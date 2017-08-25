@@ -61,20 +61,24 @@ else:
         i[-1]=float(i[-1])    #convert last column to floats
     
 ####### sorting by P value #######
+
 total_loci=len(structured_array)    # get the number of total loci
 structured_array.sort(key=lambda x:x[-1])    
 
 ##### adding a rank to each row #####
+
 ranks= 1
 for items in structured_array:
     items.append(ranks)
     ranks += 1
     
 ###### appending Benjamini-Hochberg corrected alpha ######
+
 for i in structured_array:
     i.append(float(0.05/total_loci)*i[-1])
     
 ##### create new array from significant differneces ######
+
 significant_array=[]
 significant_contigs=[]
 for i in structured_array:
@@ -86,10 +90,12 @@ for i in structured_array:
 print("loci significantly deviated after B-H correction: ",len(significant_contigs))              
    
 #### write first output file of significant contig positions ####
+
 with open ('sig_positions.txt','w') as sig_pos:
     sig_pos.writelines('\t'.join(i) + '\n' for i in significant_array)
 
 #### count occurances of each contig #####
+
 frequencytable={}
 for contig in significant_contigs:
     if contig in frequencytable:
@@ -99,7 +105,9 @@ for contig in significant_contigs:
 for every in frequencytable:
     with open("position_counts.txt", "a") as countfile:
         countfile.write(every + " " + str(frequencytable[every])+ '\n')
+
 #### pull all contigs > 1 occurence into new list and output file ####
+
 contigs_multipe_sign_positions=[]
 for contigs in frequencytable:
     if frequencytable[contigs]>1:
