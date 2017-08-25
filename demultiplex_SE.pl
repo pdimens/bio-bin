@@ -1,4 +1,7 @@
 #!/usr/bin/perl -w
+
+# Forked from Chris Hollenbeck's demultiplex.pl to add a flag for single-end reads
+
 use strict;
 use Getopt::Long;
 use Pod::Usage;
