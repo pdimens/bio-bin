@@ -41,7 +41,7 @@ c. `GNU parallel` will automatically assign how many cores your system will use 
 Unfortunately, I'm not a master coder, so I can't [yet] write something that will just universally work for all cases. The PacBio sequences we receive have a specific file/folder structure, which is a single folder (let's call this the **working directory**) that contains other folders which contain our sequence data (let's call these the **sequence folders**). If your sample was run on several cells, in theory you should be receiving one working directory filled with as many sequencing folders as cells you purchased. If youre sequences are scattered, just move the folders around until they have this structure. It doesn't matter what you name any of the folders.
 ##### Here's a diagram of what it should look like:
 
-``` mermaid
+``` @mermaid
 graph LR
   A[Some Directory]--> B[Working Directory]
   B--> C[Sequence Folder 1]
