@@ -3,20 +3,26 @@
 This is a script written in `bash` meant to automate some basic processing of multi-cell PacBio sequences after they are downloaded from a sequencing facility. If you think of PacBio sequences as a package, then name is derived from `un`packing the `pac`bio reads. It was either that or `process_pacbio`, which isn't as fun.
 
 ## Usage
-##### `unpac` is meant to be run in your working directory (see below "How to get it working correctly")
 To process only `subreads.bam`
 ```sh
-unpac -o <output.prefix>
+unpac -p <output.prefix> -d <working.directory> -m <mode>
 ```
 To process `subreads.bam` and `scraps.bam`
 ```sh
-unpac -o <output.prefix> -s
+unpac -p <output.prefix> -d <working.directory> -m <mode> -s
 ```
 An example of processing both subreads and scraps for a species of fish
 ```sh
-unpac -o swordfish -s
+unpac -p swordfish -d ~/Data/swordfish_genome/ -m multi -s
 ```
-
+### Usage arguments
+| flag |  details |
+|---|---|
+|`-p` <output.prefix> |this is the prefix used when renaming the final converted fasta | 
+| `-d` <working.dir> | the path to the working directory* |
+| `-m` <mode> | options are `single` for a single bam file, and `multi` for several bam files * |
+| `-s` | a toggle to also process scraps.bam files. by default, only subreads.bam are processed |
+* see "how to get it working correctly" below
 ## Dependencies
 |Package|Installed by default?|Source|
 |---|---|---|
