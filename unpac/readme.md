@@ -43,18 +43,18 @@ Unfortunately, I'm not a master coder, so I can't [yet] write something that wil
 
 ```mermaid
 graph LR
-A[Some Directory]--> B[Working Directory]
-B[Working Directory]--> C[Sequence Folder 1]
-B[Working Directory]--> D[Sequence Folder 2]
-B[Working Directory]--> E[Sequence Folder 3]
-B[Working Directory]--> F[Sequence Folder 4]
+  A[Some Directory]--> B[Working Directory]
+  B--> C[Sequence Folder 1]
+  B--> D[Sequence Folder 2]
+  B--> E[Sequence Folder 3]
+  B--> F[Sequence Folder 4]
 subgraph run unpac here
 B[Working Directory]
 end
 subgraph Your sequences are here
-C[Sequence Folder 1]
-D[Sequence Folder 2]
-E[Sequence Folder 3]
-F[Sequence Folder 4]
+  C
+  D
+  E
+  F
 end
 ```
