@@ -19,10 +19,12 @@ unpac -p swordfish -d ~/Data/swordfish_genome/ -m multi -s
 | flag |  details |
 |---|---|
 |`-p` <output.prefix> |this is the prefix used when renaming the final converted fasta | 
-| `-d` <working.dir> | the path to the working directory+ |
-| `-m` <processing.mode> | options are `single` for a single bam file, and `multi` for several bam files + |
+| `-d` <working.dir> | the path to the working directory++ |
+| `-m` <processing.mode> | options are `single` for a single bam file, and `multi` for several bam files ++ |
 | `-s` | a toggle to also process scraps.bam files. by default, only subreads.bam are processed |
- +see "how to get it working correctly" below
+ 
+ ++ see "how to get it working correctly" below
+
 ## Dependencies
 |Package|Installed by default?|Source|
 |---|---|---|
