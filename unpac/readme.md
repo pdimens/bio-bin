@@ -31,7 +31,7 @@ If you had sequencing done of a single individual (or species) across several ce
 1. Convert `.bam` files into `.fasta` files
   * It will by default do this only for `.subreads.bam` files
   * There is an optional flag to also process `.scraps.bam` files (which may take a while)
-  * GNU parallel` will automatically assign how many cores your system will use based on the number of `subreads.bam` files it finds
+  * `GNU parallel` will automatically assign how many cores your system will use based on the number of `subreads.bam` files it finds
 2. Concatenate all of the converted `.fasta` files into a single file
 3. Count the number of sequences in the concatenated `.fasta`
 4. Count the number of total base pairs in the concatenated `.fasta`
