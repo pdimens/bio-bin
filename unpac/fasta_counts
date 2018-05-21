@@ -4,8 +4,8 @@
 usage() {
 cat <<EOF
 
-This script will count the number of base
-pairs and total number of contigs in the concatenated file.
+This script will count the number of base pairs and 
+total number of contigs in the concatenated file.
 
         [Usage]
 $0 <fasta.file>
