@@ -1,0 +1,30 @@
+#! /usr/bin/env bash
+
+
+usage() {
+cat <<EOF
+
+This script will count the number of base
+pairs and total number of contigs in the concatenated file.
+
+        [Usage]
+$0 <fasta.file>
+
+EOF
+}
+
+# code chunk for usage when no argument given
+if [[ -z "$1" ]]; then
+  usage
+  exit 1
+fi
+#
+
+INFILE=$1
+
+echo "...counting the number of contigs in $INFILE..."
+echo "Total contigs present in $INFILE: $(grep -c ">" $INFILE)"
+echo "...counting the number of base pairs in the $INFILE..."
+echo "Total basepairs present in the $INFILE: $(grep -v ">" $INFILE | wc | awk '{print $3-$1}')"
+
+exit 1
