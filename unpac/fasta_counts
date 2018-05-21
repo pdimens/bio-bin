@@ -22,9 +22,8 @@ fi
 
 INFILE=$1
 
-echo "...counting the number of contigs in $INFILE..."
+echo "... counting ..."
 echo "Total contigs present in $INFILE: $(grep -c ">" $INFILE)"
-echo "...counting the number of base pairs in the $INFILE..."
 echo "Total basepairs present in the $INFILE: $(grep -v ">" $INFILE | wc | awk '{print $3-$1}')"
 
 exit 1
