@@ -23,13 +23,13 @@ process_subreads() {
   mkdir subreads_fasta
   echo "...converting subreads.bam files to fasta..."
   find ./*/* -name '*.subreads.bam' | parallel "samtools fasta {} > ./subreads_fasta/{/}.subreads.fasta"
+  rename .subreads.bam.subreads.fasta .subreads.fasta ./subreads_fasta/*.subreads.bam.subreads.fasta
   echo "...concatenating fasta files..."
   cat ./subreads_fasta/*subreads.fasta > ./subreads_fasta/$PREFIX.all.subreads.fasta
   echo "...counting the number of contigs in the subreads..."
   echo "Total contigs present in subreads: $(grep -c ">" ./subreads_fasta/$PREFIX.all.subreads.fasta)" >> ./subreads_fasta/$PREFIX.pacbio_subreads_stats.txt
   echo "...counting the number of base pairs in the subreads..."
   echo "Total basepairs present in the subreads: $(grep -v ">" ./subreads_fasta/$PREFIX.all.subreads.fasta | wc | awk '{print $3-$1}')" >> ./subreads_fasta/$PREFIX.pacbio_subreads_stats.txt
-  rename .subreads.bam.subreads.fasta .subreads.fasta ./subreads_fasta/*.subreads.bam.subreads.fasta
   head ./subreads_fasta/$PREFIX.pacbio_subreads_stats.txt
 }
 
@@ -37,13 +37,13 @@ process_scraps() {
   mkdir scraps_fasta
   echo "...converting scraps.bam files to fasta..."
   find ./*/* -name '*.scraps.bam' | parallel "samtools fasta {} > ./scraps_fasta/{/}.scraps.fasta"
+  rename .scraps.bam.scraps.fasta .scraps.fasta ./scraps_fasta/*.scraps.bam.scraps.fasta
   echo "...concatenating fasta files..."
   cat ./scraps_fasta/*scraps.fasta > ./scraps_fasta/$PREFIX.all.scraps.fasta
   echo "...counting the number of contigs in the scraps..."
   echo "Total contigs present in scraps: $(grep -c ">" ./scraps_fasta/$PREFIX.all.scraps.fasta)" >> ./scraps_fasta/$PREFIX.pacbio_scraps_stats.txt
   echo "...counting the number of base pairs in the scraps..."
   echo "Total basepairs present in the scraps: $(grep -v ">" ./scraps_fasta/$PREFIX.all.scraps.fasta | wc | awk '{print $3-$1}')" >> ./scraps_fasta/$PREFIX.pacbio_scraps_stats.txt
-  rename .scraps.bam.scraps.fasta .scraps.fasta ./scraps_fasta/*.scraps.bam.scraps.fasta
   head ./scraps_fasta/$PREFIX.pacbio_scraps_stats.txt
 }
 
