@@ -1,0 +1,38 @@
+#! /usr/bin/env bash
+
+usage() {
+cat <<EOF
+--requires GNU parallel--
+
+This script will parallelize unzipping .gz files from a given directory into
+another directory, while keeping the original archives intact. You may 
+optionally provide a search phrase to unzip only specific files. If the input
+directory specified doesn't exist, one will be created.
+
+        [Usage]
+punzip <infiles.directory> <output.directory> <optional.search.phrase>
+
+      --Examples--
+punzip ~/data/raw/ ~/data/processed/ 
+punzip ~/data/raw/ ~/data/processed/ flounder
+
+EOF
+}
+
+if [[ -z "$1" ]]; then
+  usage
+  exit 1
+fi
+
+WORKDIR=$1
+OUTDIR=$2
+
+if [[ -z "$3" ]]; then
+KEYWORD="*.gz"
+else
+KEYWORD=*"$3"*
+fi
+
+mkdir -p $OUTDIR
+
+find $WORKDIR -name "$KEYWORD" | parallel gunzip -c {} '>' $OUTDIR{/.}
