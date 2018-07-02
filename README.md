@@ -15,3 +15,6 @@ A bash script that converts pacbio sequences from bam to fasta, concatenates the
 
 #### fasta_counts
 A slimmed down version of `unpac` that counts the number of sequences and base pairs in a fasta file.
+
+#### punzip
+Parallelized unzipping of .gz files from one directory into another. Can do an entire directory, or only files containing something specific in their name, such as `lobster`, `_R1_`, `britneyspears`, etc.
