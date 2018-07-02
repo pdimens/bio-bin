@@ -1,4 +1,4 @@
-# Genomics Repository
+# Genomic toolbox
 
 A place to store my custom and forked scripts used for genomic analysis
 
