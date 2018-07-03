@@ -38,4 +38,4 @@ fi
 
 mkdir -p $OUTDIR
 
-nohup find $WORKDIR -name "$KEYWORD" | parallel gunzip -c {} '>' $OUTDIR{/.} &!
+find $WORKDIR -name "$KEYWORD" | parallel gunzip -c {} '>' $OUTDIR{/.}
