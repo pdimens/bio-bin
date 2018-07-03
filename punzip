@@ -24,6 +24,9 @@ if [[ -z "$1" ]]; then
   exit 1
 fi
 
+echo "now unzipping into" $2 
+echo "if >2 compressed files and are >15gb, you may notice harmless system lag"
+
 WORKDIR=$1
 OUTDIR=$2
 
@@ -35,4 +38,4 @@ fi
 
 mkdir -p $OUTDIR
 
-find $WORKDIR -name "$KEYWORD" | parallel gunzip -c {} '>' $OUTDIR{/.}
+nohup find $WORKDIR -name "$KEYWORD" | parallel gunzip -c {} '>' $OUTDIR{/.} &!
