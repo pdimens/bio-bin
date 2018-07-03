@@ -7,7 +7,8 @@ cat <<EOF
 This script will parallelize unzipping .gz files from a given directory into
 another directory, while keeping the original archives intact. You may 
 optionally provide a search phrase to unzip only specific files. If the input
-directory specified doesn't exist, one will be created.
+directory specified doesn't exist, one will be created. As a note, the directory
+must end in a / (ex. ~/bonjovi/).
 
         [Usage]
 punzip <infiles.directory> <output.directory> <optional.search.phrase>
