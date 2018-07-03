@@ -14,7 +14,7 @@ A perl script forked from Chris Hollenbeck's `demultiplex.pl` (perl wrapper for 
 A bash script that converts pacbio sequences from bam to fasta, concatenates them into a single fasta file, counts the number of sequences and base pairs in the concatenated fasta and prints it to a log file.
 
 ### fasta_counts
-A slimmed down version of `unpac` that counts the number of sequences and base pairs in a fasta file.
+The section of `unpac` that just counts the number of sequences and base pairs in a fasta file.
 
 ### punzip
 Parallelized unzipping of .gz files from one directory into another. Can do an entire directory, or only files containing something specific in their name, such as `lobster`, `_R1_`, `britneyspears`, etc.
