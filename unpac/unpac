@@ -4,8 +4,8 @@ usage() {
 cat <<EOF
 
 This script will convert PacBio bam files into fasta format using samtools,
-then it concatenates them into a single file and counts the number of base
-pairs and total number of contigs in the concatenated file.
+concatenating them into a single file and counting the number of base pairs 
+and total number of contigs in the concatenated file.
 
         [Usage]
 $0 -p <output.prefix> -d <working.directory> -m multi -s
