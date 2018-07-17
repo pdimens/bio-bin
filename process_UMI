@@ -17,6 +17,7 @@ from multiprocessing import Pool
 
 def usage():
 	print("This script finds and removes UMI elements between pair-end reads")
+	print("file format must be <name>.R1_001.fasta.gz and <name>.R2_001.fasta.gz")
 	print("-- configured for 2x150bp ddRAD sequences using EcoRI + MspI & 8bp UMI --")
 	print("[usage] python process_UMI <number.of.cores>")
 
