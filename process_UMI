@@ -1,0 +1,186 @@
+#! /usr/bin/env python
+
+from __future__ import division
+from operator import itemgetter
+from Bio import SeqIO
+import glob
+import os, sys
+from Bio import SeqIO
+from Bio.SeqIO.QualityIO import *
+import random
+import gzip
+from multiprocessing import Pool
+
+# Mostly written by Adrienne Norrell + Dr. Ken Jones (U.C. Denver)
+# Ported to python3, unified, parallelized, and modified by Pavel Dimens
+# this version is for EcoRI + MspI ddRAD when the read structure is:
+# read1 = 1-8 UMI, 9-13 EcoRI cutsite (AATTC), 14-151 read
+# read2 = 1-3 MspI cutsite (CGG), 4-151 read
+
+def usage():
+	print("This script finds and removes UMI elements between pair-end reads")
+	print("-- configured for 2x150bp ddRAD sequences using EcoRI + MspI & 8bp UMI --")
+	print("[usage] python process_UMI <number.of.cores>")
+
+if len(sys.argv)==1:
+	usage()
+else:
+	
+	where = os.getcwd()
+	
+	filelist = []
+	for root, dirs, files in os.walk(where):
+		for file in files:
+			if file.endswith('R1_001.fastq.gz'):
+				filelist.append(file)
+	
+	ncores = int(sys.argv[1])
+	
+	def processUMI(infile):
+	
+		orphans = 0
+		good_pairs = 0
+		duplicates = 0
+		count = 0
+		
+		filename1 = infile
+		# take filename1 split it by the "_R1_" and replace it with "_R2"
+		filename2 = filename1[:filename1.find("_R1")] + "_R2" + filename1[filename1.find("_R1")+3:]  
+		
+		print("processing.....",filename1[:9]) #[:9] can be edited for your appropriate naming convention. It's just a convenience feature anyway.
+		
+		forward_names = []
+		reverse_names = []
+		forward_seqs = []
+		forward_quals = []
+		reverse_seqs = []
+		reverse_quals = []
+		allseq1 = []
+		
+		f_iter = FastqGeneralIterator(gzip.open(filename1,"rt"))
+		r_iter = FastqGeneralIterator(gzip.open(filename2,"rt"))
+		for (f_id, f_seq, f_q), (r_id, r_seq, r_q) in zip(f_iter,r_iter):
+		
+			UMI = f_seq[0:8]
+			seq1 = f_seq[13:]
+			seq2 = r_seq[5:]
+			qual1 = f_q[13:]
+			qual2 = r_q[5:]
+			good_seq1 = 0
+			good_seq2 = 0
+		
+		
+		
+			try:  
+		## while loop:  runs until a defined condition is met.  If the last value in qual1 < 30 or the second to last is < 30, or the third to last is < 30, then the last element in seq1 and qual1 will be deleted and the loop will run again (-1 element of qual1, so the loop is moving backwards through the string). The condition is met when the last three values are greater than 30.  At this point, the loop stops running, and if the length of seq1 is greater than or equal to 75, it is considered a good sequence.
+		
+		## Why 33?  33 is an adjustment factor.  The ASCII code (what we get when we use the ord command) is offset from phred scores by 33 points. "To convert a symbol to a numerical phred score, subtract 33 from the ASCII symbol's decimal value." -prognosisbio.com  
+				while ord(qual1[len(qual1)-1]) - 33 < 30 or ord(qual1[len(qual1)-2]) - 33 < 30 or ord(qual1[len(qual1)-3]) - 33 < 30:
+					seq1 = seq1[:len(seq1)-1]
+					qual1 = qual1[:len(qual1)-1]
+		
+				if len(seq1) >= 98:
+					good_seq1 = 1
+					
+				while ord(qual2[len(qual2)-1]) - 33 < 30 or ord(qual2[len(qual2)-2]) - 33 < 30 or ord(qual2[len(qual2)-3]) - 33 < 30:
+					seq2 = seq2[:len(seq2)-1]
+					qual2 = qual2[:len(qual2)-1]
+		
+				if len(seq2) >= 98:
+					good_seq2 = 1
+					
+		## If both read 1 and read 2 have a length greater than 75, then the both of them make a good pair and the information is appended to the empty lists that were made earlier.
+				if good_seq1 == 1 and good_seq2 == 1:
+					good_pairs = good_pairs + 1
+		
+					forward_names.append(f_id)
+					reverse_names.append(r_id)
+					forward_seqs.append(UMI + seq1)
+					forward_quals.append(qual1)
+					reverse_seqs.append(seq2)
+					reverse_quals.append(qual2)
+		# If the 1 or both of the sequences were bad, then bad_seq = 1 
+			except:
+				bad_seq = 1
+				
+		
+		f_iter.close()
+		r_iter.close()
+		
+		
+		nondup_fseqs = []
+		seen = set()
+		nondup_rseqs = []
+		nondup_rquals = []
+		nondup_fquals = []
+		nondup_fnames = []
+		nondup_rnames = []
+		for i, val in enumerate(forward_seqs):
+			if val[:76] not in seen:
+				nondup_fseqs.append(val)
+				nondup_fquals.append(forward_quals[i])
+				nondup_fnames.append(forward_names[i])
+				nondup_rseqs.append(reverse_seqs[i])
+				nondup_rquals.append(reverse_quals[i])
+				nondup_rnames.append(reverse_names[i])
+				seen.add(val[:76])
+			else:
+				duplicates = duplicates + 1
+		
+		
+		
+		outfilename1 = filename1[:-6] + "_filtered.fq"  ## take filename1...remove ".fastq" and replace with "_filtered.fastq"
+		outfilename2 = filename2[:-6] + "_filtered.fq"  ## take filename2...remove ".fastq" and replace with "_filtered.fastq"
+		outfile1 = open(outfilename1, "w")
+		outfile2 = open(outfilename2, "w")
+		
+		
+		for a in range(len(nondup_fseqs)):
+			
+			outfile1.write("@")
+			outfile1.write(nondup_fnames[a])
+			outfile1.write("\n")
+			outfile1.write(nondup_fseqs[a][8:])
+			outfile1.write("\n")
+			outfile1.write("+")
+			outfile1.write("\n")
+			outfile1.write(nondup_fquals[a])
+			outfile1.write("\n")
+		
+			outfile2.write("@")
+			outfile2.write(nondup_rnames[a])
+			outfile2.write("\n")
+			outfile2.write(nondup_rseqs[a])
+			outfile2.write("\n")
+			outfile2.write("+")
+			outfile2.write("\n")
+			outfile2.write(nondup_rquals[a])
+			outfile2.write("\n")
+		
+		umifile = open(outfilename1 + ".umi", "w")
+		
+		umifile.write(str(filename1[:-13]) + "\n")
+		umifile.write("Good_pairs = " + str(good_pairs) + "\n")
+		umifile.write("Number of duplicates = " + str(duplicates) + "\n")
+		umifile.write("Percent Duplicates = " + str(duplicates/good_pairs) + "\n")
+		
+		outfile1.close()
+		outfile2.close()
+		umifile.close()
+			
+	if __name__ == '__main__':
+		pool = Pool(ncores)
+		pool.map(processUMI, filelist)  		  
+	
+	# concatenate output files
+	umifiles = []
+	import fileinput
+	for root, dirs, files in os.walk(where):
+		for ufile in files:
+			if ufile.endswith('.umi'):
+				umifiles.append(ufile)
+	with open("UMI_report.txt", 'w') as fout, fileinput.input(umifiles) as fin:
+		for line in fin:
+			fout.write(line)
+	print('---the results located in  "UMI_report.txt"---')
+	
