@@ -2,7 +2,6 @@
 
 from __future__ import division
 from operator import itemgetter
-from Bio import SeqIO
 import glob
 import os, sys
 from Bio import SeqIO
