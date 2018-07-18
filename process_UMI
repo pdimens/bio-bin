@@ -167,8 +167,7 @@ else:
 				umifiles.append(ufile)
 	
 	reportfile = open("UMI_report.txt", "w")
-	spaces = "                      "
-	reportfile.write("Filename" + spaces + "Good Pairs" + "\t" + "Duplicates" + "\t" +"Proportion Duplicates" + "\n")
+	reportfile.write("Filename" + "\t" + "Good Pairs" + "\t" + "Duplicates" + "\t" +"Proportion Duplicates" + "\n")
 	with reportfile as fout, fileinput.input(umifiles) as fin:
 		for line in fin:
 			fout.write(line)
