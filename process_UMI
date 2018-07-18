@@ -1,12 +1,8 @@
 #! /usr/bin/env python
 
-from __future__ import division
-from operator import itemgetter
-import glob
 import os, sys
 from Bio import SeqIO
 from Bio.SeqIO.QualityIO import *
-import random
 import gzip
 from multiprocessing import Pool
 
@@ -16,15 +12,15 @@ from multiprocessing import Pool
 # read2 = 1-3 MspI cutsite (CGG), 4-151 read
 
 def usage():
-	print("This script finds and removes UMI elements between pair-end reads")
+	print("This py3 script finds and removes UMI elements between paired-end reads")
 	print("file format must be <name>.R1_001.fasta.gz and <name>.R2_001.fasta.gz")
 	print("-- configured for 2x150bp ddRAD sequences using EcoRI + MspI & 8bp UMI --")
-	print("[usage] python process_UMI <number.of.cores>")
-
+	print("\n","[usage] process_UMI <number.of.cores>")
+	print("[example] process_UMI 4")
+	
 if len(sys.argv)==1:
 	usage()
 else:
-	
 	where = os.getcwd()
 	
 	filelist = []
@@ -37,10 +33,8 @@ else:
 	
 	def processUMI(infile):
 	
-		orphans = 0
 		good_pairs = 0
 		duplicates = 0
-		count = 0
 		
 		filename1 = infile
 		# take filename1 split it by the "_R1_" and replace it with "_R2"
@@ -54,7 +48,6 @@ else:
 		forward_quals = []
 		reverse_seqs = []
 		reverse_quals = []
-		allseq1 = []
 		
 		f_iter = FastqGeneralIterator(gzip.open(filename1,"rt"))
 		r_iter = FastqGeneralIterator(gzip.open(filename2,"rt"))
@@ -151,14 +144,15 @@ else:
 		
 		umifile = open(outfilename1 + ".umi", "w")
 		
-		umifile.write(str(filename1[:-13]) + "\n")
-		umifile.write("Good_pairs = " + str(good_pairs) + "\n")
-		umifile.write("Number of duplicates = " + str(duplicates) + "\n")
-		umifile.write("Percent Duplicates = " + str(duplicates/good_pairs) + "\n")
+		umifile.write(str(filename1[:-13]) + "\t")
+		umifile.write(str(good_pairs) + "\t")
+		umifile.write(str(duplicates) + "\t")
+		umifile.write(str(round(duplicates/good_pairs,2)) + "\t" + "\n")
 		
 		outfile1.close()
 		outfile2.close()
 		umifile.close()
+	
 			
 	if __name__ == '__main__':
 		pool = Pool(ncores)
@@ -172,8 +166,11 @@ else:
 			if ufile.endswith('.umi'):
 				umifiles.append(ufile)
 	
-	with open("UMI_report.txt", 'w') as fout, fileinput.input(umifiles) as fin:
+	reportfile = open("UMI_report.txt", "w")
+	spaces = "                      "
+	reportfile.write("Filename" + spaces + "Good Pairs" + "\t" + "Duplicates" + "\t" +"Proportion Duplicates" + "\n")
+	with reportfile as fout, fileinput.input(umifiles) as fin:
 		for line in fin:
 			fout.write(line)
-	
 	print('---the results located in  "UMI_report.txt"---')
+	
