@@ -171,5 +171,6 @@ else:
 	with reportfile as fout, fileinput.input(umifiles) as fin:
 		for line in fin:
 			fout.write(line)
+	reportfile.close()
 	print('---the results located in  "UMI_report.txt"---')
 	
