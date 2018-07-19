@@ -167,11 +167,11 @@ else:
 			if ufile.endswith('.umi'):
 				umifiles.append(ufile)
 	
-	reportfile = open("UMI_report.txt", "w")
+	reportfile = open("UMI_report.csv", "w")
 	reportfile.write("Filename" + "\t" + "Good Pairs" + "\t" + "Duplicates" + "\t" +"Proportion Duplicates" + "\n")
 	with reportfile as fout, fileinput.input(umifiles) as fin:
 		for line in fin:
 			fout.write(line)
 	reportfile.close()
-	print('---the results located in  "UMI_report.txt"---')
+	print('---the results located in  "UMI_report.csv"---')
 	
