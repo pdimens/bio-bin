@@ -181,5 +181,5 @@ else:
 	reportfile.close()
 	for umi in glob.glob("*.umi"):
 		os.remove(umi)
-	print('---output files and report are located in  "/processed_UMI/UMI_report.csv"---')
+	print('---output files and report are located in  "/processed_UMI/"---')
 		
