@@ -1,0 +1,46 @@
+#! /usr/bin/env bash
+
+usage() {
+cat <<EOF
+
+[Usage] countseq <fasta or fastq> <seq.file1> <seq.file2> <seq.file3> or *.fasta/*.fastq
+[Example] countseq fastq *.fq
+[Example] countseq fasta frog_001.fa scorpion_001.fasta 
+
+EOF
+}
+
+# adopted from Gummybear at
+# https://bioexpressblog.wordpress.com/2014/04/08/simple-script-to-count-the-number-of-reads-in-fastq-file/
+
+if [[ -z "$1" ]]; then
+        echo -e "\n This script will count the number of base pairs and total \n number of contigs in a sequence (fasta or fastq) file"
+        usage
+        exit 0
+fi
+ 
+if [ "$1" = "fasta" ]; then
+        filearg=${@:2};
+        echo "... counting ..."
+        for i in ${filearg[@]}
+                do
+                echo -e "$i: $(grep -c ">" $i) contigs"
+                echo -e "$i: $(grep -v ">" $i | wc | awk '{print $3-$1}') bp"
+                done
+elif [ "$1" = "fastq" ]; then
+        filearg=${@:2};
+        for i in ${filearg[@]}
+        do
+        lines=$(wc -l $i|cut -d " " -f 1)
+        count=$(($lines / 4))
+        echo -n -e "\t$i : "
+        echo "$count"  | \
+        sed -r '
+        :L
+        s=([0-9]+)([0-9]{3})=\1,\2=
+        t L'
+        done
+else
+        echo 'Error - please choose either "fasta" or "fastq" as the filetype'
+        usage
+        exit 0
