@@ -7,11 +7,11 @@ Currently, there are only five such scripts in here, but the list slowly grows a
 ### bh_hardy.py
 A python script that takes your raw `--hardy` output from `VCFtools` and performs a Benjamini-Hochberg correction on the data, outputting a file with the contigs that have >1 significant locus. This version requires no additional python packages (e.g. `numpy` or `pandas`)
 
+### countseq
+The section of `unpac` that counts the number of sequences and base pairs in a fasta file merged with Gummybear's quick fastq counting script to now take either (user specified) fasta or fastq format files.
+
 ### demultiplex_SE.pl
 A perl script forked from Chris Hollenbeck's `demultiplex.pl` (perl wrapper for automating `process_RADtags` across several indices) that has an additional flag to handle single-end data for demultiplexing raw sequence reads. 
-
-### fasta_counts
-The section of `unpac` that just counts the number of sequences and base pairs in a fasta file. Base pair counts don't work correctly for Illumina reads, but sequence counts work.
 
 ### process_UMI
 A specialized (but editable!) python script that takes RAD sequences with UMI elements, checking for PCR duplicates, removing them, and outputting filtered sequences. 
