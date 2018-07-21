@@ -3,44 +3,61 @@
 usage() {
 cat <<EOF
 
-[Usage] countseq <fasta or fastq> <seq.file1> <seq.file2> <seq.file3> or *.fasta/*.fastq
-[Example] countseq fastq *.fq
-[Example] countseq fasta frog_001.fa scorpion_001.fasta 
+[Usage] countseq <fa or fq> <seq.file1> <seq.file2> <seq.file3> or <*.fasta> <*.fastq>
+
+[Example] countseq fq *.fq
+[Example] countseq fa frog_001.fa scorpion_001.fasta > animals.counts
+
+[CAUTION] input files must either be all fasta or fastq format, but not a mix of both!
 
 EOF
 }
 
-# adopted from Gummybear at
-# https://bioexpressblog.wordpress.com/2014/04/08/simple-script-to-count-the-number-of-reads-in-fastq-file/
-
 if [[ -z "$1" ]]; then
-        echo -e "\n This script will count the number of base pairs and total \n number of contigs in a sequence (fasta or fastq) file"
+        echo -e "\n  This script will count the number of total base pairs and contigs \n in a gzipped or unzipped sequence (fasta fa or fastq fq) file"
         usage
-        exit 0
+        exit
 fi
  
-if [ "$1" = "fasta" ]; then
+if [ "$1" = "fa" ]; then
         filearg=${@:2};
-        echo "... counting ..."
+		echo -e "\t filename \t #contigs \t #bp"
         for i in ${filearg[@]}
-                do
-                echo -e "$i: $(grep -c ">" $i) contigs"
-                echo -e "$i: $(grep -v ">" $i | wc | awk '{print $3-$1}') bp"
-                done
-elif [ "$1" = "fastq" ]; then
+			do
+			case "$i" in
+				*.gz | *.tgz ) 
+				contigcount=$(zgrep -c ">" $i)
+				bpcount=$(zgrep -v ">" $i | wc | awk '{print $3-$1}')
+						;;
+				*)
+				contigcount=$(grep -c ">" $i)
+				bpcount=$(grep -v ">" $i | wc | awk '{print $3-$1}')
+						;;
+				esac
+			echo -e "\t $i \t $contigcount \t $bpcount"
+			done
+		
+elif [ "$1" = "fq" ]; then
         filearg=${@:2};
-        for i in ${filearg[@]}
+        echo -e "\t filename \t #contigs \t #bp"
+		for i in ${filearg[@]}
         do
-        lines=$(wc -l $i|cut -d " " -f 1)
-        count=$(($lines / 4))
-        echo -n -e "\t$i : "
-        echo "$count"  | \
-        sed -r '
-        :L
-        s=([0-9]+)([0-9]{3})=\1,\2=
-        t L'
+        case "$i" in
+			*.gz | *.tgz ) 
+			lines=$(zcat $i | wc -l | cut -d " " -f 1)
+			bpcount=$(zcat $i | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
+				;;
+			*)
+			lines=$(cat $i | wc -l $i | cut -d " " -f 1)
+			bpcount=$(cat $i | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
+				;;
+		esac
+		contigcount=$(($lines / 4))
+        echo -e "\t $i \t $contigcount \t $bpcount"
         done
 else
         echo 'Error - please choose either "fasta" or "fastq" as the filetype'
         usage
         exit 0
+fi
+exit 1
