@@ -3,61 +3,49 @@
 usage() {
 cat <<EOF
 
-[Usage] countseq <fa or fq> <seq.file1> <seq.file2> <seq.file3> or <*.fasta> <*.fastq>
+[Usage] countseq <seq.file1> <seq.file2> ... etc. or <*.fasta> <*.fastq>
 
-[Example] countseq fq *.fq
-[Example] countseq fa frog_001.fa scorpion_001.fasta > animals.counts
-
-[CAUTION] input files must either be all fasta or fastq format, but not a mix of both!
+[Example] countseq *.fq *.fasta.gz
+[Example] countseq frog_001.fa scorpion_001.fastq.gz > animals.counts
 
 EOF
 }
 
 if [[ -z "$1" ]]; then
-        echo -e "\n  This script will count the number of total base pairs and contigs \n in a gzipped or unzipped sequence (fasta fa or fastq fq) file"
+        echo -e "\n  This script will count the number of total base pairs and contigs \n in gzipped or unzipped sequence (fasta fa or fastq fq) files"
         usage
         exit
 fi
- 
-if [ "$1" = "fa" ]; then
-        filearg=${@:2};
-		echo -e "\t filename \t #contigs \t #bp"
-        for i in ${filearg[@]}
-			do
-			case "$i" in
-				*.gz | *.tgz ) 
+
+filearg=${@};
+echo -e "\t filename \t #contigs \t #bp"
+for i in ${filearg[@]}
+do
+case "$i" in
+	*fa.gz | *fa.tgz | *fasta.gz | *fasta.tgz ) 
 				contigcount=$(zgrep -c ">" $i)
 				bpcount=$(zgrep -v ">" $i | wc | awk '{print $3-$1}')
-						;;
-				*)
-				contigcount=$(grep -c ">" $i)
-				bpcount=$(grep -v ">" $i | wc | awk '{print $3-$1}')
-						;;
-				esac
-			echo -e "\t $i \t $contigcount \t $bpcount"
-			done
-		
-elif [ "$1" = "fq" ]; then
-        filearg=${@:2};
-        echo -e "\t filename \t #contigs \t #bp"
-		for i in ${filearg[@]}
-        do
-        case "$i" in
-			*.gz | *.tgz ) 
+					;;
+	*.fa | *.fasta ) 						
+			contigcount=$(grep -c ">" $i)
+			bpcount=$(grep -v ">" $i | wc | awk '{print $3-$1}')
+					;;
+	*fq.gz | *fq.tgz | *fastq.gz | *.fastq.tgz )
 			lines=$(zcat $i | wc -l | cut -d " " -f 1)
 			bpcount=$(zcat $i | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
-				;;
-			*)
+			contigcount=$(($lines / 4))
+					;;
+	*.fq | *.fastq)
 			lines=$(cat $i | wc -l $i | cut -d " " -f 1)
 			bpcount=$(cat $i | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
-				;;
-		esac
-		contigcount=$(($lines / 4))
-        echo -e "\t $i \t $contigcount \t $bpcount"
-        done
-else
-        echo 'Error - please choose either "fa" or "fq" as the filetype'
+			contigcount=$(($lines / 4))
+					;;
+	*)
+		echo 'Error - files must either end in ".fasta" ".fa" ".fq" ".fastq" or their gzipped counterparts'
         usage
         exit 0
-fi
+					;;
+esac
+			echo -e "\t $i \t $contigcount \t $bpcount"
+done
 exit 1
