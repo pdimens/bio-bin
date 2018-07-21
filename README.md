@@ -8,7 +8,7 @@ Currently, there are only five such scripts in here, but the list slowly grows a
 A python script that takes your raw `--hardy` output from `VCFtools` and performs a Benjamini-Hochberg correction on the data, outputting a file with the contigs that have >1 significant locus. This version requires no additional python packages (e.g. `numpy` or `pandas`)
 
 ### countseq
-The section of `unpac` that counts the number of sequences and base pairs in a fasta file merged with Gummybear's quick fastq counting script to now take either (user specified) fasta or fastq format files. (needs to be parallelized)
+Counts the number of contigs/sequences in fasta or fastq files. The script itself is a chimera of parts of `unpac` and Gummybear's quick fastq counting script with elements to make it work seemlessly across file formats.
 
 ### demultiplex_SE.pl
 A perl script forked from Chris Hollenbeck's `demultiplex.pl` (perl wrapper for automating `process_RADtags` across several indices) that has an additional flag to handle single-end data for demultiplexing raw sequence reads. 
