@@ -56,7 +56,7 @@ elif [ "$1" = "fq" ]; then
         echo -e "\t $i \t $contigcount \t $bpcount"
         done
 else
-        echo 'Error - please choose either "fasta" or "fastq" as the filetype'
+        echo 'Error - please choose either "fa" or "fq" as the filetype'
         usage
         exit 0
 fi
