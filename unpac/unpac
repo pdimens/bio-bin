@@ -1,19 +1,25 @@
 #! /usr/bin/env bash
 
-usage() {
+info() {
 cat <<EOF
 
 This script will convert PacBio bam files into fasta format using samtools,
 concatenating them into a single file and counting the number of base pairs 
 and total number of contigs in the concatenated file.
 
-        [Usage]
-$0 -p <output.prefix> -d <working.directory> -m multi -s
+[Usage]	unpac -p <output.prefix> -d <working.directory> -m <multi or single>
 
 -p <prefix>    | prefix output for renamed final fasta files
 -d <directory> | path to working directory
 -m <mode>      | "single" or "multi" mode (without quotes)
--s             | toggle to also process scraps.bam (kind of time consuming)
+
+EOF
+}
+
+usage() {
+cat <<EOF
+
+[Usage]	unpac -p <output.prefix> -d <working.directory> -m <multi or single>
 
 EOF
 }
@@ -24,7 +30,7 @@ process_subreads() {
   echo "...converting subreads.bam files to fasta..."
   find ./*/* -name '*.subreads.bam' | parallel "samtools fasta {} > ./subreads_fasta/{/}.subreads.fasta"
   rename .subreads.bam.subreads.fasta .subreads.fasta ./subreads_fasta/*.subreads.bam.subreads.fasta
-  echo "...concatenating fasta files..."
+echo "...concatenating fasta files..."
   cat ./subreads_fasta/*subreads.fasta > ./subreads_fasta/$PREFIX.all.subreads.fasta
   echo "...counting the number of contigs in the subreads..."
   echo "Total contigs present in subreads: $(grep -c ">" ./subreads_fasta/$PREFIX.all.subreads.fasta)" >> ./subreads_fasta/$PREFIX.pacbio_subreads_stats.txt
@@ -37,7 +43,7 @@ process_scraps() {
   mkdir scraps_fasta
   echo "...converting scraps.bam files to fasta..."
   find ./*/* -name '*.scraps.bam' | parallel "samtools fasta {} > ./scraps_fasta/{/}.scraps.fasta"
-  rename .scraps.bam.scraps.fasta .scraps.fasta ./scraps_fasta/*.scraps.bam.scraps.fasta
+    rename .scraps.bam.scraps.fasta .scraps.fasta ./scraps_fasta/*.scraps.bam.scraps.fasta
   echo "...concatenating fasta files..."
   cat ./scraps_fasta/*scraps.fasta > ./scraps_fasta/$PREFIX.all.scraps.fasta
   echo "...counting the number of contigs in the scraps..."
@@ -72,17 +78,19 @@ scraps_single() {
 
 # code chunk for usage when no argument given
 if [[ -z "$1" ]]; then
-  usage
+  info
   exit 1
 fi
 #
 
 PREFIX=
 WORKDIR=
-SCRAPS=false
+SCRAPS=
+echo "Do you want to process *scraps.bam files too? (y/n)"
+read $SCRAPS
 MODE=
 
-while getopts ":p:d:m:s" opt; do
+while getopts ":p:d:m:" opt; do
   case $opt in
     p)
       echo "fasta file prefix set to: $OPTARG" >&2
@@ -90,17 +98,13 @@ while getopts ":p:d:m:s" opt; do
       ;;
     d)
       WORKDIR=$OPTARG
-      echo "working directory set to: $OPTARG"
+      echo "working directory set to: $(readlink -f $OPTARG)"
       ;;
     m)
       MODE=$OPTARG
       echo "unpac will be run in $OPTARG mode"
       ;;
-    s)
-      SCRAPS=true
-      echo "will also process scraps.bam"
-      ;;
-	  \?)
+	\?)
       echo "Invalid option: -$OPTARG" >&2
       usage
       exit 1
@@ -113,15 +117,15 @@ while getopts ":p:d:m:s" opt; do
   esac
 done
 
-if [ "$MODE" == 'multi' ] && [ "$SCRAPS" != 'true' ] ;
+if [ "$MODE" == 'multi' ] && [ "$SCRAPS" != 'y' ] ;
   then process_subreads
-elif [ "$MODE" == 'multi' ] && [ "$SCRAPS" == 'true' ] ;
+elif [ "$MODE" == 'multi' ] && [ "$SCRAPS" == 'y' ] ;
   then process_subreads &&  process_scraps
 fi
 
-if [ "$MODE" == 'single' ] && [ "$SCRAPS" != 'true' ] ;
+if [ "$MODE" == 'single' ] && [ "$SCRAPS" != 'y' ] ;
   then subreads_single
-elif [ "$MODE" == 'single' ] && [ "$SCRAPS" == 'true' ] ;
+elif [ "$MODE" == 'single' ] && [ "$SCRAPS" == 'y' ] ;
   then subreads_single &&  scraps_single
 fi
 
