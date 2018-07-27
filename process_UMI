@@ -15,33 +15,20 @@ def usage():
 	print("This py3 script finds and removes UMI elements between paired-end reads")
 	print("file format must be <name>.R1_001.fasta.gz and <name>.R2_001.fasta.gz")
 	print("-- configured for 2x150bp ddRAD sequences using EcoRI + MspI & 8bp UMI --")
-	print("\n","[usage] process_UMI <number.of.cores>")
-	print("[example] process_UMI 4","\n")
+	print("\n","[usage] process_UMI <number.of.cores> <#.of.characters.to.keep.in.name>")
+	print("[example] process_UMI 4 10","\n")
 	
-if len(sys.argv)==1:
-	usage()
-else:
-	where = os.getcwd()
-	
-	filelist = []
-	for root, dirs, files in os.walk(where):
-		for file in files:
-			if file.endswith('R1_001.fastq.gz'):
-				filelist.append(file)
-	
-	ncores = int(sys.argv[1])
-	
-	def processUMI(infile):
+def processUMI(infile):
 	
 		good_pairs = 0
 		duplicates = 0
 		
+		namelength = int(sys.argv[2])
 		filename1 = infile
 		# take filename1 split it by the "_R1_" and replace it with "_R2"
 		filename2 = filename1[:filename1.find("_R1")] + "_R2" + filename1[filename1.find("_R1")+3:]  
 		
-		print("processing.....",filename1[:9]) #[:9] can be edited for your appropriate naming convention. It's just a convenience feature anyway.
-		
+		print("processing.....",filename1[:namelength]) 
 		forward_names = []
 		reverse_names = []
 		forward_seqs = []
@@ -115,10 +102,11 @@ else:
 			else:
 				duplicates = duplicates + 1
 		
-		outfilename1 = filename1[:-9] + "_UMI-filtered.fq"  ## take filename1...remove ".fastq" and replace with "_filtered.fastq"
-		outfilename2 = filename2[:-9] + "_UMI-filtered.fq"  ## take filename2...remove ".fastq" and replace with "_filtered.fastq"
-		outfile1 = open(outfilename1, "w")
-		outfile2 = open(outfilename2, "w")
+
+		outfilename1 = filename1[:namelength] + ".F.fq.gz"  ## rename output file1
+		outfilename2 = filename2[:namelength] + ".R.fq.gz"  ## rename outpu file 2
+		outfile1 = gzip.open(outfilename1, "wt", compresslevel=5)
+		outfile2 = gzip.open(outfilename2, "wt", compresslevel=5)
 		
 		for a in range(len(nondup_fseqs)):
 			
@@ -152,8 +140,19 @@ else:
 		outfile1.close()
 		outfile2.close()
 		umifile.close()
+
+if len(sys.argv)==1:
+	usage()
+else:
+	where = os.getcwd()
+	filelist = []
+	for root, dirs, files in os.walk(where):
+		for file in files:
+			if file.endswith('R1_001.fastq.gz'):
+				filelist.append(file)
 	
-			
+	ncores = int(sys.argv[1])
+	
 	if __name__ == '__main__':
 		pool = Pool(ncores)
 		pool.map(processUMI, filelist)  		  
@@ -164,7 +163,7 @@ else:
 	umi_fldr = "./processed_UMI"; 
 	for umi_file in glob.glob("./*.umi"):
 		shutil.move(umi_file, umi_fldr);
-	for filtered_file in glob.glob("./*UMI-filtered.fq"):
+	for filtered_file in glob.glob("./*.fq.gz"):
 		shutil.move(filtered_file, umi_fldr)
 	
 	os.chdir(umi_fldr)
