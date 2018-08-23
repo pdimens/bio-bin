@@ -1,49 +1,17 @@
 #! /usr/bin/env julia
 
-using CSV, BioSequences
-if length(ARGS) < 1
-    print("This julia script takes a simple headerless csv file of sequences and outputs \n a file of the reverse complements of those sequences")
-    print("\n [usage] reversecomp.jl <indexfile.csv>")
+if length(ARGS) != 1
+    print("This julia script takes a simple file of one-per-line sequences and outputs \na file of the reverse complements of those sequences \n \n[usage] reversecomp.jl <indexfile>")
 else
-indexes= CSV.read(ARGS[1], header=false)
-
-indlist = indexes[1]
-altered=[]
-newlist=[]
-for i in indlist
-    altered=join(reverse_complement(DNASequence(i)))
-    push!(newlist,altered)
-end
-
-writecsv("reverse_complement.csv",newlist)
-print("Your sequences are located in the file reverse_complement.csv")
-end
-
-#= THE OLD MANUAL METHOD
-indlist = indexes[1]
-tempsplit=[]
-tempjoin=[]
-newlist=[]
-for i in indlist
-    tempsplit=split(i,"")
-    for k in 1:length(tempsplit)
-        if tempsplit[k] == "A"
-            tempsplit[k]="T"
-        elseif tempsplit[k] == "T"
-            tempsplit[k]="A"
-        elseif tempsplit[k] == "C"
-            tempsplit[k]= "G"
-        else
-            tempsplit[k]= "C"
+    using BioSequences
+    x=ARGS[1]
+    function revcomp(x)
+        sequences= open(readlines,x)
+        outfile=open("reverse_complement.txt","w")
+        for i in sequences
+            write(outfile,join(reverse_complement(DNASequence(i))),"\n")
         end
-        tempjoin=prod(tempsplit)
-    end
-    push!(newlist,tempjoin)
+        print("Your sequences are located in the file reverse_complement.txt")
+    end ;
+    revcomp(x)
 end
-
-revcomplist=[]
-for i in 1:length(revcomplist)
-    push!(revcomplist,reverse(newlist[i]))
-end
-writecsv("revcomp_indexes.csv",revcomplist)
-=#
