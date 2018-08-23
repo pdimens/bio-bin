@@ -19,8 +19,8 @@ A specialized (but editable!) python script that takes RAD sequences with UMI el
 ### punzip ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Parallelized unzipping of .gz files from one directory into another. Can do an entire directory, or only files containing something specific in their name, such as `lobster`, `_R1_`, `britneyspears`, etc.
 
-### reversecomp.jl ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
-A simple script written in julia that takes  a basic headerless `.csv` file of one-per-line sequences and outputs the reverse-complement of each of those sequences. This script was used to quickly generate reverse-complements to sequencing barcodes for demultiplexing.
+### reversecomp ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
+A simple script written in julia (because julia is awesome) that takes  a file of one-per-line sequences and outputs the reverse, complement, or reverse-complement of each of those sequences. This script was used to quickly generate reverse-complements to sequencing barcodes for demultiplexing.
 
 ### unpac ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 A bash script that converts pacbio sequences from bam to fasta, concatenates them into a single fasta file, counts the number of sequences and base pairs in the concatenated fasta and prints it to a log file.
