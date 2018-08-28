@@ -5,7 +5,7 @@
 
 cat <<EOF
 
-This script will configure the split_and_run script to work correctly and move it to the global PATH at /bin/ 
+This script will download the split_and_run script from Sparc, configure script to work correctly, and move it to the global PATH at /bin/ 
 The easiest way to have all the other parts work is to create a conda environment configured for python2 and install blasr and Sparc into that.
 
 [example] 
