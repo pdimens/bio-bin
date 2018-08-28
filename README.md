@@ -1,8 +1,6 @@
 # Genomic toolbox
 
-A place to store my custom and forked scripts used for genomic analysis
-
-Currently, there are seven such scripts in here and the list slowly grows as things come up.
+A place to store my custom and forked scripts used for genomic analysis- a list slowly growing as things come up.
 
 ### bh_hardy.py ![alt_text](https://img.shields.io/badge/language-python3-green.svg)
 A python script that takes your raw `--hardy` output from `VCFtools` and performs a Benjamini-Hochberg correction on the data, outputting a file with the contigs that have >1 significant locus. This version requires only base python packages (e.g. no `numpy` or `pandas`)
