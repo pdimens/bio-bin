@@ -7,6 +7,9 @@ Currently, there are seven such scripts in here and the list slowly grows as thi
 ### bh_hardy.py ![alt_text](https://img.shields.io/badge/language-python3-green.svg)
 A python script that takes your raw `--hardy` output from `VCFtools` and performs a Benjamini-Hochberg correction on the data, outputting a file with the contigs that have >1 significant locus. This version requires only base python packages (e.g. no `numpy` or `pandas`)
 
+### configure_blasr_install ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
+It took me forever to get blasr/sparc installed and running correctly for hybrid genome assemblies, and after finally getting it to work correctly, I vowed to never **ever** have to deal with it again, so this scipt does the necessary tweaks to get sparc_split_and_run.sh working correctly and from your `$PATH`
+
 ### countseq ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Counts the number of contigs/sequences in fasta or fastq files. The script itself is a chimera of parts of `unpac` and Gummybear's quick fastq counting script with elements to make it work seemlessly across file formats.
 
