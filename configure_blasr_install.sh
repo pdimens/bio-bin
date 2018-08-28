@@ -57,6 +57,7 @@ sed -i -e 's/.\/\Sparc/Sparc/g' split_and_run_sparc.2.sh
 chmod +x *
 
 mv split_and_run_sparc.2.sh ./split_and_run_sparc.sh
+echo "password needed to move scripts to /bin"
 sudo cp * /bin/
 
 echo "Done! split_and_run_sparc, along with the necessary python scripts \n are executable and copied to /bin/"
