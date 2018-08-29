@@ -1,42 +1,24 @@
 #! /usr/bin/env julia
 if length(ARGS)==0
     print("This julia script takes a simple file of one-per-line sequences and outputs \na file of the reverse complements of those sequences \n \n[usage] reversecomp <mode> <indexfile> \nmodes: rev | comp | revcomp ")
-elseif ARGS[1] == "revcomp"
+elseif occursin(ARGS[1], "comp rev revcomp")
     using BioSequences
-    x=ARGS[2]
-    function revcomp(x)
-        sequences= open(readlines,x)
-        outfile=open("reverse_complement_seqs.txt","w")
+    outfilename = ARGS[1]*"_seqs.txt"
+    function revcomp()
+        sequences = open(readlines,ARGS[2]);
+        outfile=open(outfilename,"w");
         for i in sequences
-            write(outfile,join(reverse_complement(DNASequence(i))),"\n")
+            if ARGS[1] == "revcomp"
+                write(outfile,join(reverse_complement(DNASequence(i))),"\n")
+            elseif ARGS[1] == "comp"
+                write(outfile,join(complement(DNASequence(i))),"\n")
+            else write(outfile,join(reverse(DNASequence(i))),"\n")
+            end
         end
-        print("Your sequences are located in the file reverse_complement_seqs.txt")
+        close(outfile)
     end ;
-    revcomp(x)
-elseif ARGS[1] == "comp"
-    using BioSequences
-    x=ARGS[2]
-    function revcomp(x)
-        sequences= open(readlines,x)
-        outfile=open("complement_seqs.txt","w")
-        for i in sequences
-            write(outfile,join(reverse_complement(DNASequence(i))),"\n")
-        end
-        print("Your sequences are located in the file complement_seqs.txt")
-    end ;
-    revcomp(x)
-elseif ARGS[1] == "rev"
-    using BioSequences
-    x=ARGS[2]
-    function revcomp(x)
-        sequences= open(readlines,x)
-        outfile=open("reverse_seqs.txt","w")
-        for i in sequences
-            write(outfile,join(reverse(DNASequence(i))),"\n")
-        end
-        print("Your sequences are located in the file reverse_seqs.txt")
-    end ;
-    revcomp(x)
+    revcomp()
+    print("Your sequences are located in the file ", outfilename)
 else
     print("error: incorrect usage \n \n[usage] reversecomp <mode> <indexfile>\n")
     print("[example] reversecomp rev crabseqs.txt")
