@@ -1,0 +1,27 @@
+#! /usr/bin/env bash
+
+usage() {
+cat <<EOF
+
+[Usage] countbam <bam.file1> <bam.file2> ... etc. or <*.bam>
+
+[Example] countbam *.bam
+[Example] countbam frog_001.bam scorpion_001.bam > animals.counts
+
+EOF
+}
+
+if [[ -z "$1" ]]; then
+        echo -e "\n  This script uses SAMtools to count total and mapped-only reads in bam files"
+        exit
+fi
+
+filearg=${@};
+echo -e "\t filename \t #total reads \t #mapped reads"
+for i in ${filearg[@]}
+do
+	allcount=$(samtools view -c $i)
+	mappedcount=$(samtools view -c -F 260 $i)
+	echo -e "\t $i \t $allcount \t $mappedcount"
+done
+exit 1
