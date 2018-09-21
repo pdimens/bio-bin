@@ -23,25 +23,25 @@ for i in ${filearg[@]}
 do
 case "$i" in
 	*fa.gz | *fa.tgz | *fasta.gz | *fasta.tgz ) 
-			contigcount=$(zgrep -c ">" $i)
+			contigcount=$(zgrep -c ">" $i) &
 			bpcount=$(zgrep -v ">" $i | wc | awk '{print $3-$1}')
 					;;
 	*.fa | *.fasta | *.txt) 						
-			contigcount=$(grep -c ">" $i)
+			contigcount=$(grep -c ">" $i) &
 			bpcount=$(grep -v ">" $i | wc | awk '{print $3-$1}')
 					;;
 	*fq.gz | *fq.tgz | *fastq.gz | *.fastq.tgz )
-			lines=$(zcat $i | wc -l | cut -d " " -f 1)
+			lines=$(zcat $i | wc -l | cut -d " " -f 1) &
 			bpcount=$(zcat $i | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
-			contigcount=$(($lines / 4))
+			contigcount=$(($lines/4))		
 					;;
 	*.fq | *.fastq)
-			lines=$(cat $i | wc -l $i | cut -d " " -f 1)
+			lines=$(cat $i | wc -l $i | cut -d " " -f 1) &
 			bpcount=$(cat $i | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
-			contigcount=$(($lines / 4))
+			contigcount=$(($lines/4))	
 					;;
 	*.bam)
-			contigcount=$(samtools view -c $i)
+			contigcount=$(samtools view -c $i) &
 			bpcount=$(samtools view -c -F 260 $i)
 		;;
 	*)
