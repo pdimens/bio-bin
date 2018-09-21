@@ -11,7 +11,7 @@ It took me forever to get blasr/sparc installed and running correctly for hybrid
 ### countseq ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Counts the number of contigs/sequences in fasta or fastq files. The script itself is a chimera of parts of `unpac` and Gummybear's quick fastq counting script with elements to make it work seemlessly across file formats.
 
-### countseq ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
+### countbam ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Simple wrapper for `SAMtools` which counts the total number of reads and number of mapped reads in bam files.
 
 ### demultiplex_SE.pl ![alt_text](https://img.shields.io/badge/language-perl-yellow.svg)
