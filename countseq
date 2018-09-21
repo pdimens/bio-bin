@@ -12,7 +12,7 @@ EOF
 }
 
 if [[ -z "$1" ]]; then
-        echo -e "\n  This script will count the number of total base pairs and contigs \n in gzipped or unzipped sequence (fasta fa or fastq fq) files"
+        echo -e "\n  This script will count the number of total base pairs and contigs \n in gzipped or unzipped sequence (fasta fa or fastq fq) files. Uses SAMtools for bam files, where first number output is total reads, second number is all mapped reads"
         usage
         exit
 fi
@@ -23,10 +23,10 @@ for i in ${filearg[@]}
 do
 case "$i" in
 	*fa.gz | *fa.tgz | *fasta.gz | *fasta.tgz ) 
-				contigcount=$(zgrep -c ">" $i)
-				bpcount=$(zgrep -v ">" $i | wc | awk '{print $3-$1}')
+			contigcount=$(zgrep -c ">" $i)
+			bpcount=$(zgrep -v ">" $i | wc | awk '{print $3-$1}')
 					;;
-	*.fa | *.fasta ) 						
+	*.fa | *.fasta | *.txt) 						
 			contigcount=$(grep -c ">" $i)
 			bpcount=$(grep -v ">" $i | wc | awk '{print $3-$1}')
 					;;
@@ -40,12 +40,16 @@ case "$i" in
 			bpcount=$(cat $i | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
 			contigcount=$(($lines / 4))
 					;;
+	*.bam)
+			contigcount=$(samtools view -c $i)
+			bpcount=$(samtools view -c -F 260 $i)
+		;;
 	*)
-		echo 'Error - files must either end in ".fasta" ".fa" ".fq" ".fastq" or their gzipped counterparts'
+		echo 'Error - files must either end in ".fasta" ".fa" ".txt" ".fq" ".fastq" or their gzipped counterparts (.bam files also work).'
         usage
         exit 0
 					;;
 esac
-			echo -e "\t $i \t $contigcount \t $bpcount"
+	echo -e "\t $i \t $contigcount \t $bpcount"
 done
 exit 1
