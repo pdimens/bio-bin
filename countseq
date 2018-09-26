@@ -35,7 +35,7 @@ case "$i" in
 			bpcount=$(zcat $i | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )		
 					;;
 	*.fq | *.fastq)
-			contigcount=$(($((cat $i | wc -l $i | cut -d " " -f 1)/4)) &
+			contigcount=$(($(cat $i | wc -l $i | cut -d " " -f 1)/4)) &
 			bpcount=$(cat $i | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
 					;;
 	*.bam)
