@@ -25,22 +25,19 @@ case "$i" in
 	*fa.gz | *fa.tgz | *fasta.gz | *fasta.tgz ) 
 			contigcount=$(zgrep -c ">" $i) 
 			bpcount=$(zgrep -v ">" $i | wc | awk '{print $3-$1}') 
-					;;
+			;;
 	*.fa | *.fasta | *.txt) 						
 			contigcount=$(grep -c ">" $i) 
 			bpcount=$(grep -v ">" $i | wc | awk '{print $3-$1}')
-			wait
-				;;
+			;;
 	*fq.gz | *fq.tgz | *fastq.gz | *.fastq.tgz )
 			contigcount=$(($(zcat $i | wc -l | cut -d " " -f 1)/4)) 
 			bpcount=$(zcat $i | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
-			wait
-					;;
+			;;
 	*.fq | *.fastq)
 			contigcount=$(($(cat $i | wc -l $i | cut -d " " -f 1)/4)) 
-			wait
 			bpcount=$(cat $i | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
-					;;
+			;;
 	*.bam)
 			contigcount=$(samtools view -c $i) 
 			bpcount=$(samtools view -c -F 260 $i)
