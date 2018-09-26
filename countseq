@@ -49,5 +49,6 @@ case "$i" in
 					;;
 esac
 	echo -e "\t $i \t $contigcount \t $bpcount"
+	wait
 done
 exit 1
