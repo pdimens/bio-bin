@@ -31,14 +31,12 @@ case "$i" in
 			bpcount=$(grep -v ">" $i | wc | awk '{print $3-$1}')
 					;;
 	*fq.gz | *fq.tgz | *fastq.gz | *.fastq.tgz )
-			lines=$(zcat $i | wc -l | cut -d " " -f 1) &
-			bpcount=$(zcat $i | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
-			contigcount=$(($lines/4))		
+			contigcount=$(($(zcat $i | wc -l | cut -d " " -f 1)/4)) &
+			bpcount=$(zcat $i | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )		
 					;;
 	*.fq | *.fastq)
-			lines=$(cat $i | wc -l $i | cut -d " " -f 1) &
+			contigcount=$(($((cat $i | wc -l $i | cut -d " " -f 1)/4)) &
 			bpcount=$(cat $i | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
-			contigcount=$(($lines/4))	
 					;;
 	*.bam)
 			contigcount=$(samtools view -c $i) &
