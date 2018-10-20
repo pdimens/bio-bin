@@ -27,7 +27,7 @@ Parallelized unzipping of .gz files from one directory into another. Can do an e
 A simple script written in julia (because julia is awesome) that takes  a file of one-per-line sequences and outputs the reverse, complement, or reverse-complement of each of those sequences. This script was used to quickly generate reverse-complements to sequencing barcodes for demultiplexing.
 
 ### seqstatplot ![alt_text](https://img.shields.io/badge/language-python3-green.svg)
-A convenience script that outputs an interactive ![bokeh](https://bokeh.pydata.org/en/latest/) plot as an html for the sequencing run metrics we recieve as .csv from the facility that sequences our samples. *Specific to their file output format*.
+A convenience script that outputs an interactive [bokeh](https://bokeh.pydata.org/en/latest/) plot as an html for the sequencing run metrics we recieve as .csv from the facility that sequences our samples. *Specific to their file output format*.
 
 ### unpac ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 A bash script that converts pacbio sequences from bam to fasta, concatenates them into a single fasta file, counts the number of sequences and base pairs in the concatenated fasta and prints it to a log file.
