@@ -29,5 +29,8 @@ A simple script written in julia (because julia is awesome) that takes  a file o
 ### seqstatplot ![alt_text](https://img.shields.io/badge/language-python3-green.svg)
 A convenience script that outputs an interactive [bokeh](https://bokeh.pydata.org/en/latest/) plot as an html for the sequencing run metrics we recieve as .csv from the facility that sequences our samples. *Specific to their file output format*.
 
+### seqstatplotly ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
+Julia implementation of `seqstatplot` using `PlotyJS`
+
 ### unpac ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 A bash script that converts pacbio sequences from bam to fasta, concatenates them into a single fasta file, counts the number of sequences and base pairs in the concatenated fasta and prints it to a log file.
