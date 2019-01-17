@@ -26,7 +26,7 @@ EOF
 
 process_subreads() {
   cd $WORKDIR
-  mkdir subreads_fasta
+  mkdir -p subreads_fasta
   echo "...converting subreads.bam files to fasta..."
   find ./*/* -name '*.subreads.bam' | parallel "samtools fasta {} > ./subreads_fasta/{/}.subreads.fasta"
   rename .subreads.bam.subreads.fasta .unpac.subreads.fasta ./subreads_fasta/*.subreads.bam.subreads.fasta
@@ -40,7 +40,7 @@ echo "...concatenating fasta files..."
 }
 
 process_scraps() {
-  mkdir scraps_fasta
+  mkdir -p scraps_fasta
   echo "...converting scraps.bam files to fasta..."
   find ./*/* -name '*.scraps.bam' | parallel "samtools fasta {} > ./scraps_fasta/{/}.scraps.fasta"
     rename .scraps.bam.scraps.fasta .unpac.scraps.fasta ./scraps_fasta/*.scraps.bam.scraps.fasta
@@ -55,7 +55,7 @@ process_scraps() {
 
 subreads_single() {
   cd $WORKDIR
-  mkdir subreads_fasta
+  mkdir -p subreads_fasta
   echo "...converting subreads.bam to fasta... "
   samtools fasta *.subreads.bam > ./subreads_fasta/$PREFIX.subreads.fasta
   echo "...counting the number of contigs in the subreads..."
@@ -66,7 +66,7 @@ subreads_single() {
 }
 
 scraps_single() {
-  mkdir scraps_fasta
+  mkdir -p scraps_fasta
   echo "...converting scraps.bam to fasta... "
   samtools fasta *.scraps.bam > ./scraps_fasta/$PREFIX.scraps.fasta
   echo "...counting the number of contigs in the scraps..."
