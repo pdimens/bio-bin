@@ -29,9 +29,9 @@ process_subreads() {
   mkdir subreads_fasta
   echo "...converting subreads.bam files to fasta..."
   find ./*/* -name '*.subreads.bam' | parallel "samtools fasta {} > ./subreads_fasta/{/}.subreads.fasta"
-  rename .subreads.bam.subreads.fasta .subreads.fasta ./subreads_fasta/*.subreads.bam.subreads.fasta
+  rename .subreads.bam.subreads.fasta .unpac.subreads.fasta ./subreads_fasta/*.subreads.bam.subreads.fasta
 echo "...concatenating fasta files..."
-  cat ./subreads_fasta/*subreads.fasta > ./subreads_fasta/$PREFIX.all.subreads.fasta
+  cat ./subreads_fasta/*unpac.subreads.fasta > ./subreads_fasta/$PREFIX.all.subreads.fasta
   echo "...counting the number of contigs in the subreads..."
   echo "Total contigs present in subreads: $(grep -c ">" ./subreads_fasta/$PREFIX.all.subreads.fasta)" >> ./subreads_fasta/$PREFIX.pacbio_subreads_stats.txt
   echo "...counting the number of base pairs in the subreads..."
@@ -43,9 +43,9 @@ process_scraps() {
   mkdir scraps_fasta
   echo "...converting scraps.bam files to fasta..."
   find ./*/* -name '*.scraps.bam' | parallel "samtools fasta {} > ./scraps_fasta/{/}.scraps.fasta"
-    rename .scraps.bam.scraps.fasta .scraps.fasta ./scraps_fasta/*.scraps.bam.scraps.fasta
+    rename .scraps.bam.scraps.fasta .unpac.scraps.fasta ./scraps_fasta/*.scraps.bam.scraps.fasta
   echo "...concatenating fasta files..."
-  cat ./scraps_fasta/*scraps.fasta > ./scraps_fasta/$PREFIX.all.scraps.fasta
+  cat ./scraps_fasta/*unpac.scraps.fasta > ./scraps_fasta/$PREFIX.all.scraps.fasta
   echo "...counting the number of contigs in the scraps..."
   echo "Total contigs present in scraps: $(grep -c ">" ./scraps_fasta/$PREFIX.all.scraps.fasta)" >> ./scraps_fasta/$PREFIX.pacbio_scraps_stats.txt
   echo "...counting the number of base pairs in the scraps..."
@@ -86,7 +86,7 @@ fi
 PREFIX=
 WORKDIR=
 SCRAPS=
-echo "Do you want to process *scraps.bam files too? (y/n)"
+echo "Do you want to process *scraps.bam files too? This will take substantially longer. (y/n)"
 read $SCRAPS
 MODE=
 
