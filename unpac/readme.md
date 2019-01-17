@@ -24,7 +24,6 @@ unpac -p swordfish -d ~/Data/swordfish_genome/ -m multi
 |---|---|---|
 |GNU Parallel | hit or miss | https://www.gnu.org/software/parallel/  |
 |samtools   | typically not | http://www.htslib.org/   |
-|rename   | likely  | installs via homebrew (macOS) or Linux package managers |
 
 ## Why would you use this?
 If you had sequencing done of a single individual (or species) across several cells, each run is returned to you as a folder containing `.bam` files of your sequences (among other things). You may need these files in `.fasta` format for your pipeline, and multiple sequences combined into a single sequence file.
