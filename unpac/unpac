@@ -28,8 +28,8 @@ process_subreads() {
   cd $WORKDIR
   mkdir -p subreads_fasta
   echo -e "\n ...converting subreads.bam files to fasta..."
-  find ./*/* -name '*.subreads.bam' | parallel "samtools fasta {} > ./subreads_fasta/{/}.subreads.fasta"
-  rename .subreads.bam.subreads.fasta .unpac.subreads.fasta ./subreads_fasta/*.subreads.bam.subreads.fasta
+  find ./*/* -name '*.subreads.bam' | parallel "samtools fasta {} > ./subreads_fasta/{/}.fasta"
+  rename .subreads.bam.fasta .unpac.subreads.fasta ./subreads_fasta/*.subreads.bam.fasta
 echo -e "\n ...concatenating fasta files..."
   cat ./subreads_fasta/*unpac.subreads.fasta > ./subreads_fasta/$PREFIX.all.subreads.fasta
   echo "Subreads file : $PREFIX.all.subreads.fasta"
@@ -43,8 +43,8 @@ echo -e "\n ...concatenating fasta files..."
 process_scraps() {
   mkdir -p scraps_fasta
   echo -e "\n ...converting scraps.bam files to fasta..."
-  find ./*/* -name '*.scraps.bam' | parallel "samtools fasta {} > ./scraps_fasta/{/}.scraps.fasta"
-    rename .scraps.bam.scraps.fasta .unpac.scraps.fasta ./scraps_fasta/*.scraps.bam.scraps.fasta
+  find ./*/* -name '*.scraps.bam' | parallel "samtools fasta {} > ./scraps_fasta/{/}.fasta"
+    rename .scraps.bam.fasta .unpac.scraps.fasta ./scraps_fasta/*.scraps.bam.fasta
   echo -e "\n ...concatenating fasta files..."
   cat ./scraps_fasta/*unpac.scraps.fasta > ./scraps_fasta/$PREFIX.all.scraps.fasta
   echo "Scraps file: is $PREFIX.all.scraps.fasta"
