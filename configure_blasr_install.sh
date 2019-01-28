@@ -58,5 +58,5 @@ chmod +x *
 
 mv split_and_run_sparc.2.sh ./split_and_run_sparc.sh
 echo "password needed to move scripts to /bin"
-sudo cp * /bin/ && echo "Done! split_and_run_sparc, along with the necessary python scripts \n are executable and copied to /bin/" && exit
+sudo cp * /bin/ && echo -e "Done! split_and_run_sparc, along with the necessary python scripts \n are executable and copied to /bin/" && exit
 echo "Error: scripts not copied to path"
