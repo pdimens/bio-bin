@@ -1,23 +1,49 @@
 #! /usr/bin/env python
 
-import os, sys, glob, gzip, fileinput, shutil
-from Bio import SeqIO
-from Bio.SeqIO.QualityIO import *
-from multiprocessing import Pool
-
 # Originally written by Adrienne Norrell and Dr. Ken Jones (U.C Denver)
-# ported to python3, updated, optimized, and parallelized by Pavel Dimens
+# ported to python3, updated, enhanced with plotting, and optimized by Pavel Dimens
 # this version is for EcoRI + MspI ddRAD sequences when the read structure is:
 # read1 = 1-8 UMI, 9-13 EcoRI cutsite (AATTC), 14-151 read
 # read2 = 1-3 MspI cutsite (CGG), 4-151 read
 
+from bokeh.io import save, output_file
+from bokeh.models import HoverTool
+from bokeh.plotting import figure, ColumnDataSource
+import pandas as pd
+from multiprocessing import Pool
+from Bio.SeqIO.QualityIO import *
+from Bio import SeqIO
+import shutil
+import fileinput
+import gzip
+import sys
+import os
+
 
 def usage():
-    print("This py3 script finds and removes UMI elements between paired-end reads")
-    print("file format must be <name>.R1_001.fasta.gz and <name>.R2_001.fasta.gz")
-    print("-- configured for 2x150bp ddRAD sequences using EcoRI + MspI & 8bp UMI --")
-    print("\n", "[usage] process_UMI <number.of.cores> <#.of.characters.to.keep.in.name>")
-    print("[example] process_UMI 4 10", "\n")
+    print("\n", "This py3 script finds and removes UMI elements between paired-end reads")
+    print("file format must be <name>_R1_001.fasta.gz and <name>_R2_001.fasta.gz")
+    print("-- configured for 2x150bp ddRAD sequences using EcoRI + MspI & 7bp UMI --")
+    print("\n", "[usage] process_UMI <number.of.cores> <where to truncate original filename>")
+    print("[example] process_UMI 10 8", "\n")
+
+
+if len(sys.argv) != 3:
+    usage()
+    exit()
+
+filelist = []
+for root, dirs, files in os.walk(os.getcwd()):
+    for file in files:
+        if file.endswith('R1_001.fastq.gz'):
+            filelist.append(file)
+
+reportfilename = "processed_UMI/UMI_report.csv"
+os.makedirs(os.path.dirname(reportfilename), exist_ok=True)
+umi_fldr = "processed_UMI/"
+with open(reportfilename, "w") as f:
+    f.write("Filename" + "\t" + "Good Pairs" + "\t" +
+            "Duplicates" + "\t" + "Proportion Duplicates" + "\n")
 
 
 def processUMI(infile):
@@ -25,13 +51,14 @@ def processUMI(infile):
     good_pairs = 0
     duplicates = 0
 
-    namelength = int(sys.argv[2])
     filename1 = infile
+    namelength = int(sys.argv[2])
     # take filename1 split it by the "_R1_" and replace it with "_R2"
-    filename2 = filename1[:filename1.find("_R1")]
-    + "_R2" + filename1[filename1.find("_R1")+3:]
+    filename2 = filename1[:filename1.find("_R1")] + "_R2" + filename1[filename1.find("_R1")+3:]
 
-    print("processing.....", filename1[:namelength])
+    # [:9] can be edited for your appropriate naming convention. It's just a convenience feature anyway.
+    print("filtering..... ", filename1)
+
     forward_names = []
     reverse_names = []
     forward_seqs = []
@@ -52,138 +79,132 @@ def processUMI(infile):
         good_seq2 = 0
 
         try:
+            # while loop:  runs until a defined condition is met.  If the last value in qual1 < 30 or the second to last is < 30, or the third to last is < 30, then the last element in seq1 and qual1 will be deleted and the loop will run again (-1 element of qual1, so the loop is moving backwards through the string). The condition is met when the last three values are greater than 30.  At this point, the loop stops running, and if the length of seq1 is greater than or equal to 75, it is considered a good sequence.
 
-        # while loop:  runs until a defined condition is met.  If the last value in
-        # qual1 < 30 or the second to last is < 30, or the third to last is < 30, then
-        # the last element in seq1 and qual1 will be deleted and the loop will run again
-        # (-1 element of qual1, so the loop is moving backwards through the string). The
-        # point, the loop stops running, and if the length of seq1 is greater than or
-        # condition is met when the last three values are greater than 30.  At this
-        # equal to 75, it is considered a good sequence.
-        # Why 33?  33 is an adjustment factor.  The ASCII code (what we get
-        # when we use the ord command) is offset from phred scores by 33 points
-        # "To convert a symbol to a numerical phred score, subtract 33 from the
-        # ASCII symbol's decimal value." -prognosisbio.com
-
+            # Why 33?  33 is an adjustment factor.  The ASCII code (what we get when we use the ord command) is offset from phred scores by 33 points. "To convert a symbol to a numerical phred score, subtract 33 from the ASCII symbol's decimal value." -prognosisbio.com
             while ord(qual1[len(qual1)-1]) - 33 < 30 or ord(qual1[len(qual1)-2]) - 33 < 30 or ord(qual1[len(qual1)-3]) - 33 < 30:
                 seq1 = seq1[:len(seq1)-1]
                 qual1 = qual1[:len(qual1)-1]
 
-                if len(seq1) >= 98:
-                    good_seq1 = 1
+            if len(seq1) >= 98:
+                good_seq1 = 1
 
-                while ord(qual2[len(qual2)-1]) - 33 < 30 or ord(qual2[len(qual2)-2]) - 33 < 30 or ord(qual2[len(qual2)-3]) - 33 < 30:
-                    seq2 = seq2[:len(seq2)-1]
-                    qual2 = qual2[:len(qual2)-1]
+            while ord(qual2[len(qual2)-1]) - 33 < 30 or ord(qual2[len(qual2)-2]) - 33 < 30 or ord(qual2[len(qual2)-3]) - 33 < 30:
+                seq2 = seq2[:len(seq2)-1]
+                qual2 = qual2[:len(qual2)-1]
 
-                if len(seq2) >= 98:
-                    good_seq2 = 1
+            if len(seq2) >= 98:
+                good_seq2 = 1
 
-# If both read 1 and read 2 have a length greater than 75, then the both of
-# them make a good pair and the information is appended to the empty lists that
-# were made earlier.
-                if good_seq1 == 1 and good_seq2 == 1:
-                    good_pairs = good_pairs + 1
+    # If both read 1 and read 2 have a length greater than 75, then the both of them make a good pair and the information is appended to the empty lists that were made earlier.
+            if good_seq1 == 1 and good_seq2 == 1:
+                good_pairs = good_pairs + 1
 
-                    forward_names.append(f_id)
-                    reverse_names.append(r_id)
-                    forward_seqs.append(UMI + seq1)
-                    forward_quals.append(qual1)
-                    reverse_seqs.append(seq2)
-                    reverse_quals.append(qual2)
+                forward_names.append(f_id)
+                reverse_names.append(r_id)
+                forward_seqs.append(UMI + seq1)
+                forward_quals.append(qual1)
+                reverse_seqs.append(seq2)
+                reverse_quals.append(qual2)
+    # If the 1 or both of the sequences were bad, then bad_seq = 1
+        except:
+            bad_seq = 1
 
-        f_iter.close()
-        r_iter.close()
+    f_iter.close()
+    r_iter.close()
 
-        nondup_fseqs = []
-        seen = set()
-        nondup_rseqs = []
-        nondup_rquals = []
-        nondup_fnames = []
-        nondup_fquals = []
-        nondup_rnames = []
-        for i, val in enumerate(forward_seqs):
-            if val[:76] not in seen:
-                nondup_fseqs.append(val)
-                nondup_fquals.append(forward_quals[i])
-                nondup_fnames.append(forward_names[i])
-                nondup_rseqs.append(reverse_seqs[i])
-                nondup_rquals.append(reverse_quals[i])
-                nondup_rnames.append(reverse_names[i])
-                seen.add(val[:76])
-            else:
-                duplicates = duplicates + 1
+    nondup_fseqs = []
+    seen = set()
+    nondup_rseqs = []
+    nondup_rquals = []
+    nondup_fquals = []
+    nondup_fnames = []
+    nondup_rnames = []
+    for i, val in enumerate(forward_seqs):
+        if val[:76] not in seen:
+            nondup_fseqs.append(val)
+            nondup_fquals.append(forward_quals[i])
+            nondup_fnames.append(forward_names[i])
+            nondup_rseqs.append(reverse_seqs[i])
+            nondup_rquals.append(reverse_quals[i])
+            nondup_rnames.append(reverse_names[i])
+            seen.add(val[:76])
+        else:
+            duplicates = duplicates + 1
 
-# start writing outfiles
-        outfilename1 = filename1[:namelength] + ".F.fq.gz"
-        outfilename2 = filename2[:namelength] + ".R.fq.gz"
-        outfile1 = gzip.open(outfilename1, "wt", compresslevel=5)
-        outfile2 = gzip.open(outfilename2, "wt", compresslevel=5)
+    # take filename1...remove ".fastq" and replace with "_UMI-filtered.fq"
+    outfilename1 = filename1[:namelength] + "_UMI-filtered.fq"
+    # take filename2...remove ".fastq" and replace with "_UMI-filtered.fq"
+    outfilename2 = filename2[:namelength] + "_UMI-filtered.fq"
+    outfile1 = open(umi_fldr + outfilename1, "w")
+    outfile2 = open(umi_fldr + outfilename2, "w")
 
-        for a in range(len(nondup_fseqs)):
+    for a in range(len(nondup_fseqs)):
 
-            outfile1.write("@" + nondup_fnames[a]
-                           + "\n" + nondup_fseqs[a][8:]
-                           + "\n" + "+"
-                           + "\n" + nondup_fquals[a]
-                           + "\n")
-            outfile2.write("@" + nondup_rnames[a]
-                           + "\n" + nondup_rseqs[a][8:]
-                           + "\n" + "+"
-                           + "\n" + nondup_rquals[a]
-                           + "\n")
+        outfile1.write("@" + nondup_fnames[a]
+                       + "\n" + nondup_fseqs[a][8:]
+                       + "\n" + "+"
+                       + "\n" + nondup_fquals[a]
+                       + "\n")
+        outfile2.write("@" + nondup_rnames[a]
+                       + "\n" + nondup_rseqs[a][8:]
+                       + "\n" + "+"
+                       + "\n" + nondup_rquals[a]
+                       + "\n")
+    outfile1.close()
+    outfile2.close()
 
-        umifile = open(outfilename1 + ".umi", "w")
-        umifile.write(str(filename1[:-13])
-                      + "\t" + str(good_pairs)
-                      + "\t" + str(duplicates)
-                      + "\t" + str(round(duplicates/good_pairs, 2))
-                      + "\n")
-        outfile1.close()
-        outfile2.close()
-        umifile.close()
+    umifile = open(umi_fldr + "UMI_report.csv", "a")
+    umifile.write(str(filename1[:-13])
+                  + "\t" + str(good_pairs)
+                  + "\t" + str(duplicates)
+                  + "\t" + str(round(duplicates/good_pairs, 2))
+                  + "\n")
+
+    umifile.close()
 
 
-if len(sys.argv) < 2:
-    usage()
-else:
-    where = os.getcwd()
-    filelist = []
-    for root, dirs, files in os.walk(where):
-        for file in files:
-            if file.endswith('R1_001.fastq.gz'):
-                filelist.append(file)
+if __name__ == '__main__':
+    pool = Pool(int(sys.argv[1]))
+    pool.map(processUMI, filelist)
 
-    ncores = int(sys.argv[1])
 
-    if __name__ == '__main__':
-        pool = Pool(ncores)
-        pool.map(processUMI, filelist)
+def umiplot():
 
-# concatenate output files
-    if not os.path.exists("processed_UMI"):
-        os.makedirs("processed_UMI")
-    umi_fldr = "./processed_UMI"
-    for umi_file in glob.glob("./*.umi"):
-        shutil.move(umi_file, umi_fldr)
-    for filtered_file in glob.glob("./*.fq.gz"):
-        shutil.move(filtered_file, umi_fldr)
+    df = pd.read_csv("processed_UMI/UMI_report.csv", sep='\t', header=0,
+                     names=["filename", "good", "dupes", "proportion"])
+    output_file("procced_UMI/UMI_report.html")
 
-    os.chdir(umi_fldr)
-    umifiles = []
-    for root, dirs, files in os.walk(where):
-        for ufile in files:
-            if ufile.endswith('.umi'):
-                umifiles.append(ufile)
-    reportfile = open("UMI_report.csv", "w")
-    reportfile.write("Filename" + "\t"
-                     + "Good Pairs" + "\t"
-                     + "Duplicates" + "\t"
-                     + "Proportion Duplicates" + "\n")
-    with reportfile as fout, fileinput.input(umifiles) as fin:
-        for line in fin:
-            fout.write(line)
-    reportfile.close()
-    for umi in glob.glob("*.umi"):
-        os.remove(umi)
-    print('---output files and report are located in /processed_UMI/ ---')
+    data = {
+        'filename': df.filename,
+        'Good': df.good,
+        'Duplicates': df.dupes,
+        'props': df.proportion}
+
+    TOOLTIPS = [
+        ("Filename", "@filename"),
+        ("Good Pairs", "@Good"),
+        ("Duplicates", "@Duplicates"),
+        ("Proportion Duplicates", "@props{(0.00)}"),
+    ]
+    readstype = ['Good', 'Duplicates']
+    p = figure(x_range=df.filename, sizing_mode='stretch_both',
+               title="RAD UMI duplicates report", toolbar_location=None)
+    p.vbar_stack(readstype, x='filename', source=data, width=0.8, color=['#0099cc', '#e84d60'],
+                 hover_fill_color=['#006b8e', '#a23543'], hover_line_color=['#006b8e', '#a23543'])
+
+    p.min_border = 50
+    p.xgrid.grid_line_color = None
+    p.background_fill_color = "#f5f5f5"
+    p.y_range.start = 0
+    p.axis.axis_line_color = None
+    p.yaxis.axis_label = 'Number of Reads'
+    p.left[0].formatter.use_scientific = False
+    p.xaxis.visible = True
+    # p.axis.minor_tick_line_color = None
+    p.add_tools(HoverTool(tooltips=TOOLTIPS, mode='mouse'))
+    save(filename='processed_UMI/UMI_report.html', title="RAD UMI duplicates report", obj=p)
+
+
+umiplot()
+print('--- processed reads and report are located in /processed_UMI/ ---')
