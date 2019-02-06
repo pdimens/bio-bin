@@ -4,7 +4,7 @@ if length(ARGS)==0
   print("This julia script can pull out all the read names from fasta files",
         "\n", "or it can do a find-replace of readnames", "\n","\n",
   "[usage1] fasta_readnames <fasta file(s)>      # to pull out all readnames","\n",
-  "[usage2] fasta_readnames rename <fasta file> <find.this> <replace.with.this>")
+  "[usage2] fasta_readnames rename <fasta file> <find.this> <replace.with.this>", "\n")
 exit()
 end
 
