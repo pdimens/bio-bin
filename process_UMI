@@ -133,11 +133,11 @@ def processUMI(infile):
             duplicates = duplicates + 1
 
     # take filename1...remove ".fastq" and replace with "_UMI-filtered.fq"
-    outfilename1 = filename1[:namelength] + "_UMI-filtered.fq"
+    outfilename1 = filename1[:namelength] + ".F.fq.gz"
     # take filename2...remove ".fastq" and replace with "_UMI-filtered.fq"
-    outfilename2 = filename2[:namelength] + "_UMI-filtered.fq"
-    outfile1 = open(umi_fldr + outfilename1, "w")
-    outfile2 = open(umi_fldr + outfilename2, "w")
+    outfilename2 = filename2[:namelength] + ".F.fq.gz"
+    outfile1 = gzip.open(umi_fldr + outfilename1, compresslevel=4, "w")
+    outfile2 = gzip.open(umi_fldr + outfilename2, compresslevel=4, "w")
 
     for a in range(len(nondup_fseqs)):
 
