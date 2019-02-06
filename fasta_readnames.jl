@@ -23,7 +23,7 @@ if ARGS[1]!="rename"
       end
   end
   outputnames()
-  print("Your readnames file(s) are prefixed with readnames_from_")
+  print("Your readnames file(s) are prefixed with readnames_from_","\n")
 
   elseif ARGS[1]=="rename"
   function alter_readnames()
@@ -39,5 +39,5 @@ if ARGS[1]!="rename"
   end
 
   alter_readnames()
-  print("Your read-renamed fasta file is named ", ARGS[2] * "_renamed")
+  print("Your read-renamed fasta file is named ", ARGS[2] * "_renamed","\n")
 end
