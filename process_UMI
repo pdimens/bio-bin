@@ -197,6 +197,7 @@ def umiplot():
     p.y_range.start = 0
     p.axis.axis_line_color = None
     p.yaxis.axis_label = 'Number of Reads'
+    p.xaxis.major_label_orientation = "vertical"
     p.left[0].formatter.use_scientific = False
     p.xaxis.visible = True
     # p.axis.minor_tick_line_color = None
