@@ -25,7 +25,7 @@ def usage():
     print("file format must be <name>_R1_001.fasta.gz and <name>_R2_001.fasta.gz")
     print("-- configured for 2x150bp ddRAD sequences using EcoRI + MspI & 7bp UMI --")
     print("\n", "[usage] dDuplicator <number.of.cores> <where to truncate original filename>")
-    print("[example] dDupilcater 10 8", "\n")
+    print("[example] dDupilcator 10 8", "\n")
 
 
 if len(sys.argv) != 3:
