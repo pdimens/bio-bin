@@ -24,8 +24,8 @@ def usage():
     print("\n", "This py3 script finds and removes UMI elements between paired-end reads")
     print("file format must be <name>_R1_001.fasta.gz and <name>_R2_001.fasta.gz")
     print("-- configured for 2x150bp ddRAD sequences using EcoRI + MspI & 7bp UMI --")
-    print("\n", "[usage] process_UMI <number.of.cores> <where to truncate original filename>")
-    print("[example] process_UMI 10 8", "\n")
+    print("\n", "[usage] dDuplicator <number.of.cores> <where to truncate original filename>")
+    print("[example] dDupilcater 10 8", "\n")
 
 
 if len(sys.argv) != 3:
@@ -38,9 +38,9 @@ for root, dirs, files in os.walk(os.getcwd()):
         if file.endswith('R1_001.fastq.gz'):
             filelist.append(file)
 
-reportfilename = "processed_UMI/UMI_report.csv"
+reportfilename = "deduplicated/UMI_report.csv"
 os.makedirs(os.path.dirname(reportfilename), exist_ok=True)
-umi_fldr = "processed_UMI/"
+umi_fldr = "deduplicated/"
 with open(reportfilename, "w") as f:
     f.write("Filename" + "\t" + "Good Pairs" + "\t" +
             "Duplicates" + "\t" + "Proportion Duplicates" + "\n")
@@ -134,9 +134,9 @@ def processUMI(infile):
 
     outfilename1 = filename1[:namelength] + ".F.fq.gz"  # rename output file1
     outfilename2 = filename2[:namelength] + ".R.fq.gz"  # rename outpu file 2
-    outfile1 = gzip.open(outfilename1, "wt", compresslevel=5)
-    outfile2 = gzip.open(outfilename2, "wt", compresslevel=5)
-
+    outfile1 = gzip.open(umi_fldr + outfilename1, "wt", compresslevel=5)
+    outfile2 = gzip.open(umi_fldr + outfilename2, "wt", compresslevel=5)
+    
     for a in range(len(nondup_fseqs)):
 
         outfile1.write("@" + nondup_fnames[a]
@@ -169,9 +169,9 @@ if __name__ == '__main__':
 
 def umiplot():
 
-    df = pd.read_csv("processed_UMI/UMI_report.csv", sep='\t', header=0,
+    df = pd.read_csv("deduplicated/UMI_report.csv", sep='\t', header=0,
                      names=["filename", "good", "dupes", "proportion"])
-    output_file("procced_UMI/UMI_report.html")
+    output_file("deduplicated/UMI_report.html")
 
     data = {
         'filename': df.filename,
@@ -197,13 +197,12 @@ def umiplot():
     p.y_range.start = 0
     p.axis.axis_line_color = None
     p.yaxis.axis_label = 'Number of Reads'
-    p.xaxis.major_label_orientation = "vertical"
     p.left[0].formatter.use_scientific = False
     p.xaxis.visible = True
     # p.axis.minor_tick_line_color = None
     p.add_tools(HoverTool(tooltips=TOOLTIPS, mode='mouse'))
-    save(filename='processed_UMI/UMI_report.html', title="RAD UMI duplicates report", obj=p)
+    save(filename='deduplicated/UMI_report.html', title="RAD UMI duplicates report", obj=p)
 
 
 umiplot()
-print('--- processed reads and report are located in /processed_UMI/ ---')
+print('--- processed reads and report are located in /deduplicated/ ---')
