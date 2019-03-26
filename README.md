@@ -20,8 +20,8 @@ A perl script forked from Chris Hollenbeck's `demultiplex.pl` (perl wrapper for 
 ### fasta_readnames.jl ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
 Simple julia wrapper to extract all the read names from within a fasta file (or multiple) into separate text files.
 
-### process_UMI ![alt_text](https://img.shields.io/badge/language-python3-green.svg)
-A specialized (but editable!) python script that takes RAD sequences with UMI elements, checking for PCR duplicates, removing them, and outputting filtered sequences. 
+### dDuplicator ![alt_text](https://img.shields.io/badge/language-python3-green.svg)
+A specialized (but editable!) python script that takes RAD sequences with UMI elements, checking for PCR duplicates, removing them, and outputting filtered sequences ready for `dDocent` input.
 
 ### punzip ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Parallelized unzipping of .gz files from one directory into another. Can do an entire directory, or only files containing something specific in their name, such as `lobster`, `_R1_`, `britneyspears`, etc.
