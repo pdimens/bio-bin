@@ -18,7 +18,7 @@ Simple wrapper for `SAMtools` which counts the total number of reads and number 
 A perl script forked from Chris Hollenbeck's `demultiplex.pl` (perl wrapper for automating `process_RADtags` across several indices) that has an additional flag to handle single-end data for demultiplexing raw sequence reads. 
 
 ### fasta_readnames.jl ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
-Simple julia wrapper to extract all the read names from within a fasta file (or multiple) into separate text files.
+Simple julia wrapper to extract all the read names from within a fasta file (or multiple) into separate text files, or do a find-replace of readnames, such as replacing readnames "dDocent_contig_" with "Ginglymostoma_cirratum_contig_".
 
 ### dDuplicator ![alt_text](https://img.shields.io/badge/language-python3-green.svg)
 A specialized (but editable!) python script that takes RAD sequences with UMI elements, checking for PCR duplicates, removing them, and outputting filtered sequences ready for `dDocent` input.
