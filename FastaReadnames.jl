@@ -1,10 +1,10 @@
 #! /usr/bin/env julia
 
 if length(ARGS)==0
-  print("This julia script can pull out all the read names from fasta files",
-        "\n", "or it can do a find-replace of readnames", "\n","\n",
-  "[usage1] fasta_readnames <fasta file(s)>      # to pull out all readnames","\n",
-  "[usage2] fasta_readnames rename <fasta file> <find.this> <replace.with.this>", "\n")
+  println("This julia script can pull out all the read names from fasta files",
+  println("or it can do a find-replace of readnames")
+  println("\n","[usage1] FastaReadnames.jl <fasta file(s)>      # to pull out all readnames")
+  println("[usage2] FastaReadnames.jl rename <fasta file> <find.this> <replace.with.this>")
 exit()
 end
 
@@ -20,15 +20,16 @@ if ARGS[1]!="rename"
         end
         close(inputfasta)
         close(outfile)
+        println("Find your read names in readnames_from_", ARGS[2])
       end
   end
   outputnames()
-  print("Your readnames file(s) are prefixed with readnames_from_","\n")
 
   elseif ARGS[1]=="rename"
   function alter_readnames()
     inputfasta = FASTA.Reader(open(ARGS[2],"r"))
     outfile = FASTA.Writer(open(ARGS[2] * "_renamed", "w"))
+    println("replacing ",ARGS[3]," with ",ARGS[4], " in ", ARGS[2])
     for eachread in inputfasta
       readname = BioSequences.FASTA.identifier(eachread)
       new_read = BioSequences.FASTA.Record(replace(readname,ARGS[3] => ARGS[4]),BioSequences.FASTA.sequence(eachread))
@@ -36,8 +37,9 @@ if ARGS[1]!="rename"
     end
     close(inputfasta)
     close(outfile)
+    println("Your read-renamed fasta file is named ", ARGS[2] * "_renamed")
   end
 
   alter_readnames()
-  print("Your read-renamed fasta file is named ", ARGS[2] * "_renamed","\n")
+
 end
