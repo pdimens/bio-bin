@@ -5,7 +5,7 @@ if length(ARGS)==0
   println("the names of contigs below a specified coverage threshold")
   println("\n","[usage] CoverageCutoff.jl <coverage file> <coverage threshold>")
   println("[example] CoverageCutoff.jl genome.file 500")
-  println("\n", "input file format must be <contig> <-tab-> <number>")
+  println("\n", "input file format must be <contig> <-tab-> <number>", "\n")
   exit()
 end
 
