@@ -8,6 +8,9 @@ A python script that takes your raw `--hardy` output from `VCFtools` and perform
 ### configure_blasr_install ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 It took me forever to get blasr/sparc installed and running correctly for hybrid genome assemblies, and after finally getting it to work, I vowed to never **ever** have to deal with it again, so this scipt does the necessary tweaks to get sparc_split_and_run.sh working right, *and* from your `$PATH`
 
+### ContigCutoff.jl ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
+Simple isolation of contigs below a specified sequence coverage threshold. Typically used for the `genome.file` output from `dDocent`'s `FreeBayes` step when `FreeBayes` crashes due to memory load because _de novo_ assembly with too many contigs. Output usually fed into [faSomeRecords](https://github.com/santiagosnchez/faSomeRecords) to "prune" the de novo assembly of low-coverage contigs. 
+
 ### countseq ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Counts the number of contigs/sequences in fasta or fastq files. The script itself is a chimera of parts of `unpac` and Gummybear's quick fastq counting script with elements to make it work seemlessly across file formats.
 
@@ -17,7 +20,7 @@ Simple wrapper for `SAMtools` which counts the total number of reads and number 
 ### demultiplex_SE.pl ![alt_text](https://img.shields.io/badge/language-perl-yellow.svg)
 A perl script forked from Chris Hollenbeck's `demultiplex.pl` (perl wrapper for automating `process_RADtags` across several indices) that has an additional flag to handle single-end data for demultiplexing raw sequence reads. 
 
-### fasta_readnames.jl ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
+### FastaReadnames.jl ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
 Simple julia wrapper to extract all the read names from within a fasta file (or multiple) into separate text files, or do a find-replace of readnames, such as replacing readnames "dDocent_contig_" with "Ginglymostoma_cirratum_contig_".
 
 ### dDuplicator ![alt_text](https://img.shields.io/badge/language-python3-green.svg)
@@ -26,7 +29,7 @@ A specialized (but editable!) python script that takes RAD sequences with UMI el
 ### punzip ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Parallelized unzipping of .gz files from one directory into another. Can do an entire directory, or only files containing something specific in their name, such as `lobster`, `_R1_`, `britneyspears`, etc.
 
-### reversecomp ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
+### ReverseComp ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
 A simple script written in julia (because julia is awesome) that takes  a file of one-per-line sequences and outputs the reverse, complement, or reverse-complement of each of those sequences. This script was used to quickly generate reverse-complements to sequencing barcodes for demultiplexing.
 
 ### seqstatplot ![alt_text](https://img.shields.io/badge/language-python3-green.svg)
