@@ -4,7 +4,7 @@ if length(ARGS)==0
   println("This julia script can pull out all the read names from fasta files",
   println("or it can do a find-replace of readnames")
   println("\n","[usage1] FastaReadnames.jl <fasta file(s)>      # to pull out all readnames")
-  println("[usage2] FastaReadnames.jl rename <fasta file> <find.this> <replace.with.this>")
+  println("[usage2] FastaReadnames.jl rename <fasta file> <find.this> <replace.with.this>", "\n")
 exit()
 end
 
@@ -37,7 +37,7 @@ if ARGS[1]!="rename"
     end
     close(inputfasta)
     close(outfile)
-    println("Your read-renamed fasta file is named ", ARGS[2] * "_renamed")
+    println("Your read-renamed fasta file is named ", ARGS[2] * "_renamed", "\n")
   end
 
   alter_readnames()
