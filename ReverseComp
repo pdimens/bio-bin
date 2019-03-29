@@ -1,10 +1,13 @@
 #! /usr/bin/env julia
+
 if length(ARGS)==0
-    print("This julia script takes a simple file of one-per-line sequences and outputs \na file of the reverse complements of those sequences \n \n[usage] reversecomp <mode> <indexfile> \nmodes: rev | comp | revcomp ")
+    println("This julia script takes a simple file of one-per-line sequences and outputs")
+    println("a file of the reverse complements of those sequences")
+    println("\n","[usage] ReverseComp <mode> <indexfile> \nmodes: rev | comp | revcomp ")
 elseif occursin(ARGS[1], "comp rev revcomp")
     using BioSequences
-    outfilename = ARGS[1]*"_"*basename(ARGS[2])
     function revcomp()
+        outfilename = ARGS[1]*"_"*basename(ARGS[2])
         sequences = open(readlines,ARGS[2]);
         outfile=open(outfilename,"w");
         for i in sequences
@@ -16,11 +19,13 @@ elseif occursin(ARGS[1], "comp rev revcomp")
             end
         end
         close(outfile)
+        println("Your sequences are located in the file ", outfilename)
     end ;
     revcomp()
-    print("Your sequences are located in the file ", outfilename)
+
 else
-    print("error: incorrect usage \n \n[usage] reversecomp <mode> <indexfile>\n")
-    print("[example] reversecomp rev crabseqs.txt")
-    print("\nmodes: rev | comp | revcomp ")
+    println("error: incorrect usage")
+    println("\n","[usage] reversecomp <mode> <indexfile>")
+    println("[example] ReverseComp rev crabseqs.txt")
+    println("\n","modes: rev | comp | revcomp ")
 end
