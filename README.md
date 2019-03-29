@@ -9,7 +9,7 @@ A python script that takes your raw `--hardy` output from `VCFtools` and perform
 It took me forever to get blasr/sparc installed and running correctly for hybrid genome assemblies, and after finally getting it to work, I vowed to never **ever** have to deal with it again, so this scipt does the necessary tweaks to get sparc_split_and_run.sh working right, *and* from your `$PATH`
 
 ### ContigCutoff.jl ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
-Simple isolation of contigs below a specified sequence coverage threshold. Typically used for the `genome.file` output from `dDocent`'s `FreeBayes` step when `FreeBayes` crashes due to memory load because _de novo_ assembly with too many contigs. Output usually fed into [faSomeRecords](https://github.com/santiagosnchez/faSomeRecords) to "prune" the de novo assembly of low-coverage contigs. 
+Simple isolation of contigs below a specified sequence coverage threshold. Typically used for the `genome.file` output from `dDocent`'s `FreeBayes` step when `FreeBayes` crashes due to memory load because _de novo_ assembly with too many contigs. Output usually fed into [faSomeRecords](https://github.com/ENCODE-DCC/kentUtils/blob/master/src/utils/faSomeRecords/faSomeRecords.c) to "prune" the de novo assembly of low-coverage contigs. 
 
 ### countseq ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Counts the number of contigs/sequences in fasta or fastq files. The script itself is a chimera of parts of `unpac` and Gummybear's quick fastq counting script with elements to make it work seemlessly across file formats.
