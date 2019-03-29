@@ -27,5 +27,5 @@ else
     println("error: incorrect usage")
     println("\n","[usage] reversecomp <mode> <indexfile>")
     println("[example] ReverseComp rev crabseqs.txt")
-    println("\n","modes: rev | comp | revcomp ")
+    println("\n","modes: rev | comp | revcomp", "\n")
 end
