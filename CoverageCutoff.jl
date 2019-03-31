@@ -10,12 +10,11 @@ if length(ARGS)==0
 end
 
 function IsolateBad()
-  #infile = open(readlines,ARGS[1])
-  infile = open(readlines,"BWA_coverage.txt")
+  infile = open(readlines,ARGS[1])
   outfile = open("bad_contigs.txt","w")
   i=0
   for marker in infile
-    if parse(Int64,split(marker, "\t")[2]) < parse(Int64,"500")
+    if parse(Int64,split(marker, "\t")[2]) < parse(Int64,ARGS[2])
       write(outfile, split(marker, "\t")[1],"\n")
       i += 1
     end
