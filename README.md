@@ -14,6 +14,9 @@ Simple isolation of contigs below a specified sequence coverage threshold. Typic
 ### countseq ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Counts the number of contigs/sequences in fasta or fastq files. The script itself is a chimera of parts of `unpac` and Gummybear's quick fastq counting script with elements to make it work seemlessly across file formats.
 
+### CountSeq.jl ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
+A Julia implementation of `countseq` just to try it out. Tends to be more useful when fasta files are large or there are many fasta files that need to be counted. 
+
 ### countbam ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Simple wrapper for `SAMtools` which counts the total number of reads and number of mapped reads in bam files.
 
