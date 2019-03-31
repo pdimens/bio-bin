@@ -11,7 +11,6 @@ using BioSequences
 using GZip
 
 function getcounts()
-  println("filename", "\t", "#reads", "\t", "#basepairs")
   for infile in ARGS
     if occursin(".fastq", lowercase(infile)) | occursin(".fq", lowercase(infile))
       if occursin(".gz", lowercase(infile))
@@ -29,6 +28,7 @@ function getcounts()
       filetype="fasta"
     else
       println("file format not recognized, accepted formats are .fa .fasta .txt .fq .fastq and their gzipped counterparts")
+    exit()
     end
     reads = 0
     bp = 0
@@ -44,5 +44,7 @@ function getcounts()
     close(seqfile)
   end
 end
+
+println("filename", "\t", "#reads", "\t", "#basepairs")
 
 getcounts()
