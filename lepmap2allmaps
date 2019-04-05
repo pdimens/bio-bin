@@ -12,11 +12,11 @@ def usage():
     
     print("\n","\t","-- Using the script --")
     print("LepMap3 files must be named 'something.LGnumber.extension' (ex. chromosome.1.dist):")
-    print("For separate male+female output:")
-    print("[usage] lepmap2allmaps splitsex <outfile from vcftools --012> <lepmapfile extension>","\n")
+    print(":: For separate male+female output ::")
+    print("[usage] lepmap2allmaps splitsex <outfile from vcftools --012> <lepmapfile extension>")
     print("[example] lepmap2allmaps splitsex chrom_positions.pos .dist \n")
     
-    print("For sex-averaged in/output:")
+    print(":: For sex-averaged in/output ::")
     print("[usage] lepmap2allmaps sexaverage <outfile from vcftools --012>")
     print("[example] lepmap2allmaps sexaverage chrom_positions.pos .sexdist)
 
