@@ -17,7 +17,7 @@ def usage():
     
     print(":: For sex-averaged in/output ::")
     print("[usage] lepmap2allmaps sexaverage <outfile from vcftools --012>")
-    print("[example] lepmap2allmaps sexaverage chrom_positions.pos .sexdist)
+    print("[example] lepmap2allmaps sexaverage chrom_positions.pos .sexdist")
 
 if len(sys.argv) != 4:
     usage()
