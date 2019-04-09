@@ -44,5 +44,8 @@ Outputs an interactive [bokeh](https://bokeh.pydata.org/en/latest/) plot as an h
 ### seqstatplotly ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
 Julia implementation of `seqstatplot` using `PlotyJS`
 
+### SplitChrom.jl ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
+Takes input fasta file and splits reads into their own fasta files. Useful for splitting a genome file by chromosome. 
+
 ### unpac ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Converts pacbio sequences from bam to fasta, concatenates them into a single fasta file, counts the number of sequences and base pairs in the concatenated fasta and prints it to a log file.
