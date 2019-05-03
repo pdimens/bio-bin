@@ -1,7 +1,8 @@
 args = commandArgs(trailingOnly = TRUE)
 
 if (length(args)==0) {
-  stop("[usage] Rscript lepmapQA.r <directory> <inputfile matching pattern>
+  stop("Trims the ends for clusters >10cM away from the main map using unmodified LepMap3 orderedMarkers2 output as input 
+        [usage] Rscript lepmapQA.r <directory> <inputfile matching pattern>
        [example] Rscript lepmapQA.r . ordered", call.=FALSE)
 }
 suppressMessages(library("dplyr"))
