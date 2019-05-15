@@ -1,10 +1,16 @@
 args = commandArgs(trailingOnly = TRUE)
 
 if (length(args)==0) {
-  stop("Trims the ends for clusters >10cM away from the main map using unmodified LepMap3 orderedMarkers2 output as input 
-        [usage] Rscript lepmapQA.r <directory> <inputfile matching pattern>
-       [example] Rscript lepmapQA.r . ordered", call.=FALSE)
+  stop("Trims the ends for clusters away from the main map using unmodified LepMap3 OrderedMarkers2 output as input 
+       [usage] Rscript lepmapQA.r <directory> <inputfile matching pattern> <cM distance cutoff (default=10)>
+       [example] Rscript lepmapQA.r . ordered
+       [example] Rscript lepmapQA.r ./beardata chromosome 15", call.=FALSE)
+}  else if (length(args)==2) {
+  # default cM distance cutoff
+  args[3] = 10
 }
+
+suppressMessages(if (!require("dplyr")) install.packages("dplyr"))
 suppressMessages(library("dplyr"))
 path = args[1]
 setwd(args[1])
@@ -26,7 +32,7 @@ for(i in file.names){
     filelength10 <- length(pass_sort[,j]) * 0.10
     for(a in 1:filelength10){ #first 10% of total markers from the beginning
       diff <- abs(pass_sort[a+1,j]-pass_sort[a,j]) # difference between two points
-      if( diff > 10 ){ # is the difference between the two points > 10cM?
+      if( diff > args[3] ){ # is the difference between the two points > distance argument?
         pass_sort[1:a,] <- NA # mark that marker and all markers BEFORE it as NA
       }
     }
@@ -36,7 +42,7 @@ for(i in file.names){
     filelength10 <- round(filelen * 0.10)
     for(z in filelen:(filelen-filelength10)){  #iterate 10% total markers in starting from the end
       diff <- abs(pass_sort[z,j]-pass_sort[z-1,j]) # difference between two points
-      if( diff > 10 ){ # is the difference between the two points > 10cM?
+      if( diff > args[3] ){ # is the difference between the two points > distance argument?
         pass_sort[filelen:z,] <- NA # mark that marker and all markers AFTER it as NA
       }
     }
