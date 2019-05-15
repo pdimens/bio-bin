@@ -33,7 +33,7 @@ A specialized (but editable!) python script that takes RAD sequences with UMI el
 Takes `lepmap3` ordered marker linkage group files (using module `OrderMarkers2`) and converts them into `ALLMAPS` input format with the help of your contig name/positions courtesy of `vcftools` or a clever `grep` command. Can be used on either regular or sex-averaged maps.  
 
 ### lepmapQA.r ![alt_text](https://img.shields.io/badge/language-R-yellow.svg)
-Prunes the ambiguously clustered ends of ordered linkage maps produced by `lepmap3`'s `orderMarkers2` module. By default only scans the first and last 10% of each linkage group, and for a threshold of 10cM.
+Prunes the ambiguously clustered ends of ordered linkage maps produced by `lepmap3`'s `orderMarkers2` module. By default only scans the first and last 10% of each linkage group, and for a default threshold of 10cM (can be altered with an argument).
 
 ### punzip ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Parallelized unzipping of .gz files from one directory into another. Can do an entire directory, or only files containing something specific in their name, such as `lobster`, `_R1_`, `britneyspears`, etc.
