@@ -6,50 +6,64 @@ cat <<EOF
 [Usage] countseq <seq.file1> <seq.file2> ... etc. or <*.fasta> <*.fastq>
 
 [Example] countseq *.fq *.fasta.gz
-[Example] countseq frog_001.fa scorpion_001.fastq.gz > animals.counts
-
+[Example] countseq -n 8 frog_001.fa *.fastq.gz > animals.counts.txt
+ 
 EOF
 }
 
 if [[ -z "$1" ]]; then
-        echo -e "\n  This script will count the number of total base pairs and contigs \n in gzipped or unzipped sequence (fasta fa or fastq fq) files. Uses SAMtools for bam files, where first number output is total reads, second number is all mapped reads"
-        usage
-        exit
+    echo -e "\n  This script counts the number of total base pairs and contigs in gzipped or unzipped sequence (fasta fa or fastq fq) files. By default will parallelize over all available CPUs. Use optional '-n' flag to specify how many CPUs to use."
+    usage
+    exit
 fi
 
-filearg=${@};
-echo -e "filename \t #contigs \t #bp"
-for i in ${filearg[@]}
-do
-case "$i" in
+countfiles() {
+case "$1" in
 	*fa.gz | *fa.tgz | *fasta.gz | *fasta.tgz ) 
-			contigcount=$(zgrep -c ">" $i) 
-			bpcount=$(zgrep -v ">" $i | wc | awk '{print $3-$1}') 
-			;;
+    		contigcount=$(zgrep -c ">" $1) 
+		bpcount=$(zgrep -v ">" $1 | wc | awk '{print $3-$1}') 
+		;;
 	*.fa | *.fasta | *.txt) 						
-			contigcount=$(grep -c ">" $i) 
-			bpcount=$(grep -v ">" $i | wc | awk '{print $3-$1}')
-			;;
+		contigcount=$(grep -c ">" $1) 
+		bpcount=$(grep -v ">" $1 | wc | awk '{print $3-$1}')
+		;;
 	*fq.gz | *fq.tgz | *fastq.gz | *.fastq.tgz )
-			contigcount=$(($(zcat $i | wc -l | cut -d " " -f 1)/4)) 
-			bpcount=$(zcat $i | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
-			;;
+		contigcount=$(($(zcat $1 | wc -l | cut -d " " -f 1)/4)) 
+		bpcount=$(zcat $1 | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
+		;;
 	*.fq | *.fastq)
-			contigcount=$(($(cat $i | wc -l $i | cut -d " " -f 1)/4)) 
-			bpcount=$(cat $i | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
-			;;
-	*.bam)
-			contigcount=$(samtools view -c $i) 
-			bpcount=$(samtools view -c -F 260 $i)
-			;;
+		contigcount=$(($(cat $1 | wc -l $1 | cut -d " " -f 1)/4)) 
+		bpcount=$(cat $1 | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
+		;;
 	*)
-		echo 'Error - files must either end in ".fasta" ".fa" ".txt" ".fq" ".fastq" or their gzipped counterparts (.bam files also work).'
-        usage
-        exit 0
-					;;
+	echo 'Error - must be ".fasta" ".fa" ".txt" ".fq" ".fastq" or gzipped counterparts'
+	;;
 esac
-	printf  "%s \t%s" "$i" "$contigcount" &
-	printf "\t%s\n" "$bpcount" &
+	printf  "%s\t\t%s\t%s\n" "$(basename $1)" "$contigcount" "$bpcount"
+}
+
+
+filearg=${@};
+infiles() {
+for i in ${filearg[@]}
+    do
+    find ./ -name "$i"
 done
-wait
-exit 1
+}
+
+export -f countfiles
+export -f infiles
+
+while getopts "n:" opt; do
+  case $opt in
+    n)
+        cores=$(echo "--jobs $OPTARG")
+    ;;
+    :)
+        cores=$(echo "--jobs 0")
+    ;;
+  esac
+done
+
+echo -e "filename \t\t #contigs \t #bp"
+infiles | parallel $cores countfiles
