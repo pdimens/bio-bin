@@ -29,7 +29,7 @@ for(i in file.names){
   for (j in 2:3){   # iterate over male (2) and female (3)
     # prune beginning
     pass_sort<-passing_markers[order(passing_markers[,j]),]   # sort good markers
-    filelength10 <- length(pass_sort[,j]) * 0.10
+    filelength10 <- length(pass_sort[,j]) * 0.15
     for(a in 1:filelength10){ #first 10% of total markers from the beginning
       diff <- abs(pass_sort[a+1,j]-pass_sort[a,j]) # difference between two points
       if( diff > args[3] ){ # is the difference between the two points > distance argument?
@@ -39,7 +39,7 @@ for(i in file.names){
 
     # prune ends
     filelen<-length(pass_sort[,j])  # get new file lengths for each time we remove NA's
-    filelength10 <- round(filelen * 0.10)
+    filelength10 <- round(filelen * 0.15)
     for(z in filelen:(filelen-filelength10)){  #iterate 10% total markers in starting from the end
       diff <- abs(pass_sort[z,j]-pass_sort[z-1,j]) # difference between two points
       if( diff > args[3] ){ # is the difference between the two points > distance argument?
