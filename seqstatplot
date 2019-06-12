@@ -59,6 +59,6 @@ else:
         p.xaxis.visible = False
         p.axis.minor_tick_line_color = None
         p.add_tools(HoverTool(tooltips=TOOLTIPS, mode='vline'))
-        save(filename='seqstatplot.html', title=os.path.splitext(sys.argv[1])[0], obj=p)
+        save(filename=sys.argv[1]+'.seqstats.html', title=os.path.splitext(sys.argv[1])[0], obj=p)
     seqstatplot()
-    print("\n", "you can find your plot in seqstatplot.html", "\n")
+    print("\n", "you can find your plot in ", sys.argv[1]+'.seqstats.html', "\n")
