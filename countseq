@@ -7,7 +7,7 @@ cat <<EOF
 
 [Example] countseq *.fq *.fasta.gz
 [Example] countseq -n 8 frog_001.fa *.fastq.gz > animals.counts.txt
- 
+
 EOF
 }
 
@@ -19,16 +19,16 @@ fi
 
 countfiles() {
 case "$1" in
-	*fa.gz | *fa.tgz | *fasta.gz | *fasta.tgz ) 
-    		contigcount=$(zgrep -c ">" $1) 
-		bpcount=$(zgrep -v ">" $1 | wc | awk '{print $3-$1}') 
+	*fa.gz | *fa.tgz | *fasta.gz | *fasta.tgz )
+    contigcount=$(zgrep -c ">" $1)
+		bpcount=$(zgrep -v ">" $1 | wc | awk '{print $3-$1}')
 		;;
-	*.fa | *.fasta | *.txt) 						
-		contigcount=$(grep -c ">" $1) 
+	*.fa | *.fasta | *.txt)
+		contigcount=$(grep -c ">" $1)
 		bpcount=$(grep -v ">" $1 | wc | awk '{print $3-$1}')
 		;;
 	*fq.gz | *fq.tgz | *fastq.gz | *.fastq.tgz )
-		contigcount=$(($(zcat $1 | wc -l | cut -d " " -f 1)/4)) 
+		contigcount=$(($(zcat $1 | wc -l | cut -d " " -f 1)/4))
 		bpcount=$(zcat $1 | paste - - - - | cut -f 2 | tr -d '\n' | wc -c )
 		;;
 	*.fq | *.fastq)
@@ -41,7 +41,6 @@ case "$1" in
 esac
 	printf  "%s\t\t%s\t%s\n" "$(basename $1)" "$contigcount" "$bpcount"
 }
-
 
 filearg=${@};
 infiles() {
@@ -65,5 +64,5 @@ while getopts "n:" opt; do
   esac
 done
 
-echo -e "filename \t\t #reads \t #bp"
+echo -e "filename \t\t #contigs \t #bp"
 infiles | parallel $cores countfiles
