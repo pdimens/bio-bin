@@ -22,7 +22,7 @@ import os
 
 def usage():
     print("\n", "This py3 script finds and removes UMI elements between paired-end reads")
-    print("file format must be <name>_R1_001.fasta.gz and <name>_R2_001.fasta.gz")
+    print("file format must be <name>_R1_001.fastq.gz and <name>_R2_001.fastq.gz")
     print("-- configured for 2x150bp ddRAD sequences using EcoRI + MspI & 7bp UMI --")
     print("\n", "[usage] dDuplicator <number.of.cores> <where to truncate original filename>")
     print("[example] dDupilcator 10 8", "\n")
