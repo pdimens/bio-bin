@@ -3,15 +3,14 @@
 info() {
 cat <<EOF
 
-This script will convert PacBio bam files into fasta format using samtools,
-concatenating them into a single file and counting the number of base pairs 
-and total number of contigs in the concatenated file.
+Converts PacBio bam files into fasta or fastq format using bam2fastx
+provided by PacBio https://github.com/PacificBiosciences/bam2fastx
 
-[Usage]	unpaq -p <output.prefix> -d <working.directory>
+[usage]:	unpaq fastq/a -o <outfile.name> -d <working.directory>
+[example]: unpaq fasta -o pangolin_1  ./pangolin_pbio
 
--p <prefix>       | prefix output for output file
+-o <prefix>       | output filename
 -d <directory>    | path to working directory
--q                | indicates you want fastq output (optional)
 
 EOF
 }
@@ -19,58 +18,26 @@ EOF
 usage() {
 cat <<EOF
 
-[Usage]	unpaq -p <output.prefix> -d <working.directory> -q <optional>
+[usage]:	unpaq fastq/a -o <outfile.name> -d <working.directory> -q <optional>
+[example]: unpaq fasta -o armadillo  ./
 
 EOF
 }
 
-process_subreads() {
-  cd $WORKDIR
-  mkdir -p subreads_fasta
-  echo -e "\n ...converting subreads.bam files to fasta..."
-  find ./ -name '*.subreads.bam' | parallel "echo 'converting {} to fasta' & samtools fasta {} > ./subreads_fasta/{/.}.unpac.fasta" 
-  echo -e "\n ...concatenating fasta files..."
-  cat ./subreads_fasta/*unpac.fasta > ./subreads_fasta/$PREFIX.pacbio.subreads.fasta
-  echo "Subreads file : $PREFIX.pacbio.subreads.fasta"
-  echo -e "\n ...counting the number of contigs and base pairs in the subreads..."
-  echo "Total contigs present in $PREFIX.pacbio.subreads.fasta: $(grep -c ">" ./subreads_fasta/$PREFIX.pacbio.subreads.fasta)" >> ./subreads_fasta/$PREFIX.pacbio_subreads_stats.txt & \
-  echo "Total basepairs present in $PREFIX.pacbio.subreads.fasta: $(grep -v ">" ./subreads_fasta/$PREFIX.pacbio.subreads.fasta | wc | awk '{print $3-$1}')" >> ./subreads_fasta/$PREFIX.pacbio_subreads_stats.txt
-  head ./subreads_fasta/$PREFIX.pacbio_subreads_stats.txt
-}
-
-process_scraps() {
-  mkdir -p scraps_fasta
-  echo -e "\n ...converting scraps.bam files to fasta..."
-  find ./ -name '*.scraps.bam' | parallel "echo 'converting {} to fasta' & samtools fasta {} > ./scraps_fasta/{/.}.unpac.fasta"
-  echo -e "\n ...concatenating fasta files..."
-  cat ./scraps_fasta/*unpac.fasta > ./scraps_fasta/$PREFIX.pacbio.scraps.fasta
-  echo "Scraps file: is $PREFIX.pacbio.scraps.fasta"
-  echo -e "\n ...counting the number of contigs and base pairs in the scraps..."
-  echo "Total contigs present in scraps: $(grep -c ">" ./scraps_fasta/$PREFIX.pacbio.scraps.fasta)" >> ./scraps_fasta/$PREFIX.pacbio_scraps_stats.txt & \
-  echo "Total basepairs present in the scraps: $(grep -v ">" ./scraps_fasta/$PREFIX.pacbio.scraps.fasta | wc | awk '{print $3-$1}')" >> ./scraps_fasta/$PREFIX.pacbio_scraps_stats.txt
-  head ./scraps_fasta/$PREFIX.pacbio_scraps_stats.txt
-}
-
-# code chunk for usage when no argument given
 if [[ -z "$1" ]]; then
   info
   exit 1
 fi
-#
 
-while getopts ":p:d:m:q" opt; do
+while getopts ":p:d:" opt; do
   case $opt in
     p)
-      echo "fasta file prefix set to: $OPTARG" 
+      echo "output file will be named $OPTARG.f*.gz" 
       PREFIX=$OPTARG
       ;;
     d)
       WORKDIR=$OPTARG
       echo "working directory set to: $(readlink -f $OPTARG)"
-      ;;
-    q)
-      MODE=FASTQ
-      echo "using bam2fastq to convert subreads.bam into $PREFIX.fq.gz"
       ;;
     \?)
       echo "Invalid option: -$OPTARG" 
@@ -85,15 +52,19 @@ while getopts ":p:d:m:q" opt; do
   esac
 done
 
-if [ "$MODE" == 'FASTQ' ] ; then
-    bam2fastq -o $PREFIX $(find $WORKDIR -name "*.subreads.bam")
-else ;
+if [ "$1" == 'fastq' ] ; then
     echo "Do you want to process scraps.bam files too? This will take a lot longer. (y/n)"
     read $SCRAPS
-    if [ "$SCRAPS" == 'n' ] ; 
-        then process_subreads
-    else ;
-        process_subreads &&  process_scraps
+    bam2fastq -o $PREFIX $(find $WORKDIR -name "*.subreads.bam")
+    if [ "$SCRAPS" == 'y' ] ; then
+        bam2fastq -o $PREFIX $(find $WORKDIR -name "*.scraps.bam")
+    fi
+else ;
+    bam2fasta -o $PREFIX $(find $WORKDIR -name "*.scraps.bam")
+    echo "Do you want to process scraps.bam files too? This will take a lot longer. (y/n)"
+    read $SCRAPS
+    if [ "$SCRAPS" == 'y' ] ; then
+        bam2fasta -o $PREFIX $(find $WORKDIR -name "*.scraps.bam")
     fi
 fi
 
