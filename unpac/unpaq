@@ -1,0 +1,21 @@
+#! /usr/bin/env bash
+
+if [[ -z "$1" ]]; then
+    cat <<EOF
+
+    This script will convert PacBio bam files into fastq format using bam2fastq 
+    provided by PacBio at https://github.com/pacificbiosciences/bam2fastx/
+    Will search for all folders in the working dir containing "*.subreads.bam"
+    MUST also have complementary *.subreads.bam.pbi" file
+    
+    [usage]	unpaq <working.directory> <outfile.name> 
+    [example]	unpaq ./ pangolin
+
+EOF
+  exit 1
+fi
+
+DIR=$1
+FILENAME=$2
+
+bam2fastq -o $FILENAME $(find $DIR -name "*.subreads.bam")
