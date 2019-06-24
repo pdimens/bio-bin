@@ -29,7 +29,9 @@ unpaq -q swordfish -d ~/Data/swordfish_genome/
 |bam2fastq | FASTQ output | no | https://github.com/PacificBiosciences/pbbioconda |
 
 ## Why would you use this?
-If you had sequencing done of a single individual (or species) across several cells, each run is returned to you as a folder containing `.bam` files of your sequences (among other things). You may need these files in `.fasta` format for your pipeline, and multiple sequences combined into a single sequence file.
+If you had sequencing done of a single individual (or species) across several cells, each run is returned to you as a folder containing `.bam` files of your sequences (among other things). You may need these files in `.fasta` or fastq format for your pipeline, and multiple sequences combined into a single sequence file. 
+##### Why use this instead of bam2fastx directly? 
+This script makes it a little easier to add multiple files across different folders at once. 
 
 
 
