@@ -7,11 +7,11 @@ Convert `.bam` files into a concatenated `.fasta` file or a `fastq` file
 
 ## Usage
 ```bash
-unpac -p <output.prefix> -d <working.directory> -m <mode>
+unpaq -p <output.prefix> -d <working.directory> -m <mode>
 ```
-An example of processing a species of fish
+An example of processing a species of fish to produce fasta output
 ```bash
-unpac -p swordfish -d ~/Data/swordfish_genome/ -m multi
+unpac -q swordfish -d ~/Data/swordfish_genome/ 
 ```
 ### Usage arguments
 | flag |  details |
