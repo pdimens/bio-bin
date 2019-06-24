@@ -7,11 +7,11 @@ This script will convert PacBio bam files into fasta format using samtools,
 concatenating them into a single file and counting the number of base pairs 
 and total number of contigs in the concatenated file.
 
-[Usage]	unpac -p <output.prefix> -d <working.directory> -m <multi or single>
+[Usage]	unpaq -p <output.prefix> -d <working.directory>
 
--p <prefix>       | prefix output for renamed final fasta files
+-p <prefix>       | prefix output for output file
 -d <directory>    | path to working directory
--q                | indicates you want fastq output
+-q                | indicates you want fastq output (optional)
 
 EOF
 }
@@ -19,7 +19,7 @@ EOF
 usage() {
 cat <<EOF
 
-[Usage]	unpac -p <output.prefix> -d <working.directory> -q <optional>
+[Usage]	unpaq -p <output.prefix> -d <working.directory> -q <optional>
 
 EOF
 }
