@@ -11,7 +11,7 @@ unpaq -p <output.prefix> -d <working.directory> -m <mode>
 ```
 An example of processing a species of fish to produce fasta output
 ```bash
-unpac -q swordfish -d ~/Data/swordfish_genome/ 
+unpaq -q swordfish -d ~/Data/swordfish_genome/ 
 ```
 ### Usage arguments
 | flag |  details |
