@@ -13,9 +13,9 @@ unpac -p swordfish -d ~/Data/swordfish_genome/ -m multi
 ### Usage arguments
 | flag |  details |
 |---|---|
--p <prefix>       | prefix output for ouput fil
+-p <prefix>       | prefix output for ouput file
 -d <directory>    | path to working directory
--q                | indicates you want fastq output
+-q                | indicates you want fastq output (optional)
  
 
 ## Dependencies
