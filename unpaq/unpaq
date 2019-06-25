@@ -3,14 +3,15 @@
 info() {
 cat <<EOF
 
-Converts PacBio bam files into fasta or fastq format using bam2fastx
-provided by PacBio https://github.com/PacificBiosciences/bam2fastx
+  Converts PacBio bam files into fasta or fastq format using bam2fastx
+  provided by PacBio https://github.com/PacificBiosciences/bam2fastx
 
-[usage]:	unpaq fastq/a -o <outfile.name> -d <working.directory>
-[example]: unpaq fasta -o pangolin_1  ./pangolin_pbio
+  [usage]:	unpaq -f <fastq/a> -o <outfile.name> -d <working.directory>
+  [example]: 	unpaq -f fasta -o pangolin_1  -d ./pangolin_pbio
 
--o <prefix>       | output filename
--d <directory>    | path to working directory
+  -f <fastX>      | fasta or fastq file output
+  -o <outfile>    | output filename prefix
+  -d <directory>  | path to working directory
 
 EOF
 }
@@ -18,8 +19,8 @@ EOF
 usage() {
 cat <<EOF
 
-[usage]:	unpaq fastq/a -o <outfile.name> -d <working.directory> -q <optional>
-[example]: unpaq fasta -o armadillo  ./
+[usage]:	unpaq -f fastq/a -o <outfile.name> -d <working.directory>
+[example]: 	unpaq -f fasta -o armadillo  -d ./
 
 EOF
 }
@@ -29,43 +30,63 @@ if [[ -z "$1" ]]; then
   exit 1
 fi
 
-while getopts ":p:d:" opt; do
+fastq(){
+  echo "output file will be named $OUTFILE.fq.gz"
+  bam2fastq -o $OUTFILE $SUBREADS
+    if [ $SCRAPS == "y" ] ; then
+        bam2fastq -o $OUTFILE $SCRAPFILES
+    fi
+}
+export -f fastq
+fasta(){
+  echo "output file will be named $OUTFILE.fa.gz" 
+  bam2fasta -o $OUTFILE $SUBREADS
+  if [ $SCRAPS == 'y' ] ; then
+      bam2fasta -o $OUTFILE $SCRAPFILES
+  fi
+}
+export -f fasta
+
+while getopts ":f:o:d:" opt; do
   case $opt in
-    p)
-      echo "output file will be named $OPTARG.f*.gz" 
-      PREFIX=$OPTARG
+    f)
+      FASTX=$OPTARG
+      if [ "$FASTX" != 'fastq' ] && [ "$FASTX" != 'fasta' ] ; then
+        echo -e "\n\t :::Please specify either fasta or fastq:::"
+        usage
+        exit 1
+      fi
+      ;;
+    o)
+      OUTFILE=$OPTARG
       ;;
     d)
       WORKDIR=$OPTARG
-      echo "working directory set to: $(readlink -f $OPTARG)"
       ;;
-    \?)
-      echo "Invalid option: -$OPTARG" 
+	\?)
+      echo "Invalid option: -$OPTARG" >&2
       usage
       exit 1
       ;;
     :)
-      echo "-$OPTARG requires an argument." 
+      echo "-$OPTARG requires an argument." >&2
       usage
       exit 1
       ;;
   esac
 done
 
-if [ "$1" == 'fastq' ] ; then
-    echo "Do you want to process scraps.bam files too? This will take a lot longer. (y/n)"
-    read $SCRAPS
-    bam2fastq -o $PREFIX $(find $WORKDIR -name "*.subreads.bam")
-    if [ "$SCRAPS" == 'y' ] ; then
-        bam2fastq -o $PREFIX $(find $WORKDIR -name "*.scraps.bam")
-    fi
-else ;
-    bam2fasta -o $PREFIX $(find $WORKDIR -name "*.scraps.bam")
-    echo "Do you want to process scraps.bam files too? This will take a lot longer. (y/n)"
-    read $SCRAPS
-    if [ "$SCRAPS" == 'y' ] ; then
-        bam2fasta -o $PREFIX $(find $WORKDIR -name "*.scraps.bam")
-    fi
+SUBREADS=$(find $WORKDIR -name "*.subreads.bam")
+echo "Do you want to process scraps.bam files too (y/n)? "
+  read -r SCRAPS
+  if [ $SCRAPS == "y" ] ; then
+    SCRAPFILES=$(find $WORKDIR -name "*.scraps.bam")
+  fi
+
+if [ $FASTX == "fastq" ] ; then
+  fastq 
+else
+  fasta
 fi
 
 exit 1
