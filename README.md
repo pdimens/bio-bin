@@ -2,7 +2,7 @@
 
 A place to store my custom and forked scripts used for genomic analysis- a list slowly growing as things come up.
 
-### bh_hardy.py ![alt_text](https://img.shields.io/badge/language-python3-green.svg)
+### bh_hardy.py ![alt_text](https://img.shields.io/badge/language-python3-green.svg) (not maintained)
 A python script that takes your raw `--hardy` output from `VCFtools` and performs a Benjamini-Hochberg correction on the data, outputting a file with the contigs that have >1 significant locus. This version requires only base python packages (e.g. no `numpy` or `pandas`)
 
 ### configure_blasr_install ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
@@ -20,7 +20,7 @@ A Julia implementation of `countseq` just to try it out. Tends to be more useful
 ### countbam ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Simple wrapper for `SAMtools` which counts the total number of reads and number of mapped reads in bam files.
 
-### demultiplex_SE.pl ![alt_text](https://img.shields.io/badge/language-perl-yellow.svg)
+### demultiplex_SE.pl ![alt_text](https://img.shields.io/badge/language-perl-yellow.svg) (not maintained)
 Fork of Chris Hollenbeck's `demultiplex.pl` (perl wrapper for automating `process_RADtags` across several indices) that has an additional flag to handle single-end data for demultiplexing raw sequence reads. 
 
 ### FastaReadnames.jl ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
