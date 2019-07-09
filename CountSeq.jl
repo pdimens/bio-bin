@@ -4,17 +4,19 @@ if length(ARGS)==0
   println("This julia script counts the # of reads and basepairs in fasta or fastq files")
   println(":: dependencies: BioSequences.jl, GZip.jl ::")
   println("\n","[usage] CountSeq <fasta/q file1> <fasta/q file2> <etc.>")
+  println("\n \n", "for multithreading, set \"export JULIA_NUM_THREADS= \" in your shell before running")
   exit()
 end
 
 using BioSequences
 using GZip
+using Base.Threads
 
 function getcounts()
-    for infile in ARGS
+    @threads for infile in ARGS
     if occursin(".fastq", lowercase(infile)) | occursin(".fq", lowercase(infile))
       if occursin(".gz", lowercase(infile))
-        seqfile= FASTQ.Reader(GZip.open(infile,"r")) 
+        seqfile= FASTQ.Reader(GZip.open(infile,"r"))
       else
         seqfile= FASTQ.Reader(open(infile,"r"))
       end
@@ -27,7 +29,7 @@ function getcounts()
       end
       filetype="fasta"
     else
-      println(infile, " format incorrect, must be .fa .fasta .txt .fq .fastq or gzipped versions")
+      println("$infile format incorrect, must be .fa .fasta .txt .fq .fastq or gzipped versions")
       continue
     end
     reads = 0
