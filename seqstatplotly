@@ -1,39 +1,36 @@
 #! /usr/bin/env julia
 
 if length(ARGS)==0
-    print("Uses Julia + Plotly to make an interactive plot of the sequencing information from U-Colorado \n[usage] seqstatplotly <csv file>")
+    println("Uses Julia + Plotly to make an interactive plot of the sequencing information from U-Colorado \n[usage] seqstatplotly <csv file>")
 else
-    using Blink
-    using PlotlyJS
-    using CSV
-    using ORCA
-    using DataFrames
-    infile = CSV.read(
-                      ARGS[1],
-                      delim = ",",
-                      datarow=8,
-                      header=[
-                              "lane",
-                              "project",
-                              "sample",
-                              "barcode",
-                              "reads",
-                              "percent of lane",
-                              "percent perfect barcode",
-                              "percent one mismatch",
-                              "yield",
-                              "percent PF clusters",
-                              "pq30",
-                              "mqscore"
-                              ]
-                      )
+    using PlotlyJS, CSV, ORCA, DataFrames
+
     function statplots()
+        infile = CSV.read(
+            ARGS[1],
+            delim = ",",
+            datarow=8,
+            header=[
+            "lane",
+            "project",
+            "sample",
+            "barcode",
+            "reads",
+            "percent of lane",
+            "percent perfect barcode",
+            "percent one mismatch",
+            "yield",
+            "percent PF clusters",
+            "pq30",
+            "mqscore"
+            ]
+            )
         trace1 = bar(
                     x=infile.sample,
                     y=infile.reads,
                     name = "Number of reads",
                     text = infile.sample
-                    )
+		)
         trace2 = bar(
                     x=infile.sample,
                     y=infile.yield,
@@ -41,28 +38,45 @@ else
                     )
         trace3 = bar(
                     x=infile.sample,
-                    y=infile.pq30,
-                    name = "% > Q30"
-                    )
-        trace4 = bar(
-                    x=infile.sample,
                     y=infile.mqscore,
                     name = "Mean Quality Score"
                     )
 
-        layout = Layout(
+        layoutBars = Layout(
                        barmode = "stack",
+                       yaxis_title = "# of reads",
                        bargap = 0.1,
                        font_size = 10,
-                       margin = attr(l=100, r=50, b=50, t=50, pad=10)
-                       )
+                       title = "Reads per Individual",
+                       margin = attr(l=100,
+					   				r=50,
+									b=50,
+									t=50,
+									pad=8
+								)
+                       )       
+        hist1 = (histogram(;x = infile.reads, 
+                          nbinsx = 50,
+                          name = "# clusters (frequency)", 
+                          )
+                )
+        hist2 =(histogram(;x = infile.mqscore, 
+                          nbinsx = 50,
+                          name = "Mean Quality Score",
+                          )
+                )
+        layoutHist1 = Layout(title = "Cluster # distribution across all individuals", yaxis_title = "# individuals")
+        layoutHist2 = Layout(title = "Distribution of mean quality scores across all individuals", yaxis_title = "# individuals")
 
-        plot([trace1,trace2,trace3,trace4], layout)
+        p1 = plot([trace1,trace2,trace3], layoutBars)
+        p2 = plot([hist1], layoutHist1)
+        p3 = plot([hist2], layoutHist2)
+        [p1, p2, p3]
     end
     PlotlyJS.savehtml(
                      statplots(),
-                     "seqstatplotly.html",
+                     split(ARGS[1], ".")[1]*".statplot.html",
                      :embed
                      )
-    print("\n find your plot in seqstatplotly.html \n")
+    println("\n find your plot in ending with statplot.html \n")
 end
