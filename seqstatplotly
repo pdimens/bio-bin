@@ -1,7 +1,8 @@
 #! /usr/bin/env julia
 
 if length(ARGS)==0
-    println("Uses Julia + Plotly to make an interactive plot of the sequencing information from U-Colorado \n[usage] seqstatplotly <csv file>")
+    println("Uses Julia + Plotly to make an interactive plot of the sequencing information from U-Colorado")
+    println("[usage] seqstatplotly <csv file>")
 else
     using PlotlyJS, CSV, ORCA, DataFrames
 
@@ -49,11 +50,11 @@ else
                        font_size = 10,
                        title = "Reads per Individual",
                        margin = attr(l=100,
-					   				r=50,
-									b=50,
-									t=50,
-									pad=8
-								)
+				     r=50,
+				     b=50,
+				     t=50,
+				     pad=8
+				)
                        )       
         hist1 = (histogram(;x = infile.reads, 
                           nbinsx = 50,
