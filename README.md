@@ -20,6 +20,9 @@ A Julia implementation of `countseq` just to try it out. Tends to be more useful
 ### countbam ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Simple wrapper for `SAMtools` which counts the total number of reads and number of mapped reads in bam files.
 
+### CountMismatch.jl ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
+Takes an input file of strings (like 6bp indices) and does and all vs. all match to count the number of mismatches between the indices. Outputs an html heatmap and textfile of the pairwise comparisons.
+
 ### demultiplex_SE.pl ![alt_text](https://img.shields.io/badge/language-perl-yellow.svg) (not maintained)
 Fork of Chris Hollenbeck's `demultiplex.pl` (perl wrapper for automating `process_RADtags` across several indices) that has an additional flag to handle single-end data for demultiplexing raw sequence reads. 
 
