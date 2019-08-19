@@ -25,7 +25,7 @@ def usage():
     print("file format must be <name>_R1_001.fastq.gz and <name>_R2_001.fastq.gz")
     print("-- configured for 2x150bp ddRAD sequences using EcoRI + MspI & 7bp UMI --")
     print("\n", "[usage] dDuplicator <number.of.cores> <where to truncate original filename>")
-    print("[example] dDupilcator 10 8", "\n")
+    print("[example] dDupilcater 10 8", "\n")
 
 
 if len(sys.argv) != 3:
@@ -142,12 +142,12 @@ def processUMI(infile):
         outfile1.write("@" + nondup_fnames[a]
                        + "\n" + nondup_fseqs[a][8:]
                        + "\n" + "+"
-                       + "\n" + nondup_fquals[a]
+                       + "\n" + nondup_fquals[a][8:]
                        + "\n")
         outfile2.write("@" + nondup_rnames[a]
                        + "\n" + nondup_rseqs[a][8:]
                        + "\n" + "+"
-                       + "\n" + nondup_rquals[a]
+                       + "\n" + nondup_rquals[a][8:]
                        + "\n")
     outfile1.close()
     outfile2.close()
