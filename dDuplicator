@@ -142,7 +142,7 @@ def processUMI(infile):
         outfile1.write("@" + nondup_fnames[a]
                        + "\n" + nondup_fseqs[a][8:]
                        + "\n" + "+"
-                       + "\n" + nondup_fquals[a][8:]
+                       + "\n" + nondup_fquals[a]
                        + "\n")
         outfile2.write("@" + nondup_rnames[a]
                        + "\n" + nondup_rseqs[a][8:]
