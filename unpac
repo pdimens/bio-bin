@@ -5,9 +5,10 @@ cat <<EOF
 
   Converts PacBio bam files into fasta or fastq format using bam2fastx
   provided by PacBio https://github.com/PacificBiosciences/bam2fastx
+  MUST have bam2fastx installed (simple via conda)
 
-  [usage]:	unpaq -f <fastq/a> -o <outfile.name> -d <working.directory>
-  [example]: 	unpaq -f fasta -o pangolin_1  -d ./pangolin_pbio
+  [usage]:	unpac -f <fastq/a> -o <outfile.name> -d <working.directory>
+  [example]: 	unpac -f fasta -o pangolin_1  -d ./pangolin_pbio
 
   -f <fastX>      | fasta or fastq file output
   -o <outfile>    | output filename prefix
@@ -19,8 +20,8 @@ EOF
 usage() {
 cat <<EOF
 
-[usage]:	unpaq -f fastq/a -o <outfile.name> -d <working.directory>
-[example]: 	unpaq -f fasta -o armadillo  -d ./
+[usage]:	unpac -f fastq/a -o <outfile.name> -d <working.directory>
+[example]: 	unpac -f fasta -o armadillo  -d ./
 
 EOF
 }
