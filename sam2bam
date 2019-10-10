@@ -1,9 +1,9 @@
 #! /usr/bin/env bash
 
 #====== USAGE ======#
-
-sam2bam filename.sam
-
+#
+# sam2bam filename.sam
+#
 #===================#
 
 FILENAME=`echo "$1" | cut -d '.' -f1`
