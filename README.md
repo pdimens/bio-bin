@@ -32,7 +32,6 @@ Simple julia wrapper to extract all the read names from within a fasta file (or 
 ### dDuplicator ![alt_text](https://img.shields.io/badge/language-python3-green.svg)
 A specialized (but editable!) python script that takes RAD sequences with UMI elements, checking for PCR duplicates, removing them, and outputting filtered sequences ready for `dDocent` input.
 
-
 ### lepmapQA.r ![alt_text](https://img.shields.io/badge/language-R-yellow.svg)
 Prunes the ambiguously clustered ends of ordered linkage maps produced by `lepmap3`'s `orderMarkers2` module. By default only scans the first and last 15% of each linkage group's markers, and for a default threshold of 10cM (can be altered with an argument). This is a standalone version of `LepMapp3rQA.r` used by `LepMapp3r`.
 
@@ -41,6 +40,9 @@ Parallelized unzipping of .gz files from one directory into another. Can do an e
 
 ### ReverseComp ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
 Takes  a file of one-per-line sequences and outputs the reverse, complement, or reverse-complement of each of those sequences. This script was used to quickly generate reverse-complements to sequencing barcodes for demultiplexing.
+
+### sam2bam ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
+Automates basic conversion of a single `sam` file to a `bam` file, sorts it, and indexes it. 
 
 ### seqstatplot ![alt_text](https://img.shields.io/badge/language-python3-green.svg)
 Outputs an interactive [bokeh](https://bokeh.pydata.org/en/latest/) plot as an html for the sequencing run metrics we recieve as .csv from the facility that sequences our samples. *Specific to their file output format*.
