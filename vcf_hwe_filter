@@ -1,0 +1,82 @@
+#! /usr/bin/env Rscript
+# R routines written by Amanda Barker
+# Code generalization and bash/vcftools components added by Pavel Dimens
+# This script is used to generate HWE heterozygosity info from a VCF file 
+# and perform the necessary outlier test with Benjamini-Hochberg correction.
+# It outputs outlier contigs and loci into separate files and removes those
+# loci and contigs from your VCF file, eliminating a lot of manual effort. 
+
+args = commandArgs(trailingOnly = TRUE)
+
+if (length(args)==0) {
+  system("echo Filter contigs/snps with excess heterozygosity.")
+  system("echo Calculates per-locus heterozygosity and detects outliers with an FDR correciton.")
+  system("echo \"  - For sites with a single outlier, only that position is removed\"")
+  system("echo \"  - For sites with multiple outliers, the entire contig is removed\"")
+  system("echo -e \"\n>> must be run in the same directory as the input VCF file <<\"")
+  system("echo -e \"\n[usage]:    vcf_hwe_filter <vcf_file>\"")
+  system("echo -e \"\n[requires]: VCFtools, R, and remove_contigs_from_vcf.sh in your PATH available here:\"")     
+  system("echo https://github.com/marinegenomicslab/workflow/tree/master/utility-scripts/VCFfiltering")
+  q()
+}
+
+#### Get HWE values from VCFtools #####
+system("echo -e \"\n ## Performing HWE calculations via VCFtools ##\n\"")
+hwe_calc <- paste("vcftools --vcf ", args[1], " --out VCF --hardy")
+system(hwe_calc)
+
+# format the outfile
+system("sed 's/\\// /g' VCF.hwe > HWE.csv")
+
+##### identify heterozygous outliers ####
+# Silently load dplyr library, or install it if necessary
+suppressMessages(if (!require("dplyr")) install.packages("dplyr"))
+suppressMessages(library("dplyr"))
+
+setwd(getwd())
+
+system("echo -e \"\n ## Performing heterozygosity signficance tests with FDR correction ##\n\"")
+
+# Import data
+VCF_hwe <- read.table("HWE.csv", header = TRUE, col.names=c("CHR", "POS", "OBS_HOM1", "OBS_HET", "OBS_HOM2", "EXP_HOM1", "EXP_HET", "EXP_HOM2", "ChiSq_HWE", "P_HWE", "P_HET_DEFICIT", "P_HET_EXCESS"))
+
+# Calculate observed heterozygosity and correct pvalues
+VCF_hwe <- VCF_hwe %>% mutate(Observed_het = (VCF_hwe$OBS_HET/(VCF_hwe$OBS_HOM1 + VCF_hwe$OBS_HET + VCF_hwe$OBS_HOM2)), Corrected_p = p.adjust(VCF_hwe$P_HET_EXCESS, method = "fdr"))
+
+# Filter rows that have >0.5 heterozygosity and are significant and put in new dataframe 
+VCF_filtered_hwe <- filter(VCF_hwe, Observed_het > 0.5, Corrected_p < 0.05)
+
+# Count number of significant snps for each contig and put in new dataframe 
+VCF_uniq_contigs <- VCF_filtered_hwe %>% count(CHR)
+
+# Filter for contigs that have multiple significant snps 
+VCF_remove_contigs <- filter(VCF_uniq_contigs, n > 1)
+
+system("echo \"  - Writing contigs with multiple significant positions to file VCF_hwe_contigs.txt\"")
+# Write contigs to text file, use file with "remove_contigs_from_vcf" script to remove 
+write.table(VCF_remove_contigs[1], file = "VCF_hwe_contigs.txt", col.names= FALSE, row.names = FALSE, quote = FALSE)
+
+# Remove contigs with multiple significant positions
+rm_mult <- paste("remove_contigs_from_vcf.sh VCF_hwe_contigs.txt ", args[1])
+system("echo \"  - Removing contigs with multiple significant positions using remove_contigs_from_vcf.sh\n\"")
+system(rm_mult)
+
+# Filter for contigs that only have one significant snp
+VCF_single <- filter(VCF_uniq_contigs, n == 1)
+
+# Match the contigs w/ one snp back to the filtered dataframe to get position of snp. Match function adds a column with the location of the match in the second data frame, otherwise returns zero. 
+VCF_filtered_hwe$match <- match(VCF_filtered_hwe$CHR, VCF_single$CHR, nomatch = 0)
+
+# Filter matches to new dataframe
+VCF_remove_snps <- filter(VCF_filtered_hwe, match > 0)
+
+system("echo -e \"\n  - Writing sites with single signficant positions to file VCF_hwe_snps.txt\"")
+#Write contig/position to text file, use file with vcftools to remove positions from dataset 
+write.table(VCF_remove_snps[1:2], file = "VCF_hwe_snps.txt", col.names= FALSE, row.names = FALSE, quote = FALSE)
+
+# Remove loci with single significant sites
+system("echo \"  - Removing loci with single significant sites using VCFtools\"")
+rm_single <- "vcftools --recode-INFO-all --vcf vcf-minus-contigs.recode.vcf --exclude-positions VCF_hwe_snps.txt --recode --out vcf-het-filtered"
+system(rm_single)
+
+system("echo -e \"\nHeterozygosity filtering is complete. Your filtered file is named: vcf-het-filtered.recode.vcf\"")
