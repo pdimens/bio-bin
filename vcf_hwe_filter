@@ -76,7 +76,7 @@ write.table(VCF_remove_snps[1:2], file = "VCF_hwe_snps.txt", col.names= FALSE, r
 
 # Remove loci with single significant sites
 system("echo \"  - Removing loci with single significant sites using VCFtools\"")
-rm_single <- "vcftools --recode-INFO-all --vcf vcf-minus-contigs.recode.vcf --exclude-positions VCF_hwe_snps.txt --recode --out vcf-het-filtered"
+rm_single <- "vcftools --recode-INFO-all --vcf vcf-minus-contigs.recode.vcf --exclude-positions VCF_hwe_snps.txt --recode --out het-filtered"
 system(rm_single)
 
-system("echo -e \"\nHeterozygosity filtering is complete. Your filtered file is named: vcf-het-filtered.recode.vcf\"")
+system("echo -e \"\nHeterozygosity filtering is complete. Your filtered file is named: het-filtered.recode.vcf\"")
