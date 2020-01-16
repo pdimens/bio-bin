@@ -2,9 +2,6 @@
 
 A place to store my custom and forked scripts used for genomic analysis- a list slowly growing as things come up.
 
-### bh_hardy.py ![alt_text](https://img.shields.io/badge/language-python3-green.svg) (not maintained)
-A python script that takes your raw `--hardy` output from `VCFtools` and performs a Benjamini-Hochberg correction on the data, outputting a file with the contigs that have >1 significant locus. This version requires only base python packages (e.g. no `numpy` or `pandas`)
-
 ### configure_blasr_install ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 It took me forever to get blasr/sparc installed and running correctly for hybrid genome assemblies, and after finally getting it to work, I vowed to never **ever** have to deal with it again, so this scipt does the necessary tweaks to get sparc_split_and_run.sh working right, *and* from your `$PATH`
 
@@ -55,3 +52,6 @@ Takes input fasta file and splits reads into their own fasta files. Useful for s
 
 ### unpac ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Converts pacbio sequences from bam to fasta/q. A wrapper for `bam2fastx`
+
+### vcf_hwe_filter ![alt_text](https://img.shields.io/badge/language-R-yellow.svg)
+used to generate HWE heterozygosity info from a VCF file and perform the necessary outlier test with Benjamini-Hochberg correction. It outputs outlier contigs and loci into separate files and removes those loci and contigs from your VCF file, eliminating a lot of manual effort.
