@@ -26,6 +26,9 @@ Fork of Chris Hollenbeck's `demultiplex.pl` (perl wrapper for automating `proces
 ### FastaReadnames.jl ![alt_text](https://img.shields.io/badge/language-julia-blue.svg)
 Simple julia wrapper to extract all the read names from within a fasta file (or multiple) into separate text files, or do a find-replace of readnames, such as replacing readnames "dDocent_contig_" with "Ginglymostoma_cirratum_contig_".
 
+### FastStructureK.sh ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
+A convenience wrapper to perform `fastStructure` anaylses for a range of `1` to `k` values, then summarize all the marginal likelihoods into a single file. 
+
 ### dDuplicator ![alt_text](https://img.shields.io/badge/language-python3-green.svg)
 A specialized (but editable!) python script that takes RAD sequences with UMI elements, checking for PCR duplicates, removing them, and outputting filtered sequences ready for `dDocent` input.
 
