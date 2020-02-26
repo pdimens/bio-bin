@@ -16,6 +16,8 @@ do
     --format=str \
     --input=$INFILE \
     --output=${INFILE}_out
+  grep 'Marginal Likelihood =' ${INFILE}_out.$i.log
+  # add to summary file
   echo -e "\nK = $i :\t" >> ${INFILE}.fs.summary
   grep 'Marginal Likelihood =' ${INFILE}_out.$i.log >> ${INFILE}.fs.summary
 done
