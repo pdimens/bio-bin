@@ -16,6 +16,6 @@ do
     --format=str \
     --input=$INFILE \
     --output=${INFILE}_out
-  echo -e "\nK = $i :\t" >> fastStructure.summary
+  echo -e "\nK = $i :\t" >> ${INFILE}.fs.summary
   grep 'Marginal Likelihood =' ${INFILE}_out.$i.log >> ${INFILE}.fs.summary
 done
