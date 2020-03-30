@@ -27,7 +27,7 @@ if (args[1] == "locus" | args[1] == "loci"){
   } else{
     #### Get HWE values from VCFtools #####
     system("echo Performing HWE calculations via VCFtools")
-    hwe_calc <- paste("vcftools --vcf ", args[2], " --out VCF --hardy")
+    hwe_calc <- paste("vcftools --vcf ", args[2], " --out VCF --hardy 2> /dev/null")
     system(hwe_calc)
     
     # format the outfile
@@ -63,7 +63,8 @@ if (args[1] == "locus" | args[1] == "loci"){
     
     # Remove contigs with multiple significant positions
     rm_mult <- paste("remove_contigs_from_vcf.sh VCF_hwe_contigs.txt ", args[2])
-    system("echo Removing contigs with multiple significant positions using remove_contigs_from_vcf.sh")
+    prompt_mult <- paste("echo Removing", length(VCF_remove_contigs[1]) ,"contig\\(s\\) with multiple significant positions using remove_contigs_from_vcf.sh")
+    system(prompt_mult)
     #suppressMessages(system(rm_mult))
     system(rm_mult)
     
@@ -81,8 +82,9 @@ if (args[1] == "locus" | args[1] == "loci"){
     write.table(VCF_remove_snps[1:2], file = "VCF_hwe_snps.txt", col.names= FALSE, row.names = FALSE, quote = FALSE)
     
     # Remove loci with single significant sites
-    system("echo Remove loci with single significant sites using VCFtools")
-    rm_single <- "vcftools --recode-INFO-all --vcf vcf-minus-contigs.recode.vcf --exclude-positions VCF_hwe_snps.txt --recode --out vcf-het-filtered"
+    prompt_single <-paste("echo Removing", length(VCF_remove_snps[1]), "loci with a single significant site using VCFtools")
+    system(prompt_single)
+    rm_single <- "vcftools --recode-INFO-all --vcf vcf-minus-contigs.recode.vcf --exclude-positions VCF_hwe_snps.txt --recode --out vcf-het-filtered 2> /dev/null"
     system(rm_single)
     
     system("echo -e \"\nHeterozygosity filtering is complete.\nYour filtered file is named: vcf-het-filtered.recode.vcf\"")
@@ -107,7 +109,7 @@ if(args[1] == "ind" | args[1] == "individual"){
     setwd(getwd())
     
     ## use VCFtools to perform heterozygosity calculations
-    het_calc <- paste("vcftools --vcf ", args[2], " --out individuals --het")
+    het_calc <- paste("vcftools --vcf ", args[2], " --out individuals --het 2> /dev/null")
     system(het_calc)
     
     ## Import into R and perform outlier analysis
@@ -161,7 +163,7 @@ if(args[1] == "ind" | args[1] == "individual"){
     rm_ind_text <- paste("echo \"  - Removing flagged individuals from ", args[2], "using VCFtools\"")
     system(rm_ind_text)
     
-    rm_ind <- paste("vcftools --vcf", args[2], "--recode --recode-INFO-all --out Het_indiv_filtered --remove het_outliers_to_rm.txt")
+    rm_ind <- paste("vcftools --vcf", args[2], "--recode --recode-INFO-all --out Het_indiv_filtered --remove het_outliers_to_rm.txt 2> /dev/null")
     system(rm_ind)
     
     system("echo -e \"\nIndividual heterozygosity filtering is complete.\nYour filtered file is named: Het_indiv_filtered.recode.vcf\"")
