@@ -84,10 +84,10 @@ if (args[1] == "locus" | args[1] == "loci"){
     # Remove loci with single significant sites
     prompt_single <-paste("echo Removing", length(VCF_remove_snps[1]), "loci with a single significant site using VCFtools")
     system(prompt_single)
-    rm_single <- "vcftools --recode-INFO-all --vcf vcf-minus-contigs.recode.vcf --exclude-positions VCF_hwe_snps.txt --recode --out vcf-het-filtered 2> /dev/null"
+    rm_single <- "vcftools --recode-INFO-all --vcf vcf-minus-contigs.recode.vcf --exclude-positions VCF_hwe_snps.txt --recode --out Het_loci_filtered 2> /dev/null"
     system(rm_single)
     
-    system("echo -e \"\nHeterozygosity filtering is complete.\nYour filtered file is named: vcf-het-filtered.recode.vcf\"")
+    system("echo -e \"\nHeterozygosity filtering is complete.\nYour filtered file is named: Het_loci_filtered.recode.vcf\"")
     q()
   }
 }
