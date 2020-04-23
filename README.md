@@ -32,9 +32,6 @@ A convenience wrapper to perform `fastStructure` anaylses for a range of `1` to 
 ### dDuplicator ![alt_text](https://img.shields.io/badge/language-python3-green.svg)
 A specialized (but editable!) python script that takes RAD sequences with UMI elements, checking for PCR duplicates, removing them, and outputting filtered sequences ready for `dDocent` input.
 
-### lepmapQA.r ![alt_text](https://img.shields.io/badge/language-R-yellow.svg)
-Prunes the ambiguously clustered ends of ordered linkage maps produced by `lepmap3`'s `orderMarkers2` module. By default only scans the first and last 15% of each linkage group's markers, and for a default threshold of 10cM (can be altered with an argument). This is a standalone version of `LepMapp3rQA.r` used by `LepMapp3r`.
-
 ### punzip ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Parallelized unzipping of .gz files from one directory into another. Can do an entire directory, or only files containing something specific in their name, such as `lobster`, `_R1_`, `britneyspears`, etc.
 
