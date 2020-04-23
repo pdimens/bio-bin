@@ -2,30 +2,53 @@
 
 if length(ARGS)==0
     println("This julia script takes a simple file of one-per-line sequences and outputs")
-    println("a file of the reverse complements of those sequences")
-    println("\n","[usage] ReverseComp <mode> <indexfile> \nmodes: rev | comp | revcomp", "\n")
-elseif occursin(ARGS[1], "comp rev revcomp")
-    using BioSequences
-    function revcomp()
-        outfilename = ARGS[1]*"_"*basename(ARGS[2])
-        sequences = open(readlines,ARGS[2]);
-        outfile=open(outfilename,"w");
-        for i in sequences
-            if ARGS[1] == "revcomp"
-                write(outfile,join(reverse_complement(DNASequence(i))),"\n")
-            elseif ARGS[1] == "comp"
-                write(outfile,join(complement(DNASequence(i))),"\n")
-            else write(outfile,join(reverse(DNASequence(i))),"\n")
-            end
-        end
-        close(outfile)
-        println("Your sequences are located in the file ", outfilename)
-    end ;
-    revcomp()
-
-else
+    println("a file of the reverse and/or complements of those sequences")
+    println("\n","[usage] ReverseComp <mode> <indexfile> \nmodes: rev | comp | revcomp ")
+    exit()
+elseif ARGS[1] ∉ ["comp", "rev", "revcomp"]
     println("error: incorrect usage")
     println("\n","[usage] reversecomp <mode> <indexfile>")
     println("[example] ReverseComp rev crabseqs.txt")
-    println("\n","modes: rev | comp | revcomp", "\n")
+    println("\n","modes: rev | comp | revcomp ")
+    exit()
 end
+
+using BioSequences
+outfilename = ARGS[1]*"_"*split(ARGS[2],".")[1]
+
+function rev()
+    sequences = open(readlines,ARGS[2]);
+    outfile=open(outfilename,"w");
+    for i in sequences
+        write(outfile,join(reverse(DNASequence(i))),"\n")
+    end
+    close(outfile)
+end
+
+function comp()
+    sequences = open(readlines,ARGS[2]);
+    outfile=open(outfilename,"w");
+    for i in sequences
+        write(outfile,join(complement(DNASequence(i))),"\n")
+    end
+    close(outfile)
+end
+
+function revcomp()
+    sequences = open(readlines,ARGS[2]);
+    outfile=open(outfilename,"w");
+    for i in sequences
+        write(outfile,join(reverse_complement(DNASequence(i))),"\n")
+    end
+    close(outfile)
+end
+
+if ARGS[1] == "revcomp"
+    revcomp()
+elseif ARGS[1] == "comp"
+    comp()
+else
+    rev()
+end
+
+println("Your sequences are located in the file $outfilename")
