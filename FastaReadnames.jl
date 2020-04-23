@@ -15,13 +15,13 @@ if ARGS[1]!="rename"
         for eachfile in ARGS
             inputfasta = FASTA.Reader(open(eachfile,"r"))
             outfile = open("readnames_from_" * basename(eachfile),"w")
-        for eachread in inputfasta
-            write(outfile, BioSequences.FASTA.identifier(eachread),"\n")
+            for eachread in inputfasta
+                write(outfile, BioSequences.FASTA.identifier(eachread),"\n")
+            end
+            close(inputfasta)
+            close(outfile)
+            println("Find your read names in readnames_from_", ARGS[1])
         end
-        close(inputfasta)
-        close(outfile)
-        println("Find your read names in readnames_from_", ARGS[1])
-      end
     end
     outputnames()
 
