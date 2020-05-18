@@ -1,6 +1,8 @@
 # Genomic toolbox
 
 A place to store my custom and forked scripts used for genomic analysis- a list slowly growing as things come up.
+### allmaps_split_chimera.sh ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
+A reusable script that wraps [the steps provided by ALLMAPS] (https://github.com/tanghaibao/jcvi/wiki/ALLMAPS:-How-to-split-chimeric-contigs) to identify and split chimeric contigs. 
 
 ### configure_blasr_install ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 It took me forever to get blasr/sparc installed and running correctly for hybrid genome assemblies, and after finally getting it to work, I vowed to never **ever** have to deal with it again, so this scipt does the necessary tweaks to get sparc_split_and_run.sh working right, *and* from your `$PATH`
