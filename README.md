@@ -31,7 +31,7 @@ Simple julia wrapper to extract all the read names from within a fasta file (or 
 ### FastStructureK.sh ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 A convenience wrapper to perform `fastStructure` anaylses for a range of `1` to `k` values, then summarize all the marginal likelihoods into a single file. 
 
-### dDuplicator ![alt_text](https://img.shields.io/badge/language-python3-green.svg)
+### dDuplicator ![alt_text](https://img.shields.io/badge/language-python3-green.svg) (not maintained)
 A specialized (but editable!) python script that takes RAD sequences with UMI elements, checking for PCR duplicates, removing them, and outputting filtered sequences ready for `dDocent` input.
 
 ### punzip ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
