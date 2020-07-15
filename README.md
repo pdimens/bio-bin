@@ -55,6 +55,9 @@ Takes input fasta file and splits reads into their own fasta files. Useful for s
 ### unpac ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
 Converts pacbio sequences from bam to fasta/q. A wrapper for `bam2fastx`
 
+### vcf2ped ![alt_text](https://img.shields.io/badge/language-bash-lightgrey.svg)
+Perform a simple conversion of VCF format into Plink1.9 PED format.
+
 ### vcf_hwe_filter ![alt_text](https://img.shields.io/badge/language-R-yellow.svg)
 **Two modes**
 #### locus
