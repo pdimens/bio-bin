@@ -2,13 +2,13 @@
 
 if [[ -z "$1" ]]; then
   echo -e "\n  Converts a VCF file to Plink1.9 (required) PED format"
-	echo -e "[usage]: vcf2ped filename.vcf output_prefix
+  echo -e "[usage]: vcf2ped filename.vcf output_prefix"
   exit
 fi
 
 plink1.9 \
-	--vcf $1 \
-	--allow-extra-chr \
-	--recode \
-	--out $2 \
-	--double-id
+  --vcf $1 \
+  --allow-extra-chr \
+  --recode \
+  --out $2 \
+  --double-id
