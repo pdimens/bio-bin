@@ -34,6 +34,9 @@ A convenience wrapper to perform `fastStructure` anaylses for a range of `1` to 
 ### dDuplicator ![alt_text](https://img.shields.io/badge/script-green.svg?logo=python&logoColor=white) (not maintained)
 A specialized (but editable!) python script that takes RAD sequences with UMI elements, checking for PCR duplicates, removing them, and outputting filtered sequences ready for `dDocent` input.
 
+### genepop2structure ![alt_text](https://img.shields.io/badge/script-blueviolet.svg?logo=R)
+Convert a genepop file to STRUCTURE and/or FASTSTRUCTURE format.
+
 ### punzip ![alt_text](https://img.shields.io/badge/script-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Parallelized unzipping of .gz files from one directory into another. Can do an entire directory, or only files containing something specific in their name, such as `lobster`, `_R1_`, `britneyspears`, etc.
 
