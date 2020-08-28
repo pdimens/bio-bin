@@ -1,0 +1,63 @@
+#! /usr/bin/env Rscript
+
+args <- commandArgs(trailingOnly = TRUE)
+
+if (length(args) == 0){
+    cat("Convert a genepop file to STRUCTURE format. The input file must end in .gen")
+    cat("\n", "The default conversion is to a standard STRUCTURE file. Use 'fast' or 'both' as an optional second argument to convert to FASTRUCTURE or both instead.")
+    cat("\n\n", ">> Usage <<")
+    cat("\n", "[structure]:     genepop2structure <infile>")
+    cat("\n", "[faststructure]: genepop2structure <infile> fast")
+    cat("\n", "[both]:          genepop2structure <infile> both")
+    q()
+}
+
+if (length(args) == 2){
+    if (args[2] == "fast") conv_mode <- "faststructure"
+    if (args[2] == "both") conv_mode <- c("structure", "faststructure")
+} else {
+    conv_mode <- "structure"
+}
+
+if (!require("radiator")) {
+    print("R package radiator not found, installing...")
+    if (!require("devtools")) install.packages("devtools")
+    devtools::install_github("thierrygosselin/radiator")
+    print("Installation of devtools / radiator complete")
+}
+
+library(radiator)
+
+infile <- args[1]
+outfile <- strsplit(infile, ".gen")[[1]]
+
+cat(paste("\n", "Converting", infile, "into", conv_mode, "format", sep = " "))
+
+invisible(
+    suppressMessages(
+        genomic_converter(
+                infile,
+                output = conv_mode,
+                filename = outfile,
+                path.folder = ".",
+                parallel.core = 2,
+                verbose = FALSE,
+                filter.monomorphic = FALSE
+        )
+    )
+)
+
+#### file cleanup ####
+# find most recently created dir (the one with the conversions)
+dir_list <- file.info(list.dirs(getwd(), full.names = T, recursive = FALSE))
+conv_dir <- rownames(dir_list)[which.max(dir_list$mtime)]
+
+# identify the structure files
+conv_files <- list.files(conv_dir, pattern = ".str", full.names = T)
+
+# copy the structure files to the working directory
+invisible(file.copy(conv_files, "."))
+cat("\n")
+# delete radiator folder
+unlink(conv_dir, recursive = TRUE)
+cat(paste("\n", "Done! Your output file is", basename(conv_files), sep = " "))
