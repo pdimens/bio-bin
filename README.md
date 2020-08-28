@@ -10,23 +10,23 @@ It took me forever to get blasr/sparc installed and running correctly for hybrid
 ### ContigCutoff.jl ![alt_text](https://img.shields.io/badge/script-julia-blue.svg)
 Simple isolation of contigs below a specified sequence coverage threshold. Typically used for the `genome.file` output from `dDocent`'s `FreeBayes` step when `FreeBayes` crashes due to memory load because _de novo_ assembly with too many contigs. Output usually fed into [faSomeRecords](https://github.com/ENCODE-DCC/kentUtils/blob/master/src/utils/faSomeRecords/faSomeRecords.c) to "prune" the de novo assembly of low-coverage contigs. 
 
-### countseq ![alt_text](https://img.shields.io/badge/script-lightgrey.svg?logo=gnu%20bash&logoColor=white)
-Counts the number of contigs/sequences in fasta or fastq files. Parallelized for faster counting!
-
-### CountSeq.jl ![alt_text](https://img.shields.io/badge/script-julia-blue.svg)
-A Julia implementation of `countseq` just to try it out. Tends to be more useful when fasta files are large or there are many fasta files that need to be counted. Slower than the GNU version otherwise.
-
 ### countbam ![alt_text](https://img.shields.io/badge/script-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Simple wrapper for `SAMtools` which counts the total number of reads and number of mapped reads in bam files.
 
 ### CountMatch.jl ![alt_text](https://img.shields.io/badge/script-julia-blue.svg)
 Takes an input file of strings (like 6bp indices) and does and all vs. all match to count the number of mismatches between the indices. Outputs an html heatmap and textfile of the pairwise comparisons.
 
-### demultiplex_SE.pl ![alt_text](https://img.shields.io/badge/script-yellow.svg?logo=perl&logoColor=white) (not maintained)
-Fork of Chris Hollenbeck's `demultiplex.pl` (perl wrapper for automating `process_RADtags` across several indices) that has an additional flag to handle single-end data for demultiplexing raw sequence reads. 
+### countseq ![alt_text](https://img.shields.io/badge/script-lightgrey.svg?logo=gnu%20bash&logoColor=white)
+Counts the number of contigs/sequences in fasta or fastq files. Parallelized for faster counting!
+
+### CountSeq.jl ![alt_text](https://img.shields.io/badge/script-julia-blue.svg)
+A Julia implementation of `countseq` just to try it out. Tends to be more useful when fasta files are large or there are many fasta files that need to be counted. Slower than the GNU version otherwise.
 
 ### dDuplicator ![alt_text](https://img.shields.io/badge/script-green.svg?logo=python&logoColor=white) (not maintained + deprecated)
 A specialized (but editable!) python script that takes RAD sequences with UMI elements, checking for PCR duplicates, removing them, and outputting filtered sequences ready for `dDocent` input. **Deprecated, use FASTP instead**
+
+### demultiplex_SE.pl ![alt_text](https://img.shields.io/badge/script-yellow.svg?logo=perl&logoColor=white) (not maintained)
+Fork of Chris Hollenbeck's `demultiplex.pl` (perl wrapper for automating `process_RADtags` across several indices) that has an additional flag to handle single-end data for demultiplexing raw sequence reads. 
 
 ### FastaReadnames.jl ![alt_text](https://img.shields.io/badge/script-julia-blue.svg)
 Simple julia wrapper to extract all the read names from within a fasta file (or multiple) into separate text files, or do a find-replace of readnames, such as replacing readnames "dDocent_contig_" with "Ginglymostoma_cirratum_contig_".
