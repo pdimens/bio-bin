@@ -1,4 +1,5 @@
-#! /usr/bin/env bash
+ #! /usr/bin/env bash
+
 if [[ -z "$1" ]]; then
   echo "Run a series of fastSTRUCTURE for a range of 1 to K values"
   echo "[usage] FastStructureK.sh infile Kmax"
@@ -8,6 +9,8 @@ fi
 INRAW=$1
 INFILE="${INRAW%.str}" 
 KVAL=$2
+echo "#fastSTRUCTURE likelihoods for $INRAW" > ${INFILE}.fs.summary
+echo -ne "k likelihood\n" >> ${INFILE}.fs.summary
 for i in $(seq 1 $KVAL);
 do
   echo "Running fastSTRUCTURE for K = $i"
@@ -18,6 +21,6 @@ do
     --output=${INFILE}_out
   grep 'Marginal Likelihood =' ${INFILE}_out.$i.log
   # add to summary file
-  echo -e "\nK = $i :\t" >> ${INFILE}.fs.summary
-  grep 'Marginal Likelihood =' ${INFILE}_out.$i.log >> ${INFILE}.fs.summary
+  echo -ne "$i " >> ${INFILE}.fs.summary
+  grep 'Marginal Likelihood =' ${INFILE}_out.$i.log | cut -d"=" -f2 >> ${INFILE}.fs.summary
 done
