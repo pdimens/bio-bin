@@ -20,10 +20,10 @@ if (length(args) == 2){
 }
 
 if (!require("radiator")) {
-    print("R package radiator not found, installing...")
+    cat("\n", "R package radiator not found, installing...")
     if (!require("devtools")) install.packages("devtools")
     devtools::install_github("thierrygosselin/radiator")
-    print("Installation of devtools / radiator complete")
+    cat("\n", "Installation of devtools / radiator complete")
 }
 
 library(radiator)
