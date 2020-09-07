@@ -25,7 +25,7 @@ fstruct(){
 	--output=${INFILE}_out
 	grep 'Marginal Likelihood =' ${INFILE}_out.$1.log
 	# add to summary file
-	echo -ne "$i " >> ${INFILE}.fs.summary
+	echo -ne "$1 " >> ${INFILE}.fs.summary
 	grep 'Marginal Likelihood =' ${INFILE}_out.$1.log | cut -d"=" -f2 >> ${INFILE}.fs.summary
 }
 export -f fstruct
