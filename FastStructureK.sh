@@ -11,16 +11,23 @@ INFILE="${INRAW%.str}"
 KVAL=$2
 echo "#fastSTRUCTURE likelihoods for $INRAW" > ${INFILE}.fs.summary
 echo -ne "k likelihood\n" >> ${INFILE}.fs.summary
-for i in $(seq 1 $KVAL);
-do
-  echo "Running fastSTRUCTURE for K = $i"
-  structure.py \
-    -K $i \
-    --format=str \
-    --input=$INFILE \
-    --output=${INFILE}_out
-  grep 'Marginal Likelihood =' ${INFILE}_out.$i.log
-  # add to summary file
-  echo -ne "$i " >> ${INFILE}.fs.summary
-  grep 'Marginal Likelihood =' ${INFILE}_out.$i.log | cut -d"=" -f2 >> ${INFILE}.fs.summary
-done
+
+export INRAW
+export INFILE
+export KVAL
+
+fstruct(){
+	echo "Running fastSTRUCTURE for K = $1"
+	structure.py \
+	-K $1 \
+	--format=str \
+	--input=$INFILE \
+	--output=${INFILE}_out
+	grep 'Marginal Likelihood =' ${INFILE}_out.$1.log
+	# add to summary file
+	echo -ne "$i " >> ${INFILE}.fs.summary
+	grep 'Marginal Likelihood =' ${INFILE}_out.$1.log | cut -d"=" -f2 >> ${INFILE}.fs.summary
+}
+export -f fstruct
+
+parallel --jobs $(nproc) fstruct {1} ::: $(seq 1 $KVAL)
