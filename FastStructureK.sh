@@ -24,10 +24,13 @@ fstruct(){
 	--input=$INFILE \
 	--output=${INFILE}_out
 	grep 'Marginal Likelihood =' ${INFILE}_out.$1.log
-	# add to summary file
-	echo -ne "$1 " >> ${INFILE}.fs.summary
-	grep 'Marginal Likelihood =' ${INFILE}_out.$1.log | cut -d"=" -f2 >> ${INFILE}.fs.summary
 }
 export -f fstruct
 
 parallel --jobs $(nproc) fstruct {1} ::: $(seq 1 $KVAL)
+
+# add to summary file
+for K in $(seq 1 $KVAL) ; do
+	echo -ne $K >> ${INFILE}.fs.summary
+	grep 'Marginal Likelihood =' ${INFILE}_out.$K.log | cut -d"=" -f2 >> ${INFILE}.fs.summary
+done
