@@ -1,3 +1,5 @@
+args <- commandArgs(trailingOnly = TRUE)
+
 library(ggplot2)
 library(tidyr)
 library(gridExtra)
@@ -8,10 +10,16 @@ setwd(getwd())
 infiles <- list.files(pattern = "[2-9][0-9]?.meanQ")
 ## pull out basename to regenerate original structure filename
 orig_file <- strsplit(infiles[1], "_out")[[1]][1]
+
 ## load in all the q values
 q_scores <- lapply(infiles,fread)
 ## load in fs file and pull out sample names from the first column
-samp_names <- as.character(unlist(unique(fread(paste0(orig_file, ".str"))[,1])))
+if (length(args) == 0) {
+    samp_names <- as.character(unlist(unique(fread(paste0(orig_file, ".str"))[,1])))
+} else {
+    samp_names <- as.character(unlist(unique(fread(args[1])[,1])))
+}
+## load
 ## correct any hyphens in sample names to underscores
 samp_names <- gsub("-", "_", samp_names)
 
