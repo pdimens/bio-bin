@@ -12,15 +12,13 @@ infiles <- list.files(pattern = "[2-9][0-9]?.meanQ")
 
 ## load in all the q values
 q_scores <- lapply(infiles,fread)
-
 ## load in fs file and pull out sample names from the first column
+f_basename <- strsplit(infiles[1], "_out")[[1]][1]
 if (length(args) == 0) {
-    orig_file <- strsplit(infiles[1], "_out")[[1]][1]
-    samp_names <- as.character(unlist(unique(fread(paste0(orig_file, ".str"))[,1])))
+    samp_names <- as.character(unlist(unique(fread(paste0(f_basename, ".str"))[,1])))
 } else {
     samp_names <- as.character(unlist(unique(fread(args[1])[,1])))
 }
-## load
 ## correct any hyphens in sample names to underscores
 samp_names <- gsub("-", "_", samp_names)
 
@@ -85,7 +83,7 @@ for (i in 1:length(q_scores)) {
 
 
 plt_h <- length(q_scores) %% 3 * 5
-pdf(file = paste0(orig_file, ".pdf"), 24, plt_h)
+pdf(file = paste0(f_basename, ".pdf"), 24, plt_h)
 do.call(grid.arrange,plots)
 .x <- dev.off()
 
