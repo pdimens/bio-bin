@@ -9,12 +9,13 @@ setwd(getwd())
 ## pattern match to find output files from FaststructureK.sh
 infiles <- list.files(pattern = "[2-9][0-9]?.meanQ")
 ## pull out basename to regenerate original structure filename
-orig_file <- strsplit(infiles[1], "_out")[[1]][1]
 
 ## load in all the q values
 q_scores <- lapply(infiles,fread)
+
 ## load in fs file and pull out sample names from the first column
 if (length(args) == 0) {
+    orig_file <- strsplit(infiles[1], "_out")[[1]][1]
     samp_names <- as.character(unlist(unique(fread(paste0(orig_file, ".str"))[,1])))
 } else {
     samp_names <- as.character(unlist(unique(fread(args[1])[,1])))
