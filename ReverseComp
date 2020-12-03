@@ -1,54 +1,50 @@
-#! /usr/bin/env julia
+#! /usr/bin/env bash
 
-if length(ARGS)==0
-    println("This julia script takes a simple file of one-per-line sequences and outputs")
-    println("a file of the reverse and/or complements of those sequences")
-    println("\n","[usage] ReverseComp <mode> <indexfile> \nmodes: rev | comp | revcomp ")
-    exit()
-elseif ARGS[1] ∉ ["comp", "rev", "revcomp"]
-    println("error: incorrect usage")
-    println("\n","[usage] reversecomp <mode> <indexfile>")
-    println("[example] ReverseComp rev crabseqs.txt")
-    println("\n","modes: rev | comp | revcomp ")
-    exit()
-end
 
-using BioSequences
-outfilename = ARGS[1]*"_"*split(ARGS[2],".")[1]
+usage() {
+cat <<EOF
 
-function rev()
-    sequences = open(readlines,ARGS[2]);
-    outfile=open(outfilename,"w");
-    for i in sequences
-        write(outfile,join(reverse(DNASequence(i))),"\n")
-    end
-    close(outfile)
-end
+[Usage] ReverseComp [mode] textfile > outfile
 
-function comp()
-    sequences = open(readlines,ARGS[2]);
-    outfile=open(outfilename,"w");
-    for i in sequences
-        write(outfile,join(complement(DNASequence(i))),"\n")
-    end
-    close(outfile)
-end
+By default, outputs the reverse-complement. Use the first argument to specify a different mode of operation:
+[r] or [reverse] for reverse only
+[c] or [complement] for complement only
 
-function revcomp()
-    sequences = open(readlines,ARGS[2]);
-    outfile=open(outfilename,"w");
-    for i in sequences
-        write(outfile,join(reverse_complement(DNASequence(i))),"\n")
-    end
-    close(outfile)
-end
+[Example] ReverseComp oligos.txt > revcomp_oligos.txt
+[Example] ReverseComp reverse oligots.txt > reverse_oligos.txt
 
-if ARGS[1] == "revcomp"
-    revcomp()
-elseif ARGS[1] == "comp"
-    comp()
-else
-    rev()
-end
+EOF
+}
 
-println("Your sequences are located in the file $outfilename")
+if [[ -z "$1" ]]; then
+    echo -e "\n  Returns the reverse-complement of DNA bases in a text file."
+    usage
+    exit
+fi
+
+if [[ -z "$2" ]]; then
+    while IFS= read -r line
+    do
+        echo "$line" | tr 'ATCG' 'TAGC' | rev
+    done < "$1"
+else   
+    case "$1" in
+        reverse | r )
+            while IFS= read -r line
+            do
+                echo "$line" | rev
+            done < "$2"
+        ;;
+        complement | c )
+            while IFS= read -r line
+            do
+                echo "$line" | tr 'ATCG' 'TAGC'
+            done < "$2"
+        ;;
+    *)
+        echo "Invalid mode of operation: $1"
+        usage
+        ;;
+    esac
+
+fi
