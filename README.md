@@ -43,7 +43,7 @@ Convert a genepop file to STRUCTURE and/or FASTSTRUCTURE format.
 ### punzip ![alt_text](https://img.shields.io/badge/script-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Parallelized unzipping of .gz files from one directory into another. Can do an entire directory, or only files containing something specific in their name, such as `lobster`, `_R1_`, `britneyspears`, etc.
 
-### ReverseComp ![alt_text](https://img.shields.io/badge/script-julia-blue.svg)
+### ReverseComp ![alt_text](https://img.shields.io/badge/script-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Takes  a file of one-per-line sequences and outputs the reverse, complement, or reverse-complement of each of those sequences. This script was used to quickly generate reverse-complements to sequencing barcodes for demultiplexing.
 
 ### sam2bam ![alt_text](https://img.shields.io/badge/script-lightgrey.svg?logo=gnu%20bash&logoColor=white)
