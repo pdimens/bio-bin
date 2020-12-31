@@ -39,19 +39,20 @@ case "$1" in
 	echo 'Error - must be ".fasta" ".fa" ".txt" ".fq" ".fastq" or gzipped counterparts'
 	;;
 esac
-	printf  "%s\t\t%s\t%s\n" "$(basename $1)" "$contigcount" "$bpcount"
+	printf  "%s\t\t%'.0f\t%'.0f\n" "$(basename $1)" "$contigcount" "$bpcount"
 }
 
-filearg=${@};
-infiles() {
-for i in ${filearg[@]}
-    do
-    find ./ -name "$i"
-done
-}
+# deprecated
+#filearg=${@};
+#infiles() {
+#for i in ${filearg[@]}
+#    do
+#    "$i"
+#done
+#}
 
 export -f countfiles
-export -f infiles
+#export -f infiles
 
 while getopts "n:" opt; do
   case $opt in
@@ -59,10 +60,10 @@ while getopts "n:" opt; do
         cores=$(echo "--jobs $OPTARG")
     ;;
     :)
-        cores=$(echo "--jobs 0")
+        cores=$(echo "--jobs 4")
     ;;
   esac
 done
 
 echo -e "filename \t\t #contigs \t #bp"
-infiles | parallel $cores countfiles
+echo "$@" | parallel $cores countfiles
