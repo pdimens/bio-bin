@@ -2,14 +2,18 @@
 
 usage() {
 cat <<EOF
-[Usage] countseq <seq.file1> <seq.file2> <*.fasta> <*.fastq>
-[Example] countseq *.fq *.fasta.gz
-[Example] countseq -n 8 frog_001.fa *.fastq.gz > animal.counts.txt
+[Usage]
+countseq <seq.file1> <seq.file2> <*.fasta> <*.fastq>
+
+[Examples]
+countseq *.fq *.fasta.gz
+countseq -n 8 frog_001.fa *.fastq.gz > animal.counts.txt
+find -name "wasps*R1.fasta" | countseq
 EOF
 }
 
-if [[ -z "$1" ]]; then
-    echo -e "\n  This script counts the number of total base pairs and contigs in gzipped or unzipped sequence (fasta fa or fastq fq) files."
+if [[ -z "$1" ]] && [ -t 0 ]; then
+    echo -e "\nCounts the number of total base pairs and sequences in fastX files."
     echo "By default will parallelize over 4 threads. Use optional '-n' flag to specify how many CPUs to use."
     usage
     exit
@@ -76,3 +80,4 @@ done
 printf "%-40s%-15s%s\n" "filename" "sequences" "basepairs"
 
 infiles | parallel $cores countfiles
+cat /dev/stdin  | parallel $cores countfiles
