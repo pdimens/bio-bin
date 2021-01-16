@@ -2,14 +2,15 @@
 
 usage() {
 cat <<EOF
-[Usage] countseq <seq.file1> <seq.file2> ... etc. or <*.fasta> <*.fastq>
+[Usage] countseq <seq.file1> <seq.file2> <*.fasta> <*.fastq>
 [Example] countseq *.fq *.fasta.gz
-[Example] countseq -n 8 frog_001.fa *.fastq.gz > animals.counts.txt
+[Example] countseq -n 8 frog_001.fa *.fastq.gz > animal.counts.txt
 EOF
 }
 
 if [[ -z "$1" ]]; then
-    echo -e "\n  This script counts the number of total base pairs and contigs in gzipped or unzipped sequence (fasta fa or fastq fq) files. By default will parallelize over all available CPUs. Use optional '-n' flag to specify how many CPUs to use."
+    echo -e "\n  This script counts the number of total base pairs and contigs in gzipped or unzipped sequence (fasta fa or fastq fq) files."
+    echo "By default will parallelize over 4 threads. Use optional '-n' flag to specify how many CPUs to use."
     usage
     exit
 fi
