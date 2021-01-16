@@ -1,10 +1,10 @@
+  
 #! /usr/bin/env bash
 
 usage() {
 cat <<EOF
 [Usage]
 countseq <seq.file1> <seq.file2> <*.fasta> <*.fastq>
-
 [Examples]
 countseq *.fq *.fasta.gz
 countseq -n 8 frog_001.fa *.fastq.gz > animal.counts.txt
@@ -80,4 +80,8 @@ done
 printf "%-40s%-15s%s\n" "filename" "sequences" "basepairs"
 
 infiles | parallel $cores countfiles
-cat /dev/stdin  | parallel $cores countfiles
+
+if [ ! -t 0 ]; then
+    cat /dev/stdin  | parallel $cores countfiles
+    exit
+fi
