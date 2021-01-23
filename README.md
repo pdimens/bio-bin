@@ -31,6 +31,9 @@ Fork of Chris Hollenbeck's `demultiplex.pl` (perl wrapper for automating `proces
 ### FastaReadnames.jl ![alt_text](https://img.shields.io/badge/script-julia-blue.svg)
 Simple julia wrapper to extract all the read names from within a fasta file (or multiple) into separate text files, or do a find-replace of readnames, such as replacing readnames "dDocent_contig_" with "Ginglymostoma_cirratum_contig_".
 
+### fasta_subsample & fastq_subsample ![alt_text](https://img.shields.io/badge/script-lightgrey.svg?logo=gnu%20bash&logoColor=white)
+Subsample single or paired-end fasta/fastq files without replacement for a fixed number of output reads. Copied directly from ["Tutorial: BASH one-liners for subsampling reads"](http://userweb.eng.gla.ac.uk/umer.ijaz/bioinformatics/subsampling_reads.pdf) by Umer Zeeshan Ijaz and modified into convenient script form.
+
 ### FastStructureK.sh ![alt_text](https://img.shields.io/badge/script-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 A convenience wrapper to perform `fastStructure` anaylses for a range of `1` to `k` values, then summarize all the marginal likelihoods into a single file. 
 
