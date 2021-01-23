@@ -4,9 +4,9 @@
 # modified to be a flexible script
 
 if [[ -z "$1" ]]; then
-    echo -e "\nSamples paired-end fastq files without replacement."
-    echo "By default will parallelize over 4 threads. Use optional '-n' flag to specify how many CPUs to use."
-    echo "[usage] fastx_subsample <forward.fq> <reverse.fq> <number of reads>"
+    echo -e "\nSamples single or paired-end fastq files without replacement."
+    echo "[usage] fastq_subsample <forward.fq> <number of reads>"
+    echo "[usage] fastq_subsample <forward.fq> <reverse.fq> <number of reads>"
     exit
 fi
 
@@ -17,7 +17,7 @@ if [[ -z "$3" ]]; then
   cat $1 | awk '{ printf("%s",$0); n++; if(n%4==0) {
   printf("\n");} else { printf("\t");} }' |
   awk -v k=$2 'BEGIN{srand(systime() + PROCINFO["pid"]);}{s=x++<k?x1:int(rand()*x);if(s<k)R[s]=$0}END{for(i in R)print R[i]}' |
-  awk -F"\t" '{print $1"\n"$2"\n"$3"\n"$4 > "$F_sub.fastq"}' && echo "Successfully generated $F_sub.fq"
+  awk -F"\t" '{print $1"\n"$2"\n"$3"\n"$4 > "$F_sub.fastq"}' && echo "Successfully generated $F_sub.fastq"
 else
   # paired-end fastq
   R= $(basename $2)
@@ -25,5 +25,5 @@ else
   if(n%4==0) { printf("\n");} else { printf("\t");} }' |
   awk -v k=$3 'BEGIN{srand(systime() + PROCINFO["pid"]);}{s=x++<k?x1:int(rand()*x);if(s<k)R[s]=$0}END{for(i in R)print R[i]}' |
   awk -F"\t" '{print $1"\n"$3"\n"$5"\n"$7 > "$F_sub.fq";print
-  $2"\n"$4"\n"$6"\n"$8 > "$R_sub.fq"}' && echo "Successfully generated $F_sub.fq and $R_sub.fq"
+  $2"\n"$4"\n"$6"\n"$8 > "$R_sub.fq"}' && echo "Successfully generated $F_sub.fastq and $R_sub.fastq"
 fi
