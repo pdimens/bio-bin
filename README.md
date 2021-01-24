@@ -65,7 +65,7 @@ Converts pacbio sequences from bam to fasta/q. A wrapper for `bam2fastx`
 Perform a simple conversion of VCF format into Plink1.9 PED format.
 
 ### vcf_hwe_filter ![alt_text](https://img.shields.io/badge/script-blueviolet.svg?logo=R)
-#### locus (mode 1)
+- #### locus (mode 1)
 Used to generate HWE heterozygosity info from a VCF file and perform the necessary outlier test with Benjamini-Hochberg correction. It outputs outlier contigs and loci into separate files and removes those loci and contigs from your VCF file, eliminating a lot of manual effort.
-#### individual (mode 2)
+- #### individual (mode 2)
 Used to generate heterozygosity information per individual from a VCF file and perform a Tukey outlier test where outliers are individuals with F scores < Q1 - (1.5 x IQR) or > Q3 + (1.5 x IQR), then remove those individuals flagged as outliers from the input VCF. (Q = Quartile, IQR = Inter-Quartile Range).
