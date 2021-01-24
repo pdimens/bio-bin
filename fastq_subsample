@@ -10,7 +10,7 @@ if [[ -z "$1" ]]; then
     exit
 fi
 
-F= $(basename $1)
+F=$(basename $1)
 
 if [[ -z "$3" ]]; then
   # single fastq
