@@ -35,7 +35,7 @@ Simple julia wrapper to extract all the read names from within a fasta file (or 
 A convenience wrapper to perform `fastStructure` anaylses for a range of `1` to `k` values, then summarize all the marginal likelihoods into a single file. 
 
 ### FastStructurePlot.R ![alt_text](https://img.shields.io/badge/script-blueviolet.svg?logo=R)
-Pairs with `FastStructureK.sh` to create a pdf of a reasonably nice non-publication quality plot of your fastStructure results for exploration. Assumes your fastStructure input file is in the working directory, if it's not, then supply its name as the only argument.
+Pairs with `FastStructureK.sh` to create a pdf of a reasonably nice non-publication quality plot of your fastStructure results for exploration. Assumes your fastStructure input file (`__.str`) is in the working directory, if it's not, then supply its name as the only argument. This is the [example output](https://github.com/pdimens/bioinformatics-toolbox/blob/master/misc/FastStructurePlot.example.pdf).
 
 ### genepop2structure ![alt_text](https://img.shields.io/badge/script-blueviolet.svg?logo=R)
 Convert a genepop file to STRUCTURE and/or FASTSTRUCTURE format.
