@@ -14,11 +14,13 @@ fi
 
 FILENAME=`echo "$1" | cut -d '.' -f1`
 
-# convert SAM to BAM
-samtools view -hb $1 -@$THREADS > $FILENAME.bam
+# convert SAM to BAM & remove unmapped | sort the bam
+samtools view -hb -F4 $1 -@$THREADS | samtools sort -m 16G -l0  -@$THREADS > $FILENAME.bam
 
+## deprecated ##
 # remove unmapped | sort the BAM
-samtools view -h -F4 $FILENAME.bam -@$THREADS | samtools sort -m 16G -l0  -@$THREADS> $FILENAME.sorted.bam
+#samtools view -h -F4 $FILENAME.bam -@$THREADS | samtools sort -m 16G -l0  -@$THREADS > $FILENAME.sorted.bam
+##
 
 # index sorted BAM
-samtools index $FILENAME.sorted.bam -@$THREADS%
+samtools index $FILENAME.bam -@$THREADS
