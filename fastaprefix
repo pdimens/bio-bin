@@ -1,0 +1,26 @@
+#! /usr/bin/env bash
+# modified from https://github.com/bioinfomaticsCSU/MEC/blob/master/README.md
+
+usage() {
+cat <<EOF
+
+[Usage] fastaprefix input.fasta prefix > output.fasta
+[Example] fastaprefix walnut.fasta Jnigra > walnut_renamed.fasta
+
+EOF
+}
+
+if [[ -z "$1" ]]; then
+        echo "Renames all contigs into a consistent sequential naming convention based on a prefix."
+        echo "In other words:"
+        echo "  >Backbone_122432/11_pilon => >Potato_1"
+        echo "  >Backbone_122433/11_pilon => >Potato_2"
+        echo "  etc."
+        usage
+        exit
+fi
+
+IN=$1
+PREFIX=$2
+
+awk -v pref=$PREFIX 'BEGIN{id=1}{if($0~/>/){printf(">%s_%d\n",pref,id);id++}else{print $0}}' $IN
