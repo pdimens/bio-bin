@@ -28,6 +28,9 @@ A specialized (but editable!) python script that takes RAD sequences with UMI el
 ### demultiplex_SE.pl ![alt_text](https://img.shields.io/badge/script-yellow.svg?logo=perl&logoColor=white) (not maintained)
 Fork of Chris Hollenbeck's `demultiplex.pl` (perl wrapper for automating `process_RADtags` across several indices) that has an additional flag to handle single-end data for demultiplexing raw sequence reads. 
 
+### fastaprefix ![alt_text](https://img.shields.io/badge/script-lightgrey.svg?logo=gnu%20bash&logoColor=white)
+Renames all contigs in a fasta file into a consistent sequential naming convention based on a prefix, like "Gbiloba_1".
+
 ### FastaReadnames.jl ![alt_text](https://img.shields.io/badge/script-blue.svg?logo=julia&logoColor=white)
 Simple julia wrapper to extract all the read names from within a fasta file (or multiple) into separate text files, or do a find-replace of readnames, such as replacing readnames "dDocent_contig_" with "Ginglymostoma_cirratum_contig_".
 
