@@ -1,0 +1,9 @@
+#! /usr/bin/env bash
+
+if [[ -z "$1" ]]; then
+    echo -e "\n export the current conda environent into a yaml file"
+    echo -e "\n [usage] exportenv outfile.yml"
+    exit
+fi
+
+conda env export | grep -v "^prefix: " > $1
