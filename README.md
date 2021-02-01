@@ -29,7 +29,7 @@ A specialized (but editable!) python script that takes RAD sequences with UMI el
 Fork of Chris Hollenbeck's `demultiplex.pl` (perl wrapper for automating `process_RADtags` across several indices) that has an additional flag to handle single-end data for demultiplexing raw sequence reads. 
 
 ### exportenv ![alt_text](https://img.shields.io/badge/script-lightgrey.svg?logo=gnu%20bash&logoColor=white)
-For al those times you forget the command to export (and strip the prefix) your current conda environment to a yaml file.
+For al those times you forget the command to export (and strip the prefix from) your current conda environment to a yaml file.
 
 ### fastaprefix ![alt_text](https://img.shields.io/badge/script-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Renames all contigs in a fasta file into a consistent sequential naming convention based on a prefix, like "Gbiloba_1".
