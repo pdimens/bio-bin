@@ -1,4 +1,4 @@
-# Genomic toolbox
+# Bio-bin, the genomic toolbox
 
 A place to store my custom and forked scripts used for genomic analysis- a list slowly growing as things come up.
 ### allmaps_split_chimera.sh ![alt_text](https://img.shields.io/badge/script-lightgrey.svg?logo=gnu%20bash&logoColor=white)
