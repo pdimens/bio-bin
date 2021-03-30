@@ -85,14 +85,14 @@ def processUMI(infile):
                 seq1 = seq1[:len(seq1)-1]
                 qual1 = qual1[:len(qual1)-1]
 
-            if len(seq1) >= 50:
+            if len(seq1) >= 75:
                 good_seq1 = 1
 
             while ord(qual2[len(qual2)-1]) - 33 < 30 or ord(qual2[len(qual2)-2]) - 33 < 30 or ord(qual2[len(qual2)-3]) - 33 < 30:
                 seq2 = seq2[:len(seq2)-1]
                 qual2 = qual2[:len(qual2)-1]
 
-            if len(seq2) >= 50:
+            if len(seq2) >= 75:
                 good_seq2 = 1
 
     # If both read 1 and read 2 have a length greater than 50, then the both of them make a good pair and the information is appended to the empty lists that were made earlier.
@@ -120,14 +120,14 @@ def processUMI(infile):
     nondup_fnames = []
     nondup_rnames = []
     for i, val in enumerate(forward_seqs):
-        if val[:51] not in seen:
+        if val[:76] not in seen:
             nondup_fseqs.append(val)
             nondup_fquals.append(forward_quals[i])
             nondup_fnames.append(forward_names[i])
             nondup_rseqs.append(reverse_seqs[i])
             nondup_rquals.append(reverse_quals[i])
             nondup_rnames.append(reverse_names[i])
-            seen.add(val[:51])
+            seen.add(val[:76])
         else:
             duplicates = duplicates + 1
 
