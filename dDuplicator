@@ -22,20 +22,20 @@ import os
 
 def usage():
     print("\n", "This py3 script finds and removes UMI elements between paired-end reads")
-    print("file format must be <name>_R1_001.fastq.gz and <name>_R2_001.fastq.gz")
+    print("file format must be <name>_R1_001.fastq.gz and <name>.F.fq.gz")
     print("-- configured for 2x150bp ddRAD sequences using EcoRI + MspI & 7bp UMI --")
-    print("\n", "[usage] dDuplicator <number.of.cores> <where to truncate original filename>")
-    print("[example] dDupilcater 10 8", "\n")
+    print("\n", "[usage] dDuplicator <number.of.cores>")
+    print("[example] dDupilcater 10", "\n")
 
 
-if len(sys.argv) != 3:
+if len(sys.argv) != 2:
     usage()
     exit()
 
 filelist = []
 for root, dirs, files in os.walk(os.getcwd()):
     for file in files:
-        if file.endswith('R1_001.fastq.gz'):
+        if file.endswith('F.fq.gz'):
             filelist.append(file)
 
 reportfilename = "deduplicated/UMI_report.csv"
@@ -52,13 +52,12 @@ def processUMI(infile):
     duplicates = 0
 
     filename1 = infile
-    namelength = int(sys.argv[2])
-    # take filename1 split it by the "_R1_" and replace it with "_R2"
-    filename2 = filename1[:filename1.find("_R1")] + "_R2" + filename1[filename1.find("_R1")+3:]
+    filebase = filename1.split(".F.fq.gz")[0]
+    filename2 = filebase + ".R.fq.gz"
 
     # [:9] can be edited for your appropriate naming convention. It's just a convenience feature anyway.
-    print("filtering..... ", filename1)
-
+    print("filtering: ", filebase)
+    
     forward_names = []
     reverse_names = []
     forward_seqs = []
@@ -86,17 +85,17 @@ def processUMI(infile):
                 seq1 = seq1[:len(seq1)-1]
                 qual1 = qual1[:len(qual1)-1]
 
-            if len(seq1) >= 98:
+            if len(seq1) >= 50:
                 good_seq1 = 1
 
             while ord(qual2[len(qual2)-1]) - 33 < 30 or ord(qual2[len(qual2)-2]) - 33 < 30 or ord(qual2[len(qual2)-3]) - 33 < 30:
                 seq2 = seq2[:len(seq2)-1]
                 qual2 = qual2[:len(qual2)-1]
 
-            if len(seq2) >= 98:
+            if len(seq2) >= 50:
                 good_seq2 = 1
 
-    # If both read 1 and read 2 have a length greater than 75, then the both of them make a good pair and the information is appended to the empty lists that were made earlier.
+    # If both read 1 and read 2 have a length greater than 50, then the both of them make a good pair and the information is appended to the empty lists that were made earlier.
             if good_seq1 == 1 and good_seq2 == 1:
                 good_pairs = good_pairs + 1
 
@@ -121,19 +120,19 @@ def processUMI(infile):
     nondup_fnames = []
     nondup_rnames = []
     for i, val in enumerate(forward_seqs):
-        if val[:76] not in seen:
+        if val[:51] not in seen:
             nondup_fseqs.append(val)
             nondup_fquals.append(forward_quals[i])
             nondup_fnames.append(forward_names[i])
             nondup_rseqs.append(reverse_seqs[i])
             nondup_rquals.append(reverse_quals[i])
             nondup_rnames.append(reverse_names[i])
-            seen.add(val[:76])
+            seen.add(val[:51])
         else:
             duplicates = duplicates + 1
 
-    outfilename1 = filename1[:namelength] + ".F.fq.gz"  # rename output file1
-    outfilename2 = filename2[:namelength] + ".R.fq.gz"  # rename outpu file 2
+    outfilename1 = filebase + "_dd.F.fq.gz"  # rename output file1
+    outfilename2 = filebase + "_dd.R.fq.gz"  # rename outpu file 2
     outfile1 = gzip.open(umi_fldr + outfilename1, "wt", compresslevel=5)
     outfile2 = gzip.open(umi_fldr + outfilename2, "wt", compresslevel=5)
     
@@ -153,7 +152,7 @@ def processUMI(infile):
     outfile2.close()
 
     umifile = open(umi_fldr + "UMI_report.csv", "a")
-    umifile.write(str(filename1[:-13])
+    umifile.write(str(filebase)
                   + "\t" + str(good_pairs)
                   + "\t" + str(duplicates)
                   + "\t" + str(round(duplicates/good_pairs, 2))
