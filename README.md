@@ -31,6 +31,10 @@ Fork of Chris Hollenbeck's `demultiplex.pl` (perl wrapper for automating `proces
 ### exportenv ![alt_text](https://img.shields.io/badge/script-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 For al those times you forget the command to export (and strip the prefix from) your current conda environment to a yaml file.
 
+### extract_barcodes.sh ![alt_text](https://img.shields.io/badge/script-lightgrey.svg?logo=gnu%20bash&logoColor=white)
+Creates a `process_radtags` compliant `barcodes.txt` file from fastq/fasta files by extracting the barcode from the end of the first read's header. 
+It assumes your reads have the barcode at the end (not always the case) and that the barcode is 6bp long. 
+
 ### fastaprefix ![alt_text](https://img.shields.io/badge/script-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Renames all contigs in a fasta file into a consistent sequential naming convention based on a prefix, like "Gbiloba_1".
 
