@@ -23,7 +23,7 @@ Counts the number of contigs/sequences in fasta or fastq files. Parallelized for
 A Julia implementation of `countseq` just to try it out. Tends to be more useful when fasta files are large or there are many fasta files that need to be counted. Slower than the GNU version otherwise.
 
 ### dDuplicator ![alt_text](https://img.shields.io/badge/python-green.svg?logo=python&logoColor=white) (not maintained + deprecated)
-A specialized (but editable!) python script that takes RAD sequences with UMI elements, checking for PCR duplicates, removing them, and outputting filtered sequences ready for `dDocent` input. **Deprecated, use FASTP instead**
+A specialized (but editable!) python script that takes RAD sequences with UMI elements, checking for PCR duplicates, removing them, and outputting filtered reads.
 
 ### demultiplex_SE.pl ![alt_text](https://img.shields.io/badge/perl-yellow.svg?logo=perl&logoColor=white) (not maintained)
 Fork of Chris Hollenbeck's `demultiplex.pl` (perl wrapper for automating `process_RADtags` across several indices) that has an additional flag to handle single-end data for demultiplexing raw sequence reads. 
