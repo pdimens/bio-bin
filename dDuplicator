@@ -7,9 +7,10 @@
 # read2 = 1-3 MspI cutsite (CGG), 4-151 read
 
 def usage():
-    print("\n", "This py3 script finds and removes UMI elements between paired-end reads")
-    print("file format must be <name>.F.fq.gz and <name>.R.fq.gz")
-    print("-- configured for 2x150bp ddRAD sequences using EcoRI + MspI & 8bp UMI --")
+    print("\nThis py3 script finds and removes UMI elements between paired-end reads")
+    print("  - File format must be <name>.<F/R1>.<fastq/fq>.gz and <name>.<R/R2>.<fastq/fq>.gz")
+    print("    -  e.g. grizzlybear_001.F.fq.gz and grizzlybear_001.R.fq.gz")
+    print("  - Configured for 2x150bp ddRAD sequences using EcoRI + MspI & 8bp UMI")
     print("\n[usage] dDuplicator <number.of.cores>")
     print("[example] dDupilcator 10", "\n")
 
@@ -27,16 +28,43 @@ else:
     from Bio.SeqIO.QualityIO import *
     from Bio import SeqIO
     import shutil
+    import glob
     import fileinput
     import gzip
     import os
 
 
-filelist = []
-for root, dirs, files in os.walk(os.getcwd()):
-    for file in files:
-        if file.endswith('F.fq.gz'):
-            filelist.append(file)
+#pull out all the files
+filelist_fastq = glob.glob(os.getcwd() + '/*fastq.gz')
+filelist_fq = glob.glob(os.getcwd() + '/*fq.gz')
+
+# sanity checks
+if len(filelist_fastq) == 0 and len(filelist_fq) == 0 :
+    print("Error: Files ending in .fastq.gz or .fq.gz not found")
+    exit()
+# found .fq.gz
+if len(filelist_fastq) == 0 and len(filelist_fq) > 0 :
+    filelist = filelist_fq
+    ext_type = ".fq.gz"
+# found .fastq.gz
+elif len(filelist_fastq) > 0 and len(filelist_fq) == 0 :
+    filelist = filelist_fastq
+    ext_type = ".fastq.gz"
+else:
+    print("Error: Directory contains files ending in both .fq.gz and .fastq.gz")
+    exit()
+
+# final sanity check that file list has even number of files
+if (len(filelist) % 2) != 0 :
+    print("Error: Odd number of reads founds. Expects paired-end reads,\nmeaning there should be an even number of files detected")
+    exit()
+
+# get just the file names
+filelist = sorted([os.path.basename(i) for i in filelist])
+# partition file list into pairs of forward and reverse reads
+read_pairs = [filelist[i:i + 2] for i in range(0, len(filelist), 2)]
+
+print("- Found " + str(len(read_pairs)) + " read pairs ending with " + ext_type)
 
 reportfilename = "deduplicated/UMI_report.csv"
 os.makedirs(os.path.dirname(reportfilename), exist_ok=True)
@@ -45,17 +73,19 @@ with open(reportfilename, "w") as f:
     f.write("Filename" + "\t" + "Good Pairs" + "\t" +
             "Duplicates" + "\t" + "Proportion Duplicates" + "\n")
 
-
+print("Processing:")
 def processUMI(infile):
 
     good_pairs = 0
     duplicates = 0
+    # first file in the pair
+    filename1 = infile[0]
+    # second file in the pair
+    filename2 = infile[1]
+    # the basename stripped of the extension
+    filebase = filename1.split(".")[0]
 
-    filename1 = infile
-    filebase = filename1.split(".F.fq.gz")[0]
-    filename2 = filebase + ".R.fq.gz"
-
-    print("filtering: ", filebase)
+    print(filebase)
 
     forward_names = []
     reverse_names = []
@@ -130,8 +160,8 @@ def processUMI(infile):
         else:
             duplicates = duplicates + 1
 
-    outfilename1 = filebase + "_dd.F.fq.gz"  # rename output file1
-    outfilename2 = filebase + "_dd.R.fq.gz"  # rename outpu file 2
+    outfilename1 = filebase + ".dedup.F.fq.gz"  # rename output file1
+    outfilename2 = filebase + ".dedup.R.fq.gz"  # rename outpu file 2
     outfile1 = gzip.open(umi_fldr + outfilename1, "wt", compresslevel=5)
     outfile2 = gzip.open(umi_fldr + outfilename2, "wt", compresslevel=5)
 
@@ -162,7 +192,7 @@ def processUMI(infile):
 
 if __name__ == '__main__':
     pool = Pool(int(sys.argv[1]))
-    pool.map(processUMI, filelist)
+    pool.map(processUMI, read_pairs)
 
 
 def umiplot():
@@ -203,4 +233,4 @@ def umiplot():
 
 
 umiplot()
-print("\n--- processed reads and report are located in /deduplicated/ ---")
+print("\n\n--- processed reads and report are located in /deduplicated/ ---")
