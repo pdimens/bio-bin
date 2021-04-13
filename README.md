@@ -22,7 +22,7 @@ Counts the number of contigs/sequences in fasta or fastq files. Parallelized for
 ### CountSeq.jl ![alt_text](https://img.shields.io/badge/julia-blue.svg?logo=julia&logoColor=white)
 A Julia implementation of `countseq` just to try it out. Tends to be more useful when fasta files are large or there are many fasta files that need to be counted. Slower than the GNU version otherwise.
 
-### dDuplicator ![alt_text](https://img.shields.io/badge/python-green.svg?logo=python&logoColor=white) (not maintained + deprecated)
+### dDuplicator ![alt_text](https://img.shields.io/badge/python-green.svg?logo=python&logoColor=white)
 A specialized (but editable!) python script that takes RAD sequences with UMI elements, checking for PCR duplicates, removing them, and outputting filtered reads.
 
 ### demultiplex_SE.pl ![alt_text](https://img.shields.io/badge/perl-yellow.svg?logo=perl&logoColor=white) (not maintained)
