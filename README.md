@@ -79,3 +79,6 @@ Perform a simple conversion of VCF format into Plink1.9 PED format.
 Used to generate HWE heterozygosity info from a VCF file and perform the necessary outlier test with Benjamini-Hochberg correction. It outputs outlier contigs and loci into separate files and removes those loci and contigs from your VCF file, eliminating a lot of manual effort.
 - #### individual (mode 2)
 Used to generate heterozygosity information per individual from a VCF file and perform a Tukey outlier test where outliers are individuals with F scores < Q1 - (1.5 x IQR) or > Q3 + (1.5 x IQR), then remove those individuals flagged as outliers from the input VCF. (Q = Quartile, IQR = Inter-Quartile Range).
+
+### vcf_metrics.sh ![alt_text](https://img.shields.io/badge/R-blueviolet.svg?logo=R) ![alt_text](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
+Calculate the mean depth and missingness per site and per sample in a vcf file. Generates a pre-formatted R file with `.rdata` to explore the results. Requires VCFtools + R::tidyverse.
