@@ -14,13 +14,13 @@ EOF
 fi
 
 echo "Calculating mean depth per individual (1 of 4)"
-vcftools --vcf $1 --out metrics --depth
+vcftools --vcf $1 --out metrics --depth 2> /dev/null
 echo "Calculating mean depth per site (2 of 4)"
-vcftools --vcf $1 --out metrics --site-mean-depth
+vcftools --vcf $1 --out metrics --site-mean-depth 2> /dev/null
 echo "Calculating missingness per individual (3 of 4)"
-vcftools --vcf $1 --out metrics --missing-indv
+vcftools --vcf $1 --out metrics --missing-indv 2> /dev/null
 echo "Calculating missingness per site (4 of 4)"
-vcftools --vcf $1 --out metrics --missing-site
+vcftools --vcf $1 --out metrics --missing-site 2> /dev/null
 
 echo "Generating vcf_metrics.r and vcf_metrics.rdata files"
 
