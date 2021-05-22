@@ -1,0 +1,27 @@
+#! /usr/bin/env bash
+
+if [ -z $1 ];  then
+    echo "Count the number of sequences, ATCG bases, and N bases in a fasta file"
+    echo "[usage]  countasm <fasta.file>"
+    echo "fasta.file    sequences   ATCG    N"
+    exit 1
+fi
+
+#determine if file is compressed
+if (file $1 | grep -q compressed ) ; then
+    GREPTYPE=$(echo "zgrep")
+else
+    GREPTYPE=$(echo "grep")
+fi
+
+# count lines that start with >
+SEQS=$($GREPTYPE -c "^>" $1)
+
+# count the ATCG nucleotides
+ATCG=$($GREPTYPE -v "^>" $1 | tr -cd '[ATCGatcg]' | wc -c)
+
+# count the non-ATCG nucleotides
+Ns=$($GREPTYPE -v "^>" $1 | tr -cd '[nN]|-|.' | wc -c)
+
+# print output to terminal
+echo -e "$1\t$SEQS\t$ATCG\t$Ns"
