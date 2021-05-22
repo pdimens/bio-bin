@@ -16,6 +16,9 @@ Simple wrapper for `SAMtools` which counts the total number of reads and number 
 ### CountMatch.jl ![alt_text](https://img.shields.io/badge/julia-blue.svg?logo=julia&logoColor=white)
 Takes an input file of strings (like 6bp indices) and does and all vs. all match to count the number of mismatches between the indices. Outputs an html heatmap and textfile of the pairwise comparisons.
 
+### countasm ![alt_text](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
+Counts the number of sequences, number of `A` `T` `C` `G` bases, and `N`/`-`/`.` bases in a fasta file, typically a genome assembly. The base-counting is not case-sensitive, i.e. `a`=`A`, `t`=`T`, etc.
+
 ### countseq ![alt_text](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Counts the number of contigs/sequences in fasta or fastq files. Parallelized for when counting multiple files!
 
