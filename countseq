@@ -1,27 +1,35 @@
-  
-#! /usr/bin/env bash
+  #! /usr/bin/env bash
 
 usage() {
 cat <<EOF
 [Usage]
 countseq <seq.file1> <seq.file2> <*.fasta> <*.fastq>
+
 [Examples]
 countseq *.fq *.fasta.gz
-countseq -n 8 frog_001.fa *.fastq.gz > animal.counts.txt
+countseq frog_001.fa *.fastq.gz > animal.counts.txt
 find -name "wasps*R1.fasta" | countseq
 EOF
 }
 
+
+declare -a A=("$@")
+[[ -p /dev/stdin ]] && { \
+    mapfile -t -O ${#A[@]} A; set -- "${A[@]}"; \
+}
+np=$(($(nproc) / 2))
+
 if [[ -z "$1" ]] && [ -t 0 ]; then
     echo -e "\nCounts the number of total base pairs and sequences in fastX files."
-    echo "By default will parallelize over 4 threads. Use optional '-n' flag to specify how many CPUs to use."
+    echo "Counts up to $np files at once on this system (50% of available cpus)."
+    echo ""
     usage
     exit
 fi
 
 fix_base_count() {
     local counts=($(cat))
-    printf  "%-40s%'-15d%'d\n" "$(basename $1)" "${counts[0]}" "$((${counts[1]} - ${counts[0]}))"
+    printf  "%-40s%'-15d%'d\n" "$1" "${counts[0]}" "$((${counts[1]} - ${counts[0]}))"
 }
 
 export -f fix_base_count
@@ -29,10 +37,10 @@ export -f fix_base_count
 countfiles() {
 case "$1" in
         *fa.gz | *fa.tgz | *fasta.gz | *fasta.tgz )
-        printf "%-40s%'-15d%'d\n" "$(basename $1)" "$(zgrep -c "^>" $1)" "$(zgrep -v "^>" $1 | wc | awk '{print $3-$1}')"
+        printf "%-40s%'-15d%'d\n" "$1" "$(zgrep -c "^>" $1)" "$(zgrep -v "^>" $1 | wc | awk '{print $3-$1}')"
                 ;;
         *.fa | *.fasta | *.txt)
-        printf "%-40s%'-15d%'d\n" "$(basename $1)" "$(grep -c "^>" $1)" "$(grep -v "^>" $1 | wc | awk '{print $3-$1}')"
+        printf "%-40s%'-15d%'d\n" "$1" "$(grep -c "^>" $1)" "$(grep -v "^>" $1 | wc | awk '{print $3-$1}')"
                 ;;
         *fq.gz | *fq.tgz | *fastq.gz | *.fastq.tgz )
         gzip -dc  $1 \
@@ -51,37 +59,7 @@ case "$1" in
 esac
 }
 
-filearg=${@};
-infiles() {
-for i in ${filearg[@]}
-do
-    if [[ "$i" == *"/"* ]]; then
-        find -name $(basename $i)
-    else
-        find -name $i
-    fi
-done
-}
-
 export -f countfiles
-export -f infiles
-
-while getopts "n:" opt; do
-  case $opt in
-    n)
-        cores=$(echo "--jobs $OPTARG")
-    ;;
-    :)
-        cores=$(echo "--jobs 4")
-    ;;
-  esac
-done
 
 printf "%-40s%-15s%s\n" "filename" "sequences" "basepairs"
-
-infiles | parallel $cores countfiles
-
-if [ ! -t 0 ]; then
-    cat /dev/stdin  | parallel $cores countfiles
-    exit
-fi
+parallel --jobs $np countfiles ::: $(echo "$@")
