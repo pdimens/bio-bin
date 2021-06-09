@@ -25,6 +25,9 @@ Counts the number of contigs/sequences in fasta or fastq files. Parallelized for
 ### CountSeq.jl ![alt_text](https://img.shields.io/badge/julia-blue.svg?logo=julia&logoColor=white)
 A Julia implementation of `countseq` just to try it out. Tends to be more useful when fasta files are large or there are many fasta files that need to be counted. Slower than the GNU version otherwise.
 
+### ddocent_rename.sh ![alt_text](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
+A simple way to batch-rename files to be dDocent compliant. Some _light_ modification may be needed depending on the naming scheme of your sequencing facility.
+
 ### dDuplicator ![alt_text](https://img.shields.io/badge/python-green.svg?logo=python&logoColor=white)
 A specialized (but editable!) python script that takes RAD sequences with UMI elements, checking for PCR duplicates, removing them, and outputting filtered reads.
 
