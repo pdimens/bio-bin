@@ -1,0 +1,14 @@
+#! /usr/bin/env bash
+
+if [ -z $1 ]; then
+echo "Convert a vcf file into PLINK format using PLINK2"
+echo "[usage]: vcf2plink2 <input_vcf>
+
+OUTNAME=$(basename $1 .vcf)
+
+plink2 --vcf $1 \
+    --vcf-idspace-to _ \
+    --const-fid \
+    --allow-extra-chr 0 \
+    --make-bed \
+    --out $OUTNAME
