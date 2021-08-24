@@ -1,0 +1,10 @@
+#! /usr/bin/env bash
+
+if [ -z $1 ]; then
+  echo "Convert a vcf file into PLINK1 format using VCFtools"
+  echo "[usage]: vcf2plink_alt <input_vcf>
+fi
+
+OUTNAME=$(basename $1 .vcf)
+
+vcftools --vcf $1 --out $OUTNAME --plink
