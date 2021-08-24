@@ -3,6 +3,7 @@
 if [ -z $1 ]; then
 echo "Convert a vcf file into PLINK format using PLINK2"
 echo "[usage]: vcf2plink2 <input_vcf>
+fi
 
 OUTNAME=$(basename $1 .vcf)
 
