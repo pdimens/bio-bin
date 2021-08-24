@@ -11,7 +11,7 @@ setwd(getwd())
 if (length(args) == 0 && length(list.files(pattern = "\\.str$")) == 0){
     cat("\nCreates data exploration plots from FastStructureK.sh results.")
     cat("\nAssumes the fastStructure input file (\"__.str\") is in the working dir. \nIf it's not, then supply its path/name as the only argument")
-    cat("\n\n[usage] FastStructurePlot.r   or    FastStructurePlot.r ../data/somefile.str")
+    cat("\n\n[usage] plot_faststructure.r   or    plot_faststructure.r ../data/somefile.str")
     q()
 }
 
