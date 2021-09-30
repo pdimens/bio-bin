@@ -11,7 +11,7 @@ setwd(getwd())
 if (length(args) == 0 && length(list.files(pattern = "\\.str$")) == 0){
     cat("\nCreates data exploration plots from FastStructureK.sh results.")
     cat("\nAssumes the fastStructure input file (\"__.str\") is in the working dir. \nIf it's not, then supply its path/name as the only argument")
-    cat("\n\n[usage] plot_faststructure.r   or    plot_faststructure.r ../data/somefile.str")
+    cat("\n\n[usage] FastStructurePlot.r   or    FastStructurePlot.r ../data/somefile.str")
     q()
 }
 
@@ -24,15 +24,20 @@ infiles <- list.files(pattern = "[2-9][0-9]?.meanQ")
 q_scores <- lapply(infiles,fread)
 
 ## load in fs file and pull out sample names from the first column
-f_basename <- strsplit(infiles[1], "_out")[[1]][1]
+f_basename <- strsplit(infiles[1], "\\.") |> unlist()
+f_basename <- paste(f_basename[1:(length(f_basename) - 2)], collapse = ".")
+f_outbase <- basename(f_basename)
 if (length(args) == 0) {
-    samp_names <- as.character(unlist(unique(fread(paste0(f_basename, ".str"))[,1])))
+    samp_names <- samp_names <- fread(paste0(f_basename, ".str"))[,1:2] |> unique()
 } else {
-    samp_names <- as.character(unlist(unique(fread(args[1])[,1])))
+    samp_names <- fread(args[1])[,1:2] |> unique()
 }
 
+
 ## correct any hyphens in sample names to underscores
-samp_names <- gsub("-", "_", samp_names)
+pop_names <- samp_names$V2
+samp_names <- gsub("-", "_", samp_names$V1)
+
 
 ## instantiate empty DF to be our awesome long-format table
 tidy_data <- data.frame(
@@ -46,58 +51,24 @@ for (i in 1:length(q_scores)){
     colnames(q_scores[[i]]) <- gsub("^[V]", "", colnames(q_scores[[i]]))
     # add a K column
     q_scores[[i]]$k <- as.factor(length(colnames(q_scores[[i]])))
-    # add a names column
+    # add sample/population names column
     q_scores[[i]]$sample <- samp_names
+    q_scores[[i]]$origin_population <- pop_names
     # wide-to-long format & append
     tidy_data <- rbind(
         tidy_data,
-        pivot_longer(q_scores[[i]], cols = !c(k, sample), names_to = "population")    
+        pivot_longer(q_scores[[i]], cols = !c(k, sample, origin_population), names_to = "population")    
     ) 
 }
-
-
-# values for population annotations
-## derive population names from sample names
-popnames <- as.factor(
-    unlist(
-        lapply(strsplit(samp_names, "_"), function(x) {x[1]})
-    )
-)
-
-## derive x values for v-lines for each population
-poplines <- as.data.frame(summary(popnames))
-colnames(poplines) <- "freq"
-
-### make the values cumulative
-for(i in 2:8){
-    poplines$freq[i] <- poplines$freq[i] + poplines$freq[i-1]
-}
-
-### the x values for text will fall in the center between two lines
-poptext <- c(0,poplines$freq)
-for(i in 1:8){
-        poptext[i] <- poptext[i] + (poptext[i+1] -  poptext[i])/2
-}
-
-#### trim off last value
-poptext <- poptext[1:length(poptext)-1]
-poplines <- head(poplines, -1)
-
-popdata_df <- data.frame(
-    xposition = poptext, 
-    yposition = -0.2, 
-    population = levels(popnames), 
-    k = factor(max(as.numeric(levels(tidy_data$k)), levels(tidy_data$k)))
-    )
-
-p <- ggplot(tidy_data, aes_string(fill = "population", y = "value", x = "sample")) +
+pdf(NULL)
+.colors <- RColorBrewer::brewer.pal(n=8, "Set2")
+ggplot(tidy_data, aes_string(fill = "population", y = "value", x = "sample")) +
     ylab("Probability of Membership") +
     geom_bar(position = "fill", stat = "identity", width = 1) +
-    geom_vline(xintercept = poplines$freq, size = 0.4, color = "#000000", linetype = "dashed") +
     coord_cartesian(ylim = c(0, 1), expand = FALSE, clip = "off") +
     labs(title = "fastStructure probabilities for values of K") +
-    facet_wrap(~ k, ncol = 1,labeller = labeller(k = label_both), strip.position = "right") +
-    geom_text(data = popdata_df, inherit.aes = FALSE, aes(x = xposition, y = yposition, label = population), show.legend = FALSE) +
+    facet_grid(k~origin_population, scales = "free_x", space = "free_x", labeller = label_both) +
+    scale_fill_manual(values = .colors) +
     theme(
         axis.title = element_text(size=12),
         axis.title.x = element_blank(),
@@ -111,9 +82,9 @@ p <- ggplot(tidy_data, aes_string(fill = "population", y = "value", x = "sample"
         plot.margin = unit(c(5.5, 5.5, 30, 5.5), "pt")
     )
 
-plt_h <- length(q_scores) %% 3 * 5
-pdf(file = paste0(f_basename, ".pdf"), 24, plt_h)
-p
-.x <- dev.off()
+
+ggsave(paste0(f_outbase, ".png"), height = 7, width = 14, units = "in")
+#p
+#.x <- dev.off()
 
 q()
