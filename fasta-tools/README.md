@@ -28,5 +28,8 @@ Renames all contigs in a fasta file into a consistent sequential naming conventi
 ### FastaReadnames.jl ![alt_text](https://img.shields.io/badge/julia-blue.svg?logo=julia&logoColor=white)
 Simple julia wrapper to extract all the read names from within a fasta file (or multiple) into separate text files, or do a find-replace of readnames, such as replacing readnames "dDocent_contig_" with "Ginglymostoma_cirratum_contig_".
 
+### FastaSequentialID.jl ![alt_text](https://img.shields.io/badge/julia-blue.svg?logo=julia&logoColor=white)
+Rename all the reads in a FASTA file in the format prefix_1, prefix_2, prefix_3, etc.
+
 ### SplitChrom.jl ![alt_text](https://img.shields.io/badge/julia-blue.svg?logo=julia&logoColor=white)
 Takes input fasta file and splits reads into their own fasta files. Useful for splitting a genome file by chromosome. 
