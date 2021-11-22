@@ -6,9 +6,9 @@ function setup_environment()
   savepath;
   delete MAE101.zip
   disp("Downloading and decompressing simulator")
-  websave("simulator.zip","https://ecornell.s3.amazonaws.com/content/MAE/MAE100/simulator.zip");
-  unzip("simulator.zip");
-  addpath(genpath("simulator"));
+  websave("simulator.zip","https://ecornell.s3.amazonaws.com/content/MAE/MAE100/Simulator.zip");
+  unzip("Simulator.zip");
+  addpath(genpath("Simulator"));
   savepath; 
   delete simulator.zip
   disp("Installing Robot Simulator Toolbox")
