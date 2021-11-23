@@ -1,4 +1,4 @@
-function MAE101(activity)
+function MAE101(exercise)
   if not(isfolder('.MAE101'))
     disp("Downloading Course Materials")
     websave(".MAE101.zip","https://ecornell.s3.amazonaws.com/content/MAE/MAE101/matlabDeploy/MAE101.zip");
@@ -19,23 +19,28 @@ function MAE101(activity)
     disp("Installing Robot Simulator Toolbox")
     matlab.addons.toolbox.installToolbox("Simulator/CreateRobotSimulator.mltbx");
   end
-  delete MAE101.asv ;
-  if activity == "Activity 1"
-     if not(isfolder('Exercise 1'))
-        movefile .MAE101/'Exercise 1' 'Exercise 1' ;
-        addpath(genpath('Exercise 1')) ;
-        savepath ;
-     else
-        disp("Exercise 1 is already present in the working directory")
-     end
-  elseif activity == "Activity 2"
-  if activity == "Activity 2"
-     if not(isfolder('Exercise 2'))
-        movefile .MAE101/'Exercise 2' 'Exercise 2' ;
-        addpath(genpath('Exercise 2')) ;
-        savepath ;
-     else
-        disp("Exercise 2 is already present in the working directory")
-     end
+  if not(isfolder('Helper Functions'))
+    copyfile .MAE101/'Helper Functions'/ 'Helper Functions'
+    addpath(genpath('Helper Functions'));
+    savepath; 
+  end
+  if not(isfolder('Maps'))
+    copyfile .MAE101/'Maps' 'Maps'
+    addpath(genpath("Maps"));
+    savepath; 
+  end
+  if not(isfolder('Project'))
+    copyfile .MAE101/'Project' 'Project'
+    addpath(genpath("Project"));
+    savepath; 
+  end
+  if isfile("MAE101.asv")
+      delete MAE101.asv ;
+  end
+  exer = char(exercise) ;
+  if not(isfolder(exer))
+    copyfile(append('.MAE101/', exer), exer) ;
+    addpath(genpath(exer)) ;
+    savepath ;
   end
 end
