@@ -34,13 +34,13 @@ function MAE101(exercise)
     addpath(genpath("Project"));
     savepath; 
   end
-  if isfile("MAE101.asv")
-      delete MAE101.asv ;
-  end
   exer = char(exercise) ;
   if not(isfolder(exer))
     copyfile(append('.MAE101/', exer), exer) ;
     addpath(genpath(exer)) ;
     savepath ;
+  end
+  if isfile("MAE101.asv")
+      delete MAE101.asv ;
   end
 end
