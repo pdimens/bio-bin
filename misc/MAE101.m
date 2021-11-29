@@ -36,10 +36,21 @@ function MAE101(exercise)
     savepath; 
   end
   exer = char(exercise) ;
-  if not(isfolder(exer))
+  if lower(exer) == "simulator"
+    disp("Installing Robot Simulator Toolbox")
+    matlab.addons.toolbox.installToolbox("Simulator/CreateRobotSimulator.mltbx");
+  elseif not(isfolder(exer))
     copyfile(append('.MAE101/', exer), exer) ;
     addpath(genpath(exer)) ;
     savepath ;
+  else
+      prompt = append('Folder "', exer, '" already exists, replace existing one (yes/no)?');
+      answer = input(prompt,'s');
+      if answer ==  "yes"
+        copyfile(append('.MAE101/', exer), exer, 'f') ;
+        addpath(genpath(exer)) ;
+        savepath ;
+      end
   end
   if isfile("MAE101.asv")
       delete MAE101.asv ;
