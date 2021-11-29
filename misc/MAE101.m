@@ -6,6 +6,7 @@ function MAE101(exercise)
     unzip(".MAE101.zip", ".MAE101.tmp");
     delete .MAE101.zip ;
     movefile .MAE101.tmp/MAE101 .MAE101 ;
+    rmdir .MAE101.tmp s
   end
   if not(isfolder('Simulator'))
     disp("Downloading and decompressing simulator")
