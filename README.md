@@ -28,8 +28,8 @@ A Julia implementation of `countseq` just to try it out. Tends to be more useful
 ### ddocent_rename.sh ![alt_text](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 A simple way to batch-rename files to be dDocent compliant. Some _light_ modification may be needed depending on the naming scheme of your sequencing facility.
 
-### dDuplicator ![alt_text](https://img.shields.io/badge/python-green.svg?logo=python&logoColor=white)
-A specialized (but editable!) python script that takes RAD sequences with UMI elements, checking for PCR duplicates, removing them, and outputting filtered reads.
+### dDuplicator ![alt_text](https://img.shields.io/badge/python-green.svg?logo=python&logoColor=white) (not maintained)
+A specialized (but editable!) python script that takes RAD sequences with UMI elements, checking for PCR duplicates, removing them, and outputting filtered reads. Replaced by [fastp](https://github.com/OpenGene/fastp)
 
 ### demultiplex_SE.pl ![alt_text](https://img.shields.io/badge/perl-yellow.svg?logo=perl&logoColor=white) (not maintained)
 Fork of Chris Hollenbeck's `demultiplex.pl` (perl wrapper for automating `process_RADtags` across several indices) that has an additional flag to handle single-end data for demultiplexing raw sequence reads. 
