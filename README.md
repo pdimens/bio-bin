@@ -16,9 +16,6 @@ Simple wrapper for `SAMtools` which counts the total number of reads and number 
 ### CountMatch.jl ![alt_text](https://img.shields.io/badge/julia-blue.svg?logo=julia&logoColor=white)
 Takes an input file of strings (like 6bp indices) and does and all vs. all match to count the number of mismatches between the indices. Outputs an html heatmap and textfile of the pairwise comparisons.
 
-### ddocent_rename.sh ![alt_text](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
-A simple way to batch-rename files to be dDocent compliant. Some _light_ modification may be needed depending on the naming scheme of your sequencing facility.
-
 ### exportenv ![alt_text](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 For al those times you forget the command to export (and strip the prefix from) your current conda environment to a yaml file.
 
