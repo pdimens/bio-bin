@@ -1,0 +1,4 @@
+#! /usr/bin/env bash
+# converts a bed format file into the chrom:start-end format required by samtools faidx
+
+cat $1 | awk {'print $1":"$2"-"$3'} > $(basename $1 .bed).intervals
