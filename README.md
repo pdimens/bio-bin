@@ -4,7 +4,7 @@ A place to store custom and forked scripts used for genomic analysis- a list slo
 ### allmaps_split_chimera.sh ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 A reusable script that wraps [the steps provided by ALLMAPS](https://github.com/tanghaibao/jcvi/wiki/ALLMAPS:-How-to-split-chimeric-contigs) to identify and split chimeric contigs. 
 
-### bed2faidx ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
+### bed2faidxintervals ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Converts a .`bed` format file into the chrom:start-end format required by `samtools faidx`.
 
 ### configure_blasr_install ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
