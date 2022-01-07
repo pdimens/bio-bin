@@ -4,6 +4,9 @@ A place to store custom and forked scripts used for genomic analysis- a list slo
 ### allmaps_split_chimera.sh ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 A reusable script that wraps [the steps provided by ALLMAPS](https://github.com/tanghaibao/jcvi/wiki/ALLMAPS:-How-to-split-chimeric-contigs) to identify and split chimeric contigs. 
 
+### bampurge.sh ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
+Sort and index a BAM file, along with removing unmapped reads. Provide the number of threads as the second argument to run multithreaded.
+
 ### bed2faidxintervals ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Converts a .`bed` format file into the chrom:start-end format required by `samtools faidx`.
 
@@ -33,6 +36,9 @@ Convert a genepop file to STRUCTURE and/or FASTSTRUCTURE format.
 
 ### punzip ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Parallelized unzipping of .gz files from one directory into another. Can do an entire directory, or only files containing something specific in their name, such as `lobster`, `_R1_`, `britneyspears`, etc.
+
+### revcomp  ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
+Returns the reverse, complement, or reverse-complement of DNA bases in a text file.
 
 ### sam2bam ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Automates basic conversion of a single `sam` file to a `bam` file, sorts it, and indexes it. 

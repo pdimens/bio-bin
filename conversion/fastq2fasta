@@ -1,0 +1,9 @@
+#! /usr/bin/env bash
+
+if [[ -z "$1" ]]; then
+        echo -e "\n Converts a fastq file into a fasta file"
+        echo -e "\n [usage] fastq2fasta <file.fastq>"
+        exit
+fi
+
+paste - - - - < $1 | cut -f 1,2 | sed 's/^@/>/' | tr "\t" "\n" > $(basename $1).fasta

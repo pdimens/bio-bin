@@ -4,14 +4,14 @@
 usage() {
 cat <<EOF
 
-[Usage] ReverseComp [mode] textfile > outfile
+[Usage] revcomp [mode] textfile > outfile
 
 By default, outputs the reverse-complement. Use the first argument to specify a different mode of operation:
 [r] or [reverse] for reverse only
 [c] or [complement] for complement only
 
-[Example] ReverseComp oligos.txt > revcomp_oligos.txt
-[Example] ReverseComp reverse oligots.txt > reverse_oligos.txt
+[Example] revcomp oligos.txt > revcomp_oligos.txt
+[Example] revcomp reverse oligots.txt > reverse_oligos.txt
 
 EOF
 }
