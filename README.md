@@ -34,12 +34,6 @@ Parallelized unzipping of .gz files from one directory into another. Can do an e
 ### sam2bam ![alt_text](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Automates basic conversion of a single `sam` file to a `bam` file, sorts it, and indexes it. 
 
-### seqstatplot ![alt_text](https://img.shields.io/badge/python-green.svg?logo=python&logoColor=white)
-Outputs an interactive [bokeh](https://bokeh.pydata.org/en/latest/) plot as an html for the sequencing run metrics we recieve as .csv from the facility that sequences our samples. *Specific to their file output format*.
-
-### seqstatplotly ![alt_text](https://img.shields.io/badge/julia-blue.svg?logo=julia&logoColor=white)
-Julia implementation of `seqstatplot` using `PlotyJS`
-
 ### unpac ![alt_text](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Converts pacbio sequences from bam to fasta/q. A wrapper for `bam2fastx`
 
