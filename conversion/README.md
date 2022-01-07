@@ -1,7 +1,7 @@
 # Conversion Scripts
 Because what is bioinformatics without converting a file into some other format, like 100 times?
 
-### fastq2fasta (https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
+### fastq2fasta ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Converts a fastq file into a fasta file. Only requires basic built-in BASH commands.
 
 ### genepop2structure ![R logo](https://img.shields.io/badge/R-blueviolet.svg?logo=R)
