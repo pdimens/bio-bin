@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 if [ -z $1 ]; then
-    echo "Convert a vcf file into PLINK format using PLINK2"
+    echo "Convert a vcf file into PLINK2 BED format using PLINK2"
     echo "[usage]: vcf2plink2 <input_vcf>
 fi
 

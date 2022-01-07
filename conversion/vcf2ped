@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 if [[ -z "$1" ]]; then
-  echo -e "\n  Converts a VCF file to Plink1.9 (required) PED format"
+  echo -e "\n  Converts a VCF file to PLINK1.9 (required) PED format"
   echo -e "[usage]: vcf2ped filename.vcf output_prefix"
   exit
 fi
