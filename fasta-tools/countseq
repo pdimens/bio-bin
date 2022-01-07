@@ -32,31 +32,35 @@ fix_base_count() {
     printf  "%-40s%'-15d%'d\n" "$1" "${counts[0]}" "$((${counts[1]} - ${counts[0]}))"
 }
 
+
 export -f fix_base_count
 
 countfiles() {
-case "$1" in
-        *fa.gz | *fa.tgz | *fasta.gz | *fasta.tgz )
-        printf "%-40s%'-15d%'d\n" "$1" "$(zgrep -c "^>" $1)" "$(zgrep -v "^>" $1 | wc | awk '{print $3-$1}')"
-                ;;
-        *.fa | *.fasta | *.txt)
-        printf "%-40s%'-15d%'d\n" "$1" "$(grep -c "^>" $1)" "$(grep -v "^>" $1 | wc | awk '{print $3-$1}')"
-                ;;
-        *fq.gz | *fq.tgz | *fastq.gz | *.fastq.tgz )
-        gzip -dc  $1 \
-            | awk 'NR % 4 == 2' \
-            | wc -cl \
-            | fix_base_count $1
-                ;;
-        *.fq | *.fastq)
-        awk 'NR % 4 == 2' $1 \
-            | wc -cl \
-            | fix_base_count $1
-                ;;
-        *)
-        echo 'Error - must be ".fasta" ".fa" ".txt" ".fq" ".fastq" or gzipped counterparts'
-        ;;
-esac
+    if (file $1 | grep -q compressed ) ; then
+        GREPTYPE=$(echo "zgrep")
+        CATTYPE=$(echo "zcat")
+    else
+        GREPTYPE=$(echo "grep")
+        CATTYPE=$(echo "cat")
+    fi
+    FIRSTCHAR=$($CATTYPE $1 | head -c 1)
+    if [[ "$FIRSTCHAR" == ">" ]]; then    # fasta format
+        printf "%-40s%'-15d%'d\n" "$1" "$($GREPTYPE -c "^>" $1)" "$($GREPTYPE -v "^>" $1 | wc | awk '{print $3-$1}')"
+    elif [[ "$FIRSTCHAR" = "@" ]]; then  # fastq format
+        if (file $1 | grep -q compressed ) ; then
+            gzip -dc  $1 \
+                | awk 'NR % 4 == 2' \
+                | wc -cl \
+                | fix_base_count $1
+        else
+            awk 'NR % 4 == 2' $1 \
+                | wc -cl \
+                | fix_base_count $1
+        fi
+    else
+        echo "File format cannot be determined by starting character: $FIRSTCHAR"
+        exit 0
+    fi
 }
 
 export -f countfiles
