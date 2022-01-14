@@ -7,9 +7,6 @@ A reusable script that wraps [the steps provided by ALLMAPS](https://github.com/
 ### bampurge.sh ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Sort and index a BAM file, along with removing unmapped reads. Provide the number of threads as the second argument to run multithreaded.
 
-### bed2faidxintervals ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
-Converts a .`bed` format file into the chrom:start-end format required by `samtools faidx`.
-
 ### configure_blasr_install ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 It took me forever to get blasr/sparc installed and running correctly for hybrid genome assemblies, and after finally getting it to work, I vowed to never **ever** have to deal with it again, so this scipt does the necessary tweaks to get sparc_split_and_run.sh working right, *and* from your `$PATH`. **Deprecated since adding PR's to DBG2OLC repo**
 
