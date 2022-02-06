@@ -25,32 +25,12 @@ For al those times you forget the command to export (and strip the prefix from) 
 ### FastStructureK.sh ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 A convenience wrapper to perform `fastStructure` anaylses for a range of `1` to `k` values, then summarize all the marginal likelihoods into a single file. 
 
-### FastStructurePlot.R ![R logo](https://img.shields.io/badge/R-blueviolet.svg?logo=R)
-Pairs with `FastStructureK.sh` to create a pdf of a reasonably nice non-publication quality plot of your fastStructure results for exploration. Assumes your fastStructure input file (`__.str`) is in the working directory, if it's not, then supply its name as the only argument. This is the [example output](https://github.com/pdimens/bioinformatics-toolbox/blob/master/misc/FastStructurePlot.example.pdf).
-
-### genepop2structure ![R logo](https://img.shields.io/badge/R-blueviolet.svg?logo=R)
-Convert a genepop file to STRUCTURE and/or FASTSTRUCTURE format.
-
 ### punzip ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Parallelized unzipping of .gz files from one directory into another. Can do an entire directory, or only files containing something specific in their name, such as `lobster`, `_R1_`, `britneyspears`, etc.
 
 ### revcomp  ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Returns the reverse, complement, or reverse-complement of DNA bases in a text file.
 
-### sam2bam ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
-Automates basic conversion of a single `sam` file to a `bam` file, sorts it, and indexes it. 
-
 ### unpac ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Converts pacbio sequences from bam to fasta/q. A wrapper for `bam2fastx`
 
-### vcf2ped ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
-Perform a simple conversion of VCF format into Plink1.9 PED format.
-
-### vcf_hwe_filter ![R logo](https://img.shields.io/badge/R-blueviolet.svg?logo=R)
-- #### locus (mode 1)
-Used to generate HWE heterozygosity info from a VCF file and perform the necessary outlier test with Benjamini-Hochberg correction. It outputs outlier contigs and loci into separate files and removes those loci and contigs from your VCF file, eliminating a lot of manual effort.
-- #### individual (mode 2)
-Used to generate heterozygosity information per individual from a VCF file and perform a Tukey outlier test where outliers are individuals with F scores < Q1 - (1.5 x IQR) or > Q3 + (1.5 x IQR), then remove those individuals flagged as outliers from the input VCF. (Q = Quartile, IQR = Inter-Quartile Range).
-
-### vcf_metrics.sh ![BASH logo](https://img.shields.io/badge/R-blueviolet.svg?logo=R) ![alt_text](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
-Calculate the mean depth and missingness per site and per sample in a vcf file. Generates a pre-formatted R file with `.rdata` to explore the results. Requires VCFtools + R::tidyverse.
