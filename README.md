@@ -19,8 +19,8 @@ Simple wrapper for `SAMtools` which counts the total number of reads and number 
 ### CountMatch.jl ![Julia logo](https://img.shields.io/badge/julia-blue.svg?logo=julia&logoColor=white)
 Takes an input file of strings (like 6bp indices) and does and all vs. all match to count the number of mismatches between the indices. Outputs an html heatmap and textfile of the pairwise comparisons.
 
-### exportenv ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
-For al those times you forget the command to export (and strip the prefix from) your current conda environment to a yaml file.
+### exportenv | condadeps ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
+For those times you forget the command to export (and strip the prefix from) your current conda environment to a yaml file. Use `condadeps` to list only the manually (explicitly) installed programs.
 
 ### FastStructureK.sh ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 A convenience wrapper to perform `fastStructure` anaylses for a range of `1` to `k` values, then summarize all the marginal likelihoods into a single file. 
