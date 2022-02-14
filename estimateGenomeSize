@@ -16,7 +16,7 @@ fi
 #$5 is forward reads
 #$6 is reverse reads
 
-for i in {$2..$3}; do
+for i in $(seq $2 $3); do
     echo "Running jellyfish on k = $i"
     if (file $5 | grep -q compressed ) ; then
         jellyfish count -t $1 -C -m $i -s 7G -o $4_${i}mer <(zcat $5) <(zcat $6)
