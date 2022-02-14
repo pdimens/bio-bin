@@ -1,0 +1,28 @@
+#! /usr/bin/env bash
+
+if [[ -z $1 ]]; then
+    echo "Perform the Kmer-frequency genome estimate method on a range of Kmer sizes"
+    echo "Requires the software Jellyfish: https://github.com/gmarcais/Jellyfish"
+    echo ""
+    echo "[usage] estimateGenomeSize <# threads> <K start> <K end> <output prefix> <fastq.forward> <fastq.reverse>"
+    echo "[example] estimateGenomeSize 10 17 22 tripletail TT_001.F.fq.gz TT_001.R.fq.gz"
+    exit 1
+fi
+
+#$1 is the number of threads
+#$2 is the range start
+#$3 is the range end
+#$4 is outfile prefix
+#$5 is forward reads
+#$6 is reverse reads
+
+for i in {$2..$3}; do
+    echo "Running jellyfish on k = $i"
+    if (file $5 | grep -q compressed ) ; then
+        jellyfish count -t $1 -C -m $i -s 7G -o $4_${i}mer <(zcat $5) <(zcat $6)
+    else
+        jellyfish count -t $1 -C -m $i -s 7G -o $4_${i}mer $5 $6
+    fi
+    echo "Jellyfish histo on k = $i"
+    jellyfish histo -o $4_${i}mer.hist $4_${i}mer_0
+done
