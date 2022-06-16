@@ -10,6 +10,9 @@ Converts a fastq file into a fasta file. Only requires basic built-in BASH comma
 ### genepop2structure ![R logo](https://img.shields.io/badge/R-blueviolet.svg?logo=R)
 Convert a genepop file to STRUCTURE format. The input file must end in `.gen`. The default conversion is to a standard STRUCTURE file. Use 'fast' or 'both' as an optional second argument to convert to FASTRUCTURE or both instead. Requires `R::radiator` package.
 
+### interpro2wego![R logo](https://img.shields.io/badge/R-blueviolet.svg?logo=R)
+Convert interproscan TSV output into [WEGO](https://wego.genomics.cn/) format, with optional e-score filtering. No external packages required.
+
 ### sam2bam ![BASH logo](https://img.shields.io/badge/bash-lightgrey.svg?logo=gnu%20bash&logoColor=white)
 Convert a SAM file into a BAM file. It will also sort and index the file, along with removing unmapped reads. Provide the number of threads as the second argument to run everything multithreaded.
 
