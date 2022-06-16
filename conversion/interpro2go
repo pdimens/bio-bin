@@ -1,0 +1,59 @@
+#! /usr/bin/env Rscript
+
+args <- commandArgs(trailingOnly = T)
+setwd(getwd())
+
+if(length(args) < 1){
+  cat("Convert Interproscan TSV output into WEGO format for use in https://wego.genomics.cn/\n")
+  cat("Use the optional flag --filter <threshold> to filter the results by a cutoff e-score (default: 1e-5)\n\n")
+  cat("[usage]    interpro2wego filename.tsv [--filter <threshold>]\n\n")
+  cat("[examples]\n")
+  cat("interpro2wego tripletail.tsv\n")
+  cat("interpro2wego tripletail.tsv --filter\n")
+  cat("interpro2wego tripletail.tsv --filter 1e-8\n")
+  q()
+}
+
+# arg[1] is the input filename
+ext <- strsplit(args[1], "\\.") |> unlist()
+ext <- ext[length(ext)]
+if(tolower(ext) != "tsv"){
+  stop("File must be tab-delimited and end in .tsv. It should be the direct output of interproscan.")
+}
+
+iptsv <- read.delim(args[1], header = F, sep = "\t")
+filebase <- sub('\\.tsv$', '', args[1])
+
+if(length(args) > 1){
+  if(args[2] == "--filter"){
+    if(length(args) == 3){
+      thresh <- as.numeric(args[3])
+    } else {
+      thresh <- 1e-5
+    }
+    iptsv <- iptsv[iptsv$V9 != "-",]
+    iptsv$V9 <- as.numeric(iptsv$V9)
+    iptsvfilt <- iptsv[iptsv$V9 < 1e-5, ]
+    cat("Filtering out hits with an e-score less than", thresh, "and writing to", paste0(filebase, ".filter1e-5.tsv"), "\n")
+    cat("Before:", nrow(iptsv), "| After:", nrow(iptsvfilt), "\n")
+    write.table(iptsvfilt, paste0(filebase, ".filter.", thresh, ".tsv"), col.names = F, row.names = F, quote = F, sep = "\t")
+    out.wego <- paste0(filebase, ".filter.",thresh, ".wego")
+    conv <- iptsvfilt
+  } else {
+    stop("Second argument \"", args[2], "\" not recognized")
+  }
+  } else {
+  out.wego <- paste0(filebase, ".wego")
+  conv <- iptsv
+}
+
+  ## WEGO format ##
+wg <- conv[,c(12, 14)]
+wg <- wg[!(wg$V14 %in% c("-","")),]
+cat("Converting tsv to WEGO format:\n", out.wego, "\n")
+for(i in 1:nrow(wg)){
+  .name <- wg[i,1]
+  .go <- gsub("\\|","\t", wg[i,2])
+  cat(paste0(.name,"\t"),file = out.wego, sep = "\t", append = T)
+  cat(.go, file = out.wego, append = T, sep = "\n")
+}
