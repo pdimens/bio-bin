@@ -15,6 +15,7 @@ echo -ne "k likelihood\n" >> ${INFILE}.fs.summary
 
 export INRAW
 export INFILE
+export KSTART
 export KVAL
 
 fstruct(){
